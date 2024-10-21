@@ -50,7 +50,8 @@ class Event(models.Model):
     date = models.DateTimeField() 
     location = models.CharField(max_length=100) 
     description = models.TextField() 
-    image = models.ImageField(upload_to='event_images/', null=True, blank=True) # For event images video = models.FileField(upload_to='event_videos/', null=True, blank=True) # For event videos
+    image = models.ImageField(upload_to='event_images/', null=True, blank=True) # For event images 
+    video = models.FileField(upload_to='event_videos/', null=True, blank=True) # For event videos
 
 def __str__(self):
     return self.title
