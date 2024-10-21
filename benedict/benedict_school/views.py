@@ -85,11 +85,6 @@ class ChildDeleteView(DeleteView):
 
 # Pupil Application Views
 
-class PupilApplicationListView(ListView):
-    model = PupilApplication
-    template_name = 'applications/application_list.html'
-    context_object_name = 'applications'
-
 class PupilApplicationDetailView(DetailView):
     model = PupilApplication
     template_name = 'applications/application_detail.html'
@@ -107,17 +102,6 @@ class PupilApplicationCreateView(CreateView):
         form.instance.child = child
         return super().form_valid(form)
     
-    success_url = reverse_lazy('application-list')
-
-class PupilApplicationUpdateView(UpdateView):
-    model = PupilApplication
-    form_class = PupilApplicationForm
-    template_name = 'applications/application_form.html'
-    success_url = reverse_lazy('application-list')
-
-class PupilApplicationDeleteView(DeleteView):
-    model = PupilApplication
-    template_name = 'applications/application_confirm_delete.html' # Confirmation before deletion
     success_url = reverse_lazy('application-list')
 
 # Event views
