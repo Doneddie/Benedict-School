@@ -21,7 +21,7 @@ class Child(models.Model):
 def __str__(self):
     return self.name
 
-class StudentApplication(models.Model): 
+class PupilApplication(models.Model): 
     child = models.OneToOneField(Child, on_delete=models.CASCADE) 
     application_date = models.DateField(auto_now_add=True) 
     documents = models.FileField(upload_to='applications/', null=True, blank=True) 

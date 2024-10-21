@@ -1,0 +1,27 @@
+{% extends '/base.html' %}
+
+{% block title %}BENEDICT KINDERGARTEN AND PRIMARY SCHOOL{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>{{ view.title|default:"Add or Update Child" }}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="form-group">
+            <label for="application_status">Application Status</label>
+            {{ form.application_status }}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <a href="{% url 'parent-detail' parent.id %}" class="btn btn-secondary">Back to Parent</a> <!-- Back button to parent detail -->
+</div>
+
+{% endblock %}
