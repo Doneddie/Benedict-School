@@ -1,8 +1,9 @@
-// static/manifest.json
+
+
 {
   "name": "Benedict Kindergerten & Primary School ",
   "short_name": "Benedict School ",
-  "description": "A God fearing school with a modern approach towards learning that nartures childern to the next generation",
+  "description": "A God fearing school with a modern approach towards learning that natures children to the next generation",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
