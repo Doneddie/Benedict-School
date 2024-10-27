@@ -8,23 +8,34 @@
 <meta property="og:title" content=" BENEDICT KINDERGERTEN AND PRIMARY SCHOOL">
 <meta property="og:image">
 <meta name="keywords" content="kindergerten,primary school,modern school, generational kids, modern approach, new cirlculam, co-cirlcular activities, internationl languages">
-<title> {% block title %} BENEDICT KINDERGERTEN AND PRIMARY SCHOOL {% endblock title %}</title>    
+<title> {% block title %} BENEDICT KINDERGERTEN AND PRIMARY SCHOOL {% endblock title %}</title>
+<link rel = "manifest" href = "{% static 'manifest.json' %}">   
+<link rel =" styless" href = "{% static 'benedict_school/css/base.css'%}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
   <header>
-    <hi> BENEDECT SCHOOL</hi>  
+    <div >
+
+      <h1> BENEDECT SCHOOL</h1>
+    </div>
     <ul> 
  
-       <li><a href = '{% url for home %}'> Home </a></li>
-       <li><a href = '{% url for AboutUs %}'> AboutUs </a></li>  
+       <li><a href = '{% url for home %}'> HOME </a></li>
+       <li><a href = '{% url for AboutUs %}'> ABOUT US </a></li>  
        <li><a href = '{% url for Apply %}'> Apply  </a></li>  
-       <li><a href = '{% url for Events %}'> Events </a></li>  
-       <li><a href = '{% url for home %}'> Home </a></li>  
-       <li><a href = '{% url for home %}'> Home </a></li>  
+       <li><a href = '{% url for Events %}'> EVENTS </a></li>  
+       <li><a href = '{% url for Contact Us %}'> CONTACT US </a></li>  
+       <li><a href = '{% url for home %}'> ADDIMISSIONS</a></li>  
                  
                  
       
     </ul>
   </header>  
+<!-- Bootstrap JS and dependencies from CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
 </body>
 </html>
