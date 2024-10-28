@@ -1,6 +1,4 @@
 # Benedict-School
-A Joint Project 
-Nice! Let’s plan an appealing and appropriate web structure for a kindergarten and primary school 🌟📚.
 
 Here’s an outline for a **child-friendly, engaging, and functional website structure**. The goal is to create a safe, warm, and inviting online presence for parents, kids, and teachers, ensuring easy navigation and visually appealing design elements.
 

@@ -15,12 +15,10 @@
 <section class="cta-section">
     <div class="cta-container">
         <a href="{% url 'school_tour' %}" class="cta-button tour">
-            <i class="fas fa-school"></i>
-            Tour Our School
+            <i class="fas fa-school"></i> Tour Our School
         </a>
         <a href="{% url 'contact' %}" class="cta-button contact">
-            <i class="fas fa-envelope"></i>
-            Contact Us
+            <i class="fas fa-envelope"></i> Contact Us
         </a>
     </div>
 </section>
@@ -40,6 +38,26 @@
         {% else %}
             <div class="event-card">
                 <p>No upcoming events at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Past Events -->
+<section class="past-events-section">
+    <h2><i class="fas fa-history"></i> Past Events</h2>
+    <div class="events-carousel">
+        {% if past_events %}
+            {% for event in past_events %}
+            <div class="event-card">
+                <div class="event-date">{{ event.date|date:"M d" }}</div>
+                <h3>{{ event.title }}</h3>
+                <p>{{ event.description }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="event-card">
+                <p>No past events recorded.</p>
             </div>
         {% endif %}
     </div>
@@ -77,4 +95,43 @@
     </div>
 </section>
 
+<!-- Map Section -->
+<div class="py-12 bg-gray-50" id="map-container">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Visit Our Campus
+            </h2>
+            <p class="mt-4 text-lg text-gray-500">
+                We're located in a convenient location with easy access to public transportation.
+            </p>
+        </div>
+        <div id="school-map" class="mt-8" style="height: 400px;"></div>
+        <div class="text-center mt-6">
+            <p class="text-gray-600">
+                <strong>Address:</strong> Your School Address Here
+            </p>
+            <a href="https://maps.google.com/maps?q=YOUR_SCHOOL_COORDINATES" 
+               target="_blank" 
+               class="inline-flex items-center mt-2 text-blue-600 hover:text-blue-800">
+                Get Directions
+                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_head %}
+    <!-- Added Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}"></script>
+    
+    <!-- Custom CSS for the map -->
+    <link rel="stylesheet" href="{% static 'css/home-styles.css' %}">
+    <!--Custom JS for the map-->
+    <script src="{% static 'js/home-scripts.js' %}"></script>
 {% endblock %}
