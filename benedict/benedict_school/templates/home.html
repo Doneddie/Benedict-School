@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section with Animated Background -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN & PRIMARY SCHOOL" }}</h1>
+        <p class="tagline animate__animated animate__fadeIn">{{ tagline|default:"Love Learning!" }}</p>
+        <img src="{% static 'images/hero-kids.jpg' %}" alt="Happy children learning" class="hero-image">
+    </div>
+</section>
+
+<!-- Call to Action Buttons -->
+<section class="cta-section">
+    <div class="cta-container">
+        <a href="{% url 'school_tour' %}" class="cta-button tour">
+            <i class="fas fa-school"></i>
+            Tour Our School
+        </a>
+        <a href="{% url 'contact' %}" class="cta-button contact">
+            <i class="fas fa-envelope"></i>
+            Contact Us
+        </a>
+    </div>
+</section>
+
+<!-- Upcoming Events -->
+<section class="events-section">
+    <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
+    <div class="events-carousel">
+        {% if events %}
+            {% for event in events %}
+            <div class="event-card">
+                <div class="event-date">{{ event.date|date:"M d" }}</div>
+                <h3>{{ event.title }}</h3>
+                <p>{{ event.description }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="event-card">
+                <p>No upcoming events at the moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Welcome Message -->
+<section class="welcome-section">
+    <div class="principal-message">
+        <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo">
+        <div class="message-content">
+            <h2>Welcome to Our Family</h2>
+            <p>{{ principal.message|default:"At Benedict Kindergarten & Primary School, we believe every child is unique and deserves a nurturing environment to grow, learn, and discover their potential. Our dedicated team of educators is committed to providing the best start in your child's educational journey." }}</p>
+            <span class="principal-name">- {{ principal.name|default:"Mrs. Julian Nalwoga Sewanyana" }}, Principal</span>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section">
+    <h2><i class="fas fa-quote-left"></i> Parent Testimonials</h2>
+    <div class="testimonials-container">
+        {% if testimonials %}
+            {% for testimonial in testimonials %}
+            <div class="testimonial-card">
+                <p>"{{ testimonial.content }}"</p>
+                <span class="parent-name">- {{ testimonial.parent_name }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="testimonial-card">
+                <p>"The teachers here are amazing! My daughter loves coming to school every day."</p>
+                <span class="parent-name">- Emma's Mom</span>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
