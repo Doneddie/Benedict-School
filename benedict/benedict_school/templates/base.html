@@ -19,18 +19,20 @@
 
       <h1> BENEDECT SCHOOL</h1>
     </div>
+  <nav>
     <ul> 
- 
-       <li><a href = '{% url for home %}'> HOME </a></li>
-       <li><a href = '{% url for AboutUs %}'> ABOUT US </a></li>  
-       <li><a href = '{% url for Apply %}'> Apply  </a></li>  
-       <li><a href = '{% url for Events %}'> EVENTS </a></li>  
-       <li><a href = '{% url for Contact Us %}'> CONTACT US </a></li>  
-       <li><a href = '{% url for home %}'> ADDIMISSIONS</a></li>  
-                 
-                 
-      
+       <li><a href = '{% url "home" %}'> HOME </a></li>
+       <li><a href = '{% url "about" %}'> ABOUT US </a></li>  
+       <li><a href = '{% url "activities" %}'> ACTIVITIES  </a></li>  
+       <li><a href = '{% url "events" %}'> EVENTS </a></li>  
+       <li><a href = '{% url "contact" %}'> CONTACT US </a></li>  
+       <li><a href = '{% url "admission" %}'> ADDIMISSIONS</a></li> 
+       <form  action = "{% url 'search' %}" method = "get" class = "search_form"> 
+        <input type = "text" name ="q" placeholder = " search....." class = "search_input">
+        <button type = "submit" class = " search_btn"> Search</button>
+       </form>
     </ul>
+  </nav>
   </header>  
 <!-- Bootstrap JS and dependencies from CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
