@@ -1,2 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- About Us Section -->
+<section class="about-us">
+    <div class="about-header">
+        <img src="{% static 'images/about-us-header.jpg' %}" alt="About Us" class="header-image">
+        <h1>About Us</h1>
+    </div>
+
+    <!-- Our Mission & Vision -->
+    <div class="mission-vision">
+        <h2>Our Mission & Vision</h2>
+        <p>At Benedict Kindergarten & Primary School, we aim to provide a nurturing environment where every child can thrive academically and socially. Our values are rooted in integrity, respect, and a passion for lifelong learning.</p>
+        <p>We envision a community where education is a collaborative journey that fosters creativity and critical thinking.</p>
+    </div>
+
+    <!-- History & Founding -->
+    <div class="history-founding">
+        <h2>History & Founding</h2>
+        <p>Benedict Kindergarten & Primary School was founded in 2005 by a group of dedicated educators passionate about early childhood education. Over the years, we've grown into a vibrant community committed to the holistic development of our students.</p>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-section">
+        <h2>Meet Our Team</h2>
+        <div class="team-container">
+            {% for staff_member in staff_members %}
+            <div class="team-member">
+                <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
+                <h3>{{ staff_member.name }}</h3>
+                <p>{{ staff_member.bio }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="team-modal" class="modal" style="display:none;">
+        <div id="modal-content" class="modal-content"></div>
+    </div>
+    
+
+    <!-- Accreditation & Achievements -->
+    <div class="accreditation-achievements">
+        <h2>Accreditation & Achievements</h2>
+        <ul>
+            <li>Accredited by the National Education Board</li>
+            <li>Recipient of the Excellence in Education Award (2023)</li>
+            <li>Member of the International Schools Association</li>
+        </ul>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/about.js' %}"></script>
+{% endblock %}
 
  
