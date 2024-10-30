@@ -55,3 +55,35 @@ class Event(models.Model):
 
 def __str__(self):
     return self.title
+
+
+
+
+class Staff(models.Model):
+    # Personal information
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+    # Staff-related information
+    subjects_handled = models.CharField(
+        max_length=100,
+        choices=[
+            ("math", "Mathematics"),
+            ("science", "Science"),
+            ("english", "English"),
+            ("history", "History"),
+            ("geography", "Geography"),
+            ("art", "Art"),
+            ("music", "Music"),
+            ("physical_education", "Physical Education"),
+            ("computing", "Computing"),
+        ],
+        default="math",
+    )
+
+    years_of_experience = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.username})"

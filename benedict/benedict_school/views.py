@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Parent, Child, PupilApplication, Exit, Activity, Event
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StafForm,LoginForm, ContactFrom,SearchForm,
+from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm,LoginForm, ContactFrom,SearchForm
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
