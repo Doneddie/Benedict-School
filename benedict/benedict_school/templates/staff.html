@@ -1,1 +1,9 @@
-ad
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.name }}
+    {{ form.position }}
+    {{ form.profile_image }}
+    {{ form.subjects_handled }}
+    {{ form.years_of_experience }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
