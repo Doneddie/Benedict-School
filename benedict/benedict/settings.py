@@ -39,6 +39,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "benedict_school",
     "django-bootstrap4",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "crispy_forms",
+    "debug_toolbar",
+    "corsheaders",
+    "storages",
+    "widget_tweaks",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
