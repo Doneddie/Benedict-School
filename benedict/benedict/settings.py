@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "benedict_school",
+    "django-bootstrap4",
 ]
 
 MIDDLEWARE = [
