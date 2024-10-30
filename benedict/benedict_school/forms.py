@@ -1,5 +1,5 @@
 from django import forms
-from .models import Staff
+from .models import Staff, Event,Activity, PupilApplication,Child, Exit
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -16,9 +16,6 @@ class SearchForm(forms.Form):
         max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Search...', 'class': 'form-control'})
     )
-
-
-
 
 
 class StaffForm(forms.ModelForm):
@@ -40,3 +37,55 @@ class StaffForm(forms.ModelForm):
             "subjects_handled": forms.Select(attrs={"class": "form-control"}),
             "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
         }
+
+
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = [
+            "Username",
+            "password",
+            "ID_number",
+            "email",
+            "address",
+            "profile_image",
+        ]
+        widgets = {
+            "password": forms.PasswordInput(),  # Use password input for the password field
+        }
+
+
+class ChildForm(forms.ModelForm):
+    class Meta:
+        model = Child
+        fields = [
+            "parent",
+            "name",
+            "date_of_birth",
+            "profile_image",
+            "application_status",
+        ]
+
+
+class PupilApplicationForm(forms.ModelForm):
+    class Meta:
+        model = PupilApplication
+        fields = ["child", "documents", "notes"]
+
+
+class ExitForm(forms.ModelForm):
+    class Meta:
+        model = Exit
+        fields = ["child", "exit_date", "reason"]
+
+
+class ActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ["title", "description", "date"]
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ["title", "date", "location", "description", "image", "video"]
