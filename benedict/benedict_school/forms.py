@@ -90,3 +90,10 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ["title", "date", "location", "description", "image", "video"]
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label="Your Name")
+    email = forms.EmailField(label="Your Email")
+    subject = forms.CharField(max_length=100, label="Subject")
+    message = forms.CharField(widget=forms.Textarea, label="Message")
