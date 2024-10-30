@@ -8,6 +8,7 @@ urlpatterns = [
     path("admissions/", views.PupilApplicationCreateView.as_view(), name="admission"),
     path("activities/", views.ActivityListView.as_view(), name="activites"),
     path("contactus/", views.ContactUsView.as_view(), name="contact"),
+    path("login/", views.LoginViews.as_views, name = "login"),
 
      # parent urls
     path('parents/', ParentListView.as_view(), name='parent-list'),  # List all parents
