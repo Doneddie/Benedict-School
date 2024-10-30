@@ -121,3 +121,26 @@ class ActivityListView(ListView):
 class ActivityDetailView(DetailView):
     model = Activity
     template_name = 'activity_detail.html'
+
+
+def contact_view(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Send email (make sure to configure your email settings in settings.py)
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+            send_mail(
+                subject,
+                f"Message from {name} ({email}):\n\n{message}",
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.CONTACT_EMAIL],  # Replace with your contact email
+                fail_silently=False,
+            )
+            return render(request, "home.html")  # Redirect to a success page
+    else:
+        form = ContactForm()
+
+    return render(request, "contact.html", {"form": form})

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Staff, Event,Activity, PupilApplication,Child, Exit
+from .models import Staff, Event,Activity, PupilApplication,Child, Exit,Parent
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(
