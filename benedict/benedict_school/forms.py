@@ -9,3 +9,10 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'})
     )
 
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Search...', 'class': 'form-control'})
+    )
+
