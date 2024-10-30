@@ -18,14 +18,25 @@ class SearchForm(forms.Form):
     )
 
 
+
+
+
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = ['name', 'position', 'profile_image', 'subjects_handled', 'years_of_experience']
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "subjects_handled",
+            "years_of_experience",
+        ]
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Staff Name', 'class': 'form-control'}),
-            'position': forms.TextInput(attrs={'placeholder': 'Position', 'class': 'form-control'}),
-            'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
-            'subjects_handled': forms.TextInput(attrs={'placeholder': 'Subjects Handled (comma-separated)', 'class': 'form-control'}),
-            'years_of_experience': forms.NumberInput(attrs={'placeholder': 'Years of Experience', 'class': 'form-control'}),
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "subjects_handled": forms.Select(attrs={"class": "form-control"}),
+            "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
         }
