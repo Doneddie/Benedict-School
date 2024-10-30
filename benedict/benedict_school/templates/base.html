@@ -27,9 +27,10 @@
        <li><a href = '{% url "event-list" %}'> EVENTS </a></li>  
        <li><a href = '{% url "contact" %}'> CONTACT US </a></li>  
        <li><a href = '{% url "admission" %}'> ADDIMISSIONS</a></li> 
-       <form  action = "{% url 'search' %}" method = "get" class = "search_form"> 
-        <input type = "text" name ="q" placeholder = " search....." class = "search_input">
-        <button type = "submit" class = " search_btn"> Search</button>
+       <!-- Adding a search bar inside the navbar bootstrap -->
+       <form class="d-flex" action="{% url 'search' %}" method="get">
+         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+         <button class="btn btn-outline-success" type="submit">Search</button>
        </form>
     </ul>
   </nav>
