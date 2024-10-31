@@ -1,14 +1,40 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+
 
 # I am creating my views here.
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    TemplateView,
+)
 from django.urls import reverse_lazy
 from .models import Parent, Child, PupilApplication, Exit, Activity, Event
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm,LoginForm, ContactFrom,SearchForm
-from django.http import HttpResponse
+from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm,LoginForm, ContactForm,SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
+from django.utils import timezone
+
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Retrieve all activities and events from the database
+        context["activities"] = Activity.objects.all()  # Get all activities
+        context["events"] = Event.objects.filter(date__gte=timezone.now()).order_by(
+            "date"
+        )  # Get upcoming events
+
+        return context
+
 
 # Parent views
 class ParentListView(ListView):
