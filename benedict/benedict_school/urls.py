@@ -1,5 +1,26 @@
 from django.urls import path
 from . import views
+from .views import (
+    HomeView,
+    AboutView,
+    PupilApplicationCreateView,
+    ActivityListView,
+    ParentListView,
+    ParentDetailView,
+    ParentCreateView,
+    ParentUpdateView,
+    ParentDeleteView,
+    ChildListView,
+    ChildCreateView,
+    ChildDetailView,
+    ChildUpdateView,
+    ChildDeleteView,
+    PupilApplicationDetailView,
+    EventListView,
+    EventDetailView,
+    ActivityDetailView,
+    LoginViews,
+)
 
 
 urlpatterns = [
@@ -7,8 +28,8 @@ urlpatterns = [
     path("about/", views.AboutView.as_view(), name="aboutus"),
     path("admissions/", views.PupilApplicationCreateView.as_view(), name="admission"),
     path("activities/", views.ActivityListView.as_view(), name="activites"),
-    path("contactus/", views.ContactUsView.as_view(), name="contact"),
-    path("login/", views.LoginViews.as_views, name = "login"),
+    path("contact_views/", views.contact_view, name="contact"),
+    path("login/", views.LoginViews.as_view(), name = "login"),
 
     # parent urls
     path('parents/', ParentListView.as_view(), name='parent-list'),  # List all parents

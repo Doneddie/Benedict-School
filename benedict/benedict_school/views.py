@@ -13,6 +13,7 @@ from django.views.generic import (
     TemplateView,
 )
 from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView
 from .models import Parent, Child, PupilApplication, Exit, Activity, Event
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm,LoginForm, ContactForm,SearchForm
 from django.contrib.auth.forms import UserCreationForm
@@ -169,3 +170,19 @@ def contact_view(request):
         form = ContactForm()
 
     return render(request, "contact.html", {"form": form})
+
+
+class AboutView(TemplateView):
+    template_name = "about.html"
+
+
+class LoginViews(LoginView):
+    template_name = "login.html"  # Specify your login template here
+
+    def form_valid(self, form):
+        # Optional: Add any extra processing before login
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Redirect to a specific URL after login
+        return reverse_lazy("home")  # Change 'home' to your desired redirect URL
