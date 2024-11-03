@@ -121,7 +121,6 @@ class PupilApplicationCreateView(CreateView):
     model = PupilApplication
     form_class = PupilApplicationForm
     template_name = 'applications/application_form.html'
-    fields = ['documents', 'notes']
 
     def form_valid(self, form):
         """Set the child before saving the application"""
