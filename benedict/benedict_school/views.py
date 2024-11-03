@@ -153,8 +153,7 @@ def contact_view(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Send email (make sure to configure your email settings in settings.py)
-            name = form.cleaned_data["name"]
+            name = form.cleaned_data["name"] # Send email (make sure to configure your email settings in settings.py)
             email = form.cleaned_data["email"]
             subject = form.cleaned_data["subject"]
             message = form.cleaned_data["message"]

@@ -44,9 +44,9 @@ class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
         fields = [
-            "Username",
+            "username",
             "password",
-            "ID_number",
+            "id_number",
             "email",
             "address",
             "profile_image",
