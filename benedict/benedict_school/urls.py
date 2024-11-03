@@ -30,6 +30,8 @@ urlpatterns = [
     path("activities/", views.ActivityListView.as_view(), name="activites"),
     path("contact_views/", views.contact_view, name="contact"),
     path("login/", views.LoginViews.as_view(), name="login"),
+    path("search/", views.search_view, name="search"),
+    
     
     # parent urls
     path("parents/", ParentListView.as_view(), name="parent-list"),  # List all parents
