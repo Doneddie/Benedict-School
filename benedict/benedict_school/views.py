@@ -185,4 +185,34 @@ class LoginViews(LoginView):
 
     def get_success_url(self):
         # Redirect to a specific URL after login
-        return reverse_lazy("home")  # Change 'home' to your desired redirect URL
+        return reverse_lazy("home")  
+
+
+#search functions views
+
+def search_view(request):
+    query = request.GET.get("q")  # Get the search query from the URL
+    results = {
+        "children": [],
+        "staff": [],
+        "activities": [],
+        "events": [],
+    }
+
+    if query:
+        results["children"] = Child.objects.filter(
+            name__icontains=query
+        )  # Searching in Child model
+        results["staff"] = Staff.objects.filter(
+            first_name__icontains=query
+        ) | Staff.objects.filter(
+            last_name__icontains=query
+        )  # Searching in Staff model
+        results["activities"] = Activity.objects.filter(
+            title__icontains=query
+        )  # Searching in Activity model
+        results["events"] = Event.objects.filter(
+            title__icontains=query
+        )  # Searching in Event model
+
+    return render(request, "your_template.html", {"results": results, "query": query})
