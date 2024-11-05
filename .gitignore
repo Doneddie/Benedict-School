@@ -1,2 +1,6 @@
 school/
+<<<<<<< HEAD
 venv/
+=======
+venv/
+>>>>>>> 630faf4 (Fix: update .gitignore)
