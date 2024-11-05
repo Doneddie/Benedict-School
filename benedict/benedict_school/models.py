@@ -6,6 +6,11 @@ class Parent(models.Model):
     password = models.CharField(max_length=128)
     id_number = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
+class Parent(models.Model): 
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50) 
+    ID_number = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True) 
     address = models.CharField(max_length=100)
     profile_image = models.ImageField(
         upload_to="profile_images/", null=True, blank=True
@@ -13,6 +18,8 @@ class Parent(models.Model):
 
     def __str__(self):
         return self.username
+ def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Child(models.Model):
@@ -50,6 +57,12 @@ class PupilApplication(models.Model):
 class Exit(models.Model):
     child = models.ForeignKey(Child, on_delete=models.CASCADE)
     exit_date = models.DateField()
+def __str__(self):
+    return f"Application for {self.child.name}"
+    
+class Exit(models.Model): 
+    child = models.ForeignKey(Child, on_delete=models.CASCADE) 
+    exit_date = models.DateField() 
     reason = models.TextField(null=True, blank=True)
 
     def __str__(self):

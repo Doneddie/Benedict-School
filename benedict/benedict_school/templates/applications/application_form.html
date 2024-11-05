@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <h1>Pupil Application Form</h1>
+
+    <!-- Display form submission errors (if any) -->
+    {% if form.errors %}
+        <div class="errors">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <!-- Form to submit Pupil Application -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div>
+            <label for="id_documents">Documents:</label>
+            {{ form.documents }}
+        </div>
+        
+        <div>
+            <label for="id_notes">Notes:</label>
+            {{ form.notes }}
+        </div>
+
+        <button type="submit">Submit Application</button>
+    </form>
+
+</body>
+
+{% endblock %}

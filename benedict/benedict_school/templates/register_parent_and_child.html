@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <h1>Register Parent and Child</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <h2>Parent Information</h2>
+        {{ parent_form.as_p }}  <!-- Render parent form fields -->
+        
+        <h2>Child Information</h2>
+        {{ child_form.as_p }}  <!-- Render child form fields -->
+
+        <button type="submit">Register</button>
+    </form>
+
+</body>
+
+{% endblock %}

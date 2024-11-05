@@ -28,6 +28,7 @@ urlpatterns = [
     path("about/", views.AboutView.as_view(), name="aboutus"),
     path("admissions/", views.PupilApplicationCreateView.as_view(), name="admission"),
     path("activities/", views.ActivityListView.as_view(), name="activites"),
+<<<<<<< HEAD
     path("contact_views/", views.contact_view, name="contact"),
     path("login/", views.LoginViews.as_view(), name="login"),
     path("search/", views.search_view, name="search"),
@@ -47,6 +48,18 @@ urlpatterns = [
     path(
         "parent/<int:pk>/delete/", ParentDeleteView.as_view(), name="parent-delete"
     ),  # Delete a parent
+=======
+    path("contactus/", views.ContactUsView.as_view(), name="contact"),
+    path('register/', views.register_parent_and_child, name='register_parent_and_child'),
+
+     # parent urls
+    path('parents/', ParentListView.as_view(), name='parent-list'),  # List all parents
+    path('parent/<int:pk>/', ParentDetailView.as_view(), name='parent-detail'),  # Parent detail page
+    path('parent/new/', ParentCreateView.as_view(), name='parent-create'),  # Create a new parent
+    path('parent/<int:pk>/edit/', ParentUpdateView.as_view(), name='parent-update'),  # Edit a parent
+    path('parent/<int:pk>/delete/', ParentDeleteView.as_view(), name='parent-delete'),  # Delete a parent
+
+>>>>>>> a1b3e24 (Handled a few forms)
     # child urls
     path(
         "parent/<int:parent_id>/children/", ChildListView.as_view(), name="child-list"

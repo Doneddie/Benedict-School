@@ -51,15 +51,15 @@ class ParentDetailView(DetailView):
 class ParentCreateView(CreateView):
     model = Parent
     form_class = ParentForm
-    template_name = 'parents/parent_form.html'
-    fields = ['Username', 'password', 'ID_number', 'email', 'address', 'profile_image']
+    template_name = 'register_parent_and_child'
+    fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
     success_url = reverse_lazy('parent-list')  # Redirect to parent list after creating a new parent
 
 class ParentUpdateView(UpdateView):
     model = Parent
     form_class = ParentForm
-    template_name = 'parents/parent_form.html'
-    fields = ['Username', 'password', 'ID_number', 'email', 'address', 'profile_image']
+    template_name = 'register_parent_and_child'
+    fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
     success_url = reverse_lazy('parent-list')
 
 class ParentDeleteView(DeleteView):
@@ -87,7 +87,7 @@ class ChildDetailView(DetailView):
 class ChildCreateView(CreateView):
     model = Child
     form_class = ChildForm
-    template_name = 'children/child_form.html'
+    template_name = 'register_parent_and_child'
     fields = ['name', 'date_of_birth', 'profile_image', 'application_status']
 
     def form_valid(self, form):
@@ -101,7 +101,7 @@ class ChildCreateView(CreateView):
 class ChildUpdateView(UpdateView):
     model = Child
     form_class = ChildForm
-    template_name = 'children/child_form.html'
+    template_name = 'register_parent_and_child'
     fields = ['name', 'date_of_birth', 'profile_image', 'application_status']
     success_url = reverse_lazy('child-list')
 
