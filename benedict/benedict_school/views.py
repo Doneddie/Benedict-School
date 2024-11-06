@@ -20,21 +20,21 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone
 
-
 class HomeView(TemplateView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-
         # Retrieve all activities and events from the database
-        context["activities"] = Activity.objects.all()  # Get all activities
-        context["events"] = Event.objects.filter(date__gte=timezone.now()).order_by(
-            "date"
-        )  # Get upcoming events
-
+        context["activities"] = Activity.objects.all() # Get all activities
+        # Separate upcoming and past events
+        current_time = timezone.now()
+        context["upcoming_events"] = Event.objects.filter(date__gte=timezone.now()).order_by("date")
+        context["past_events"] = Event.objects.filter(date__lt=current_time).order_by("-date")  # Latest past events first
+        
         return context
+
 
 def school_tour(request):
     return render(request, 'contact.html')

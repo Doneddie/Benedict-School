@@ -7,7 +7,7 @@
     <div class="hero-content">
         <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>
         <p class="tagline animate__animated animate__fadeIn">{{ tagline|default:"Love Learning!" }}</p>
-        <img src="{% static 'images/hero-kids.jpg' %}" alt="Happy children learning" class="hero-image">
+        <img src="{% static 'images/hero_picture.jpg' %}" alt="Happy children learning" class="hero-image">
     </div>
 </section>
 
@@ -23,6 +23,18 @@
     </div>
 </section>
 
+<!-- Welcome Message -->
+<section class="welcome-section">
+    <div class="principal-message">
+        <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo">
+        <div class="message-content">
+            <h2>Welcome to Our Family</h2>
+            <p>{{ principal.message|default:"At Benedict Kindergarten and Primary School, we believe every child is unique and deserves a nurturing environment to grow, learn, and discover their potential. Our dedicated team of educators is committed to providing the best start in your child's educational journey." }}</p>
+            <span class="principal-name">- {{ principal.name|default:"Mrs. Julian Nalwoga Sewanyana" }}, Principal</span>
+        </div>
+    </div>
+</section>
+
 <!-- Upcoming Events -->
 <section class="events-section">
     <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
@@ -33,6 +45,11 @@
                 <div class="event-date">{{ event.date|date:"M d" }}</div>
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
+                {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:200px; height:auto;">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
             </div>
             {% endfor %}
         {% else %}
@@ -53,6 +70,11 @@
                 <div class="event-date">{{ event.date|date:"M d" }}</div>
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
+                {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:200px; height:auto;">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
             </div>
             {% endfor %}
         {% else %}
@@ -60,18 +82,6 @@
                 <p>No past events recorded.</p>
             </div>
         {% endif %}
-    </div>
-</section>
-
-<!-- Welcome Message -->
-<section class="welcome-section">
-    <div class="principal-message">
-        <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo">
-        <div class="message-content">
-            <h2>Welcome to Our Family</h2>
-            <p>{{ principal.message|default:"At Benedict Kindergarten & Primary School, we believe every child is unique and deserves a nurturing environment to grow, learn, and discover their potential. Our dedicated team of educators is committed to providing the best start in your child's educational journey." }}</p>
-            <span class="principal-name">- {{ principal.name|default:"Mrs. Julian Nalwoga Sewanyana" }}, Principal</span>
-        </div>
     </div>
 </section>
 
@@ -89,7 +99,7 @@
         {% else %}
             <div class="testimonial-card">
                 <p>"The teachers here are amazing! My daughter loves coming to school every day."</p>
-                <span class="parent-name">- Daniel's Mom</span>
+                <span class="parent-name">- Daniella's Mom</span>
             </div>
         {% endif %}
     </div>

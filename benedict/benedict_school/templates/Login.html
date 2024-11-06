@@ -3,9 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title> {% block title %} BENEDICT KINDERGERTEN & PRIMARY SCHOOL {% endblock title %}</title>
+        <title> {% block title %} BENEDICT KINDERGERTEN AND PRIMARY SCHOOL {% endblock title %}</title>
     </head>
     <body>
+        <h1>User Login</h1>
         <form method="post" action="{% url 'login_view' %}">
             {% csrf_token %}
             {{ form.username }}
