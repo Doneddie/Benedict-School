@@ -15,7 +15,7 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from .models import Parent, Child, PupilApplication, Exit, Activity, Event
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm,LoginForm, ContactForm,SearchForm
+from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone

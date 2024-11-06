@@ -1,5 +1,8 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from django import forms
-from .models import Staff, Event,Activity, PupilApplication,Child, Exit,Parent
+from .models import Parent, Child, PupilApplication, Staff, Event, Activity, Exit 
+from datetime import date
 
 
 class LoginForm(forms.Form):
@@ -43,71 +46,6 @@ class StaffForm(forms.ModelForm):
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        fields = [
-            "username",
-            "password",
-            "id_number",
-            "email",
-            "address",
-            "profile_image",
-        ]
-        widgets = {
-            "password": forms.PasswordInput(),  # Use password input for the password field
-        }
-
-
-class ChildForm(forms.ModelForm):
-    class Meta:
-        model = Child
-        fields = [
-            "parent",
-            "name",
-            "date_of_birth",
-            "profile_image",
-            "application_status",
-        ]
-
-
-class PupilApplicationForm(forms.ModelForm):
-    class Meta:
-        model = PupilApplication
-        fields = ["child", "documents", "notes"]
-
-
-class ExitForm(forms.ModelForm):
-    class Meta:
-        model = Exit
-        fields = ["child", "exit_date", "reason"]
-
-
-class ActivityForm(forms.ModelForm):
-    class Meta:
-        model = Activity
-        fields = ["title", "description", "date"]
-
-
-class EventForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = ["title", "date", "location", "description", "image", "video"]
-
-
-class ContactForm(forms.Form):
-    name = forms.CharField(max_length=100, label="Your Name")
-    email = forms.EmailField(label="Your Email")
-    subject = forms.CharField(max_length=100, label="Subject")
-    message = forms.CharField(widget=forms.Textarea, label="Message")
-    
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
-from django import forms
-from .models import Parent, Child, PupilApplication
-from datetime import date
-
-
-class ParentForm(forms.ModelForm):
-    class Meta:
-        model = Parent
         fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
 
     def clean_email(self):
@@ -132,7 +70,7 @@ class ParentForm(forms.ModelForm):
         # Ensure that the ID_number is unique
         if Parent.objects.filter(ID_number=ID_number).exists():
             raise ValidationError("This ID number is already registered.")
-              # Example: Check the length of the ID number (if required)
+        # Check the length of ID number     
 
         if len(ID_number) != 14:
             raise ValidationError("ID number should be 14 characters long.")
@@ -185,6 +123,35 @@ else:
         notes = self.cleaned_data.get('notes')
        
         return notes
+
+class ExitForm(forms.ModelForm):
+    class Meta:
+        model = Exit
+        fields = ["child", "exit_date", "reason"]
+
+
+class ActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ["title", "description", "date"]
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ["title", "date", "location", "description", "image", "video"]
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label="Your Name")
+    email = forms.EmailField(label="Your Email")
+    subject = forms.CharField(max_length=100, label="Subject")
+    message = forms.CharField(widget=forms.Textarea, label="Message")
+    
+
+
+
+
 
 
 
