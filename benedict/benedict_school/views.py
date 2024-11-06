@@ -14,7 +14,7 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Activity, Event
+from .models import Parent, Child, PupilApplication, Exit, Activity, Event, About
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
@@ -36,6 +36,40 @@ class HomeView(TemplateView):
 
         return context
 
+# Create both parent and child
+class ParentCreateChildCreateView(CreateView):
+    def get(self, request, *args, **kwargs):
+        """Display the form to register both a parent and a child"""
+        parent_form = ParentForm()
+        child_form = ChildForm()
+        return render(request, 'register_parent_and_child.html', {
+            'parent_form': parent_form,
+            'child_form': child_form
+        })
+
+    def post(self, request, *args, **kwargs):
+        """Process both the parent and child form submissions"""
+        parent_form = ParentForm(request.POST, request.FILES)
+        child_form = ChildForm(request.POST, request.FILES)
+
+        if parent_form.is_valid() and child_form.is_valid():
+            # Save the parent
+            parent = parent_form.save()
+
+            # Set the parent on the child form before saving
+            child = child_form.save(commit=False)
+            child.parent = parent  # Associate the parent with the child
+            child.save()
+
+            # Redirect to a success page
+            return HttpResponseRedirect(reverse_lazy('home.html'))  
+
+        # If forms are not valid, re-render the form with errors
+        return render(request, 'register_parent_and_child.html', {
+            'parent_form': parent_form,
+            'child_form': child_form
+        })
+
 
 # Parent views
 class ParentListView(ListView):
@@ -47,13 +81,6 @@ class ParentDetailView(DetailView):
     model = Parent
     template_name = 'parents/parent_detail.html'
     context_object_name = 'parent'
-
-class ParentCreateView(CreateView):
-    model = Parent
-    form_class = ParentForm
-    template_name = 'register_parent_and_child'
-    fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
-    success_url = reverse_lazy('parent-list')  # Redirect to parent list after creating a new parent
 
 class ParentUpdateView(UpdateView):
     model = Parent
@@ -83,20 +110,6 @@ class ChildDetailView(DetailView):
     model = Child
     template_name = 'children/child_detail.html'
     context_object_name = 'child'
-
-class ChildCreateView(CreateView):
-    model = Child
-    form_class = ChildForm
-    template_name = 'register_parent_and_child'
-    fields = ['name', 'date_of_birth', 'profile_image', 'application_status']
-
-    def form_valid(self, form):
-        """Set the parent before saving the child"""
-        parent = get_object_or_404(Parent, id=self.kwargs['parent_id'])
-        form.instance.parent = parent
-        return super().form_valid(form)
-    
-    success_url = reverse_lazy('child-list')
 
 class ChildUpdateView(UpdateView):
     model = Child
@@ -171,10 +184,6 @@ def contact_view(request):
     return render(request, "contact.html", {"form": form})
 
 
-class AboutView(TemplateView):
-    template_name = "about.html"
-
-
 class LoginViews(LoginView):
     template_name = "login.html"  # Specify your login template here
 
@@ -215,3 +224,17 @@ def search_view(request):
         )  # Searching in Event model
 
     return render(request, "your_template.html", {"results": results, "query": query})
+
+def about_view(request):
+    about_content = About.objects.first()  # Assuming a single entry for the "About" page
+    return render(request, 'about.html', {'about': about_content})
+
+def staff_create_view(request):
+    if request.method == 'POST':
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('staff_list')  # Redirect to the list of staff members or another page
+    else:
+        form = StaffForm()
+    return render(request, 'staff_form.html', {'form': form})

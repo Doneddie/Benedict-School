@@ -72,3 +72,14 @@
 .modal.show {
     opacity: 1;
 }
+
+/* Styles for expandable section */
+.anthem-content {
+    display: none; /* Initially hidden */
+    margin-top: 10px;
+}
+.toggle-button {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+}

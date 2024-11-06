@@ -28,16 +28,16 @@ class StaffForm(forms.ModelForm):
         fields = [
             "username",
             "email",
-            "first_name",
-            "last_name",
+            "teacher_name",
+            "class_name",
             "subjects_handled",
             "years_of_experience",
         ]
         widgets = {
             "username": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
-            "first_name": forms.TextInput(attrs={"class": "form-control"}),
-            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "teacher_name": forms.TextInput(attrs={"class": "form-control"}),
+            "class_name": forms.TextInput(attrs={"class": "form-control"}),
             "subjects_handled": forms.Select(attrs={"class": "form-control"}),
             "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
         }
@@ -111,13 +111,13 @@ class PupilApplicationForm(forms.ModelForm):
                 raise ValidationError("Only PDF or DOCX files are allowed.")
         
         return documents
-
+        
         if documents:
-    # Check the size and type if a document is uploaded
-    ...
-else:
-    # You can handle the case where no file is uploaded if needed
-    pass
+            # Check the size and type if a document is uploaded
+            ...
+        else:
+            # You can handle the case where no file is uploaded if needed
+            pass
 
     def clean_notes(self):
         notes = self.cleaned_data.get('notes')

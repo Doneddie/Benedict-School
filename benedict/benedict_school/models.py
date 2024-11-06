@@ -1,24 +1,17 @@
 from django.db import models
 
 
-class Parent(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=128)
-    id_number = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(unique=True)
 class Parent(models.Model): 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50) 
-    ID_number = models.CharField(max_length=50, unique=True)
+    first_name = models.CharField(max_length=50, default='Unknown')
+    last_name = models.CharField(max_length=50, default='Unknown') 
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='AA0000000A00AA')
     email = models.EmailField(unique=True) 
     address = models.CharField(max_length=100)
     profile_image = models.ImageField(
-        upload_to="profile_images/", null=True, blank=True
+        upload_to="parent_images/", null=True, blank=True
     )
-
+    
     def __str__(self):
-        return self.username
- def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 
@@ -53,12 +46,6 @@ class PupilApplication(models.Model):
     def __str__(self):
         return f"Application for {self.child.name}"
 
-
-class Exit(models.Model):
-    child = models.ForeignKey(Child, on_delete=models.CASCADE)
-    exit_date = models.DateField()
-def __str__(self):
-    return f"Application for {self.child.name}"
     
 class Exit(models.Model): 
     child = models.ForeignKey(Child, on_delete=models.CASCADE) 
@@ -98,8 +85,8 @@ class Staff(models.Model):
     # Personal information
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    teacher_name = models.CharField(max_length=100, default='Unknown')
+    class_name = models.CharField(max_length=50, default='Primary One')
 
     # Staff-related information
     subjects_handled = models.CharField(
@@ -108,12 +95,14 @@ class Staff(models.Model):
             ("math", "Mathematics"),
             ("science", "Science"),
             ("english", "English"),
-            ("history", "History"),
-            ("geography", "Geography"),
-            ("art", "Art"),
-            ("music", "Music"),
-            ("physical_education", "Physical Education"),
-            ("computing", "Computing"),
+            ("social_studies", "Social Studies"),
+            ("literacy_1A", "Literacy 1A"),
+            ("literacy_1B", "Literacy 1B"),
+            ("literacy", "Literacy"),
+            ("luganda", "Luganda"),
+            ("reading", "Reading"),
+            ("religious_education", "Religious Education"),
+            ("learning_area_1_5", "Learning Area 1-5"),
         ],
         default="math",
     )
@@ -121,4 +110,12 @@ class Staff(models.Model):
     years_of_experience = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.username})"
+        return f"{self.teacher_name} teaches {self.subjects_handled} in {self.class_name}"
+
+
+class About(models.Model):
+    description = models.TextField()
+    anthem = models.TextField()  # Field for storing the anthem text
+
+    def __str__(self):
+        return "About Page Content"

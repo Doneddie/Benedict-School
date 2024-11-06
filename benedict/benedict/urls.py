@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.HomeView.as_view(), name="home"),
     path('benedict_school/', include('benedict_school.urls')), # Keep other store URLs here
+    path('__debug__/', include('debug_toolbar.urls')),
 
 ]
 

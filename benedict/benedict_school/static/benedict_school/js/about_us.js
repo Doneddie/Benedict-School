@@ -33,3 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize modals or any interactive components
 });
 
+// JavaScript function to toggle anthem visibility
+function toggleAnthem() {
+    const anthemContent = document.getElementById("anthemContent");
+    if (anthemContent.style.display === "none") {
+        anthemContent.style.display = "block";
+    } else {
+        anthemContent.style.display = "none";
+    }
+}
+

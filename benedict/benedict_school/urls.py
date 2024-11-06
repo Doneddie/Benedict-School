@@ -2,16 +2,16 @@ from django.urls import path
 from . import views
 from .views import (
     HomeView,
-    AboutView,
+    about_view,
+    contact_view,
+    ParentCreateChildCreateView,
     PupilApplicationCreateView,
     ActivityListView,
     ParentListView,
     ParentDetailView,
-    ParentCreateView,
     ParentUpdateView,
     ParentDeleteView,
     ChildListView,
-    ChildCreateView,
     ChildDetailView,
     ChildUpdateView,
     ChildDeleteView,
@@ -20,37 +20,35 @@ from .views import (
     EventDetailView,
     ActivityDetailView,
     LoginViews,
+    staff_create_view
 )
 
 
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
-    path("about/", views.AboutView.as_view(), name="aboutus"),
+    path("about/", about_view, name="aboutus"),
     path("admissions/", views.PupilApplicationCreateView.as_view(), name="admission"),
     path("activities/", views.ActivityListView.as_view(), name="activites"),
     path("contact_views/", views.contact_view, name="contact"),
     path("login/", views.LoginViews.as_view(), name="login"),
     path("search/", views.search_view, name="search"),
-    path("contactus/", views.ContactUsView.as_view(), name="contact"),
+    path("contactus/", contact_view, name="contact"),
+    path('staff/new/', staff_create_view, name='staff_create'),
+    path('register/', views.ParentCreateChildCreateView.as_view(), name='register_parent_and_child'), # Register new parent and child
     
     
     # parent urls
     path("parents/", ParentListView.as_view(), name="parent-list"),  # List all parents
     path("parent/<int:pk>/", ParentDetailView.as_view(), name="parent-detail"
     ),  # Parent detail page
-    path("parent/new/", ParentCreateView.as_view(), name="parent-create"
-    ),  # Create a new parent
     path("parent/<int:pk>/edit/", ParentUpdateView.as_view(), name="parent-update"
     ),  # Edit a parent
     path("parent/<int:pk>/delete/", ParentDeleteView.as_view(), name="parent-delete"
     ),  # Delete a parent
-    path('register/', views.register_parent_and_child, name='register_parent_and_child'),
 
     # child urls
     path("parent/<int:parent_id>/children/", ChildListView.as_view(), name="child-list"
     ),  # List all children for a parent
-    path("parent/<int:parent_id>/child/new/", ChildCreateView.as_view(), name="child-create",
-    ),  # Create a new child
     path("child/<int:pk>/", ChildDetailView.as_view(), name="child-detail"
     ),  # Child detail page
     path("child/<int:pk>/edit/", ChildUpdateView.as_view(), name="child-update"
