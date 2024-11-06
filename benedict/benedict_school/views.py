@@ -36,6 +36,9 @@ class HomeView(TemplateView):
 
         return context
 
+def school_tour(request):
+    return render(request, 'contact.html')
+
 # Create both parent and child
 class ParentCreateChildCreateView(CreateView):
     def get(self, request, *args, **kwargs):

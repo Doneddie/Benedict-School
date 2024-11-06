@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
 <!-- Hero Section with Animated Background -->
 <section class="hero-section">
     <div class="hero-content">
-        <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN & PRIMARY SCHOOL" }}</h1>
+        <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>
         <p class="tagline animate__animated animate__fadeIn">{{ tagline|default:"Love Learning!" }}</p>
         <img src="{% static 'images/hero-kids.jpg' %}" alt="Happy children learning" class="hero-image">
     </div>

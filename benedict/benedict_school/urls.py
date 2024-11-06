@@ -35,6 +35,7 @@ urlpatterns = [
     path("contactus/", contact_view, name="contact"),
     path('staff/new/', staff_create_view, name='staff_create'),
     path('register/', views.ParentCreateChildCreateView.as_view(), name='register_parent_and_child'), # Register new parent and child
+    path('school-tour/', views.school_tour, name='school_tour'),
     
     
     # parent urls

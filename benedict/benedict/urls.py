@@ -17,18 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from benedict_school import views  # Import the views from the benedict_school app
-
-
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", views.HomeView.as_view(), name="home"),
-    path('benedict_school/', include('benedict_school.urls')), # Keep other store URLs here
-    path('__debug__/', include('debug_toolbar.urls')),
-
-]
-
 from django.conf import settings
 from django.conf.urls.static import static
+
+urlpatterns = [
+    path('admin/', admin.site.urls),  # This includes the admin panel
+    path("", views.HomeView.as_view(), name="home"),
+    path('benedict_school/', include('benedict_school.urls')), # Keep other URLs here
+    # Other patterns (for debugging, etc.)
+    path('__debug__/', include('debug_toolbar.urls')),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
