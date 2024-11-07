@@ -3,7 +3,7 @@
 
 {% block content %}
 <body>
-    <h1>Register Parent and Child</h1>
+    <h1>Register Child</h1>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -13,6 +13,9 @@
         
         <h2>Child Information</h2>
         {{ child_form.as_p }}  <!-- Render child form fields -->
+
+        <!-- Add a hidden input field for child_id if it's not part of the form fields -->
+        <input type="hidden" name="child_id" value="{{ child.id }}">
 
         <button type="submit">Register</button>
     </form>

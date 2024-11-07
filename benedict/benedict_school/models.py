@@ -56,15 +56,6 @@ class Exit(models.Model):
         return f"{self.child.name} left on {self.exit_date}"
 
 
-class Activity(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    date = models.DateField()
-
-    def __str__(self):
-        return self.title
-
-
 class Event(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateTimeField()

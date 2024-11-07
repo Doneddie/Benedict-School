@@ -14,7 +14,7 @@
     <section class="hero">
         <h2>Welcome to Our School</h2>
         <p>Begin your child's educational journey with us!</p>
-        <a href="#apply" class="cta-btn">Apply Now</a>
+        <a href="{% url 'register_parent_and_child' %}" class="cta-btn">Apply Now</a>
     </section>
     
     <!-- Admissions Overview Section -->
@@ -24,7 +24,7 @@
         <h3>Key Dates</h3>
         <ul>
             <li>Applications for the 2024-2025 school year are now open.</li>
-            <li>Early registration ends on [Date].</li>
+            <li>Early registration ends on 15th January, 2025.</li>
         </ul>
     </section>
     
@@ -33,23 +33,23 @@
         <h2>How to Apply</h2>
         <ol>
             <li class="step">Complete the online application form.</li>
-            <li class="step">Submit required documents (birth certificate, proof of residence, etc.).</li>
+            <li class="step">Submit required documents (proof of previous education, etc.).</li>
             <li class="step">Schedule a tour of the school.</li>
             <li class="step">Attend an interview or orientation (if applicable).</li>
             <li class="step">Receive admission confirmation.</li>
         </ol>
-        <a href="#apply" class="cta-btn">Apply Now</a>
+        <a href="{% url 'register_parent_and_child' %}" class="cta-btn">Apply Now</a>
     </section>
     
     <!-- Requirements Section -->
     <section class="section">
         <h2>Requirements</h2>
-        <p>Children must be between the ages of 3 and 5 to apply for Kindergarten.</p>
+        <p>Children must be between the ages of 3 and 5 to apply for Kindergarten or 6 and 10 to apply for primary.</p>
         <h3>Documents Needed</h3>
         <ul>
             <li>Birth certificate</li>
-            <li>Proof of address (e.g., utility bill)</li>
-            <li>Immunization records</li>
+            <li>Proof of previous education</li>
+            <li>Medical records</li>
             <li>Parent identification</li>
         </ul>
     </section>
@@ -62,7 +62,7 @@
             <li>Full-day program: $X,XXX</li>
             <li>Half-day program: $X,XXX</li>
         </ul>
-        <p>We also offer payment plans and financial aid options. For more details, please <a href="contact.html">contact us</a>.</p>
+        <p>We also offer payment plans and financial aid options. For more details, please <a href="{% url 'contact' %}">contact us</a>.</p>
     </section>
     
     <!-- Frequently Asked Questions (FAQ) Section -->
@@ -78,7 +78,7 @@
         </div>
         <div class="faq-item">
             <h4>How do I schedule a tour?</h4>
-            <p>You can schedule a tour by clicking the "Schedule a Tour" button in our <a href="contact.html">Contact Page</a>.</p>
+            <p>You can schedule a tour by clicking the "Schedule a Tour" button in our <a href="{% url 'contact' %}">Contact Page</a>.</p>
         </div>
         <div class="faq-item">
             <h4>What safety measures are in place?</h4>
@@ -90,16 +90,10 @@
     <section id="contact" class="contact-info">
         <h2>Contact Us</h2>
         <p>If you have any questions about the admissions process or need more information, please don't hesitate to reach out!</p>
-        <p>Phone: (XXX) XXX-XXXX</p>
-        <p>Email: admissions@[schoolname].com</p>
-        <p><a href="mailto:admissions@[schoolname].com" class="cta-btn">Email Us</a></p>
+        <p>Phone: (256) 784-499434</p>
+        <p>Email: benedictkindergarten@gmail.com</p>
+        <p><a href="mailto:benedictkindergarten@gmail.com" class="cta-btn">Email Us</a></p>
     </section>
     
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 [School Name]. All rights reserved.</p>
-        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="contact.html">Contact Us</a></p>
-        <p>Follow Us: <a href="https://facebook.com/[schoolname]" target="_blank">Facebook</a> | <a href="https://instagram.com/[schoolname]" target="_blank">Instagram</a></p>
-    </footer>
-    
-    </body>
+</body>
+{% endblock %}

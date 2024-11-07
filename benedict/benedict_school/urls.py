@@ -6,7 +6,6 @@ from .views import (
     contact_view,
     ParentCreateChildCreateView,
     PupilApplicationCreateView,
-    ActivityListView,
     ParentListView,
     ParentDetailView,
     ParentUpdateView,
@@ -18,17 +17,16 @@ from .views import (
     PupilApplicationDetailView,
     EventListView,
     EventDetailView,
-    ActivityDetailView,
     LoginViews,
     staff_create_view
 )
 
 
 urlpatterns = [
-    path("", views.HomeView.as_view(), name="home"),
-    path("about/", about_view, name="aboutus"),
-    path("admissions/", views.PupilApplicationCreateView.as_view(), name="admission"),
-    path("activities/", views.ActivityListView.as_view(), name="activites"),
+    path("", views.HomeView.as_view(), name="home"), # Home page route
+    path("about/", about_view, name="aboutus"), # About us page route
+    path('admissions/', views.admissions, name='admissions'),  # Admissions page route
+    path('admissions/form/<int:child_id>/', views.PupilApplicationCreateView.as_view(), name='admission_form'),  # Application form
     path("contact_views/", views.contact_view, name="contact"),
     path("login/", views.LoginViews.as_view(), name="login"),
     path("search/", views.search_view, name="search"),
@@ -36,6 +34,8 @@ urlpatterns = [
     path('staff/new/', staff_create_view, name='staff_create'),
     path('register/', views.ParentCreateChildCreateView.as_view(), name='register_parent_and_child'), # Register new parent and child
     path('school-tour/', views.school_tour, name='school_tour'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    
     
     
     # parent urls
@@ -67,10 +67,4 @@ urlpatterns = [
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
     path("event/<int:pk>/", EventDetailView.as_view(), name="event-detail"
     ),  # Event detail page
-
-    # ---------- Activity URLs ----------
-    path("activities/", ActivityListView.as_view(), name="activity-list"
-    ),  # List all activities
-    path("activity/<int:pk>/", ActivityDetailView.as_view(), name="activity-detail"
-    ),  # Activity detail page
 ]

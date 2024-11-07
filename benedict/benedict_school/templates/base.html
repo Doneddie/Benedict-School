@@ -25,10 +25,9 @@
         <ul>
           <li><a href = '{% url "home" %}'> HOME </a></li>
           <li><a href = '{% url "aboutus" %}'> ABOUT US </a></li>
-          <li><a href = '{% url "activites" %}'> ACTIVITIES  </a></li>
           <li><a href = '{% url "event-list" %}'> EVENTS </a></li>
           <li><a href = '{% url "contact" %}'> CONTACT US </a></li>
-          <li><a href = '{% url "admission" %}'> ADMISSIONS</a></li>
+          <li><a href = '{% url "admissions" %}'> ADMISSIONS</a></li>
           <!-- Adding a search bar inside the navbar bootstrap -->
           <form class="d-flex" action="{% url 'search' %}" method="get">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
@@ -54,10 +53,12 @@
       {% endblock %}
     </main>
   
-    <!-- Footer Section (common to all pages) -->
-    <footer>
-      <p>&copy; 2024 All rights reserved. Benedict Kindergarten and Primary School.</p>
-    </footer>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+      <p><a href = "{% url 'privacy_policy' %}">Privacy Policy</a> | <a href = "{% url 'contact' %}">Contact Us</a></p>
+      <p>Follow Us: <a href="https://facebook.com/[schoolname]" target="_blank">Facebook</a> | <a href="https://instagram.com/[schoolname]" target="_blank">Instagram</a></p>
+  </footer>
   </body>
   
 

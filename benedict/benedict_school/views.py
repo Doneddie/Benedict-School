@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-
-# I am creating my views here.
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (
     ListView,
@@ -14,11 +12,14 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Activity, Event, About
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, ActivityForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
+from .models import Parent, Child, PupilApplication, Exit, Event, About
+from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -26,8 +27,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Retrieve all activities and events from the database
-        context["activities"] = Activity.objects.all() # Get all activities
         # Separate upcoming and past events
         current_time = timezone.now()
         context["upcoming_events"] = Event.objects.filter(date__gte=timezone.now()).order_by("date")
@@ -39,6 +38,10 @@ class HomeView(TemplateView):
 def school_tour(request):
     return render(request, 'contact.html')
 
+# View for the Admissions Page
+def admissions(request):
+    return render(request, 'admissions.html')
+
 # Create both parent and child
 class ParentCreateChildCreateView(CreateView):
     def get(self, request, *args, **kwargs):
@@ -49,6 +52,10 @@ class ParentCreateChildCreateView(CreateView):
             'parent_form': parent_form,
             'child_form': child_form
         })
+
+    def form_valid(self, form):
+        # Logic for saving the parent and child info
+        child_id = 1
 
     def post(self, request, *args, **kwargs):
         """Process both the parent and child form submissions"""
@@ -64,8 +71,11 @@ class ParentCreateChildCreateView(CreateView):
             child.parent = parent  # Associate the parent with the child
             child.save()
 
-            # Redirect to a success page
-            return HttpResponseRedirect(reverse_lazy('home.html'))  
+            # Get the child_id from the saved child object
+            child_id = child.id
+
+            # Redirect to the admission form for the newly created child
+            return HttpResponseRedirect(reverse('admission_form', kwargs={'child_id': child_id}))
 
         # If forms are not valid, re-render the form with errors
         return render(request, 'register_parent_and_child.html', {
@@ -88,7 +98,7 @@ class ParentDetailView(DetailView):
 class ParentUpdateView(UpdateView):
     model = Parent
     form_class = ParentForm
-    template_name = 'register_parent_and_child'
+    template_name = 'register_parent_and_child.html'
     fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
     success_url = reverse_lazy('parent-list')
 
@@ -139,12 +149,27 @@ class PupilApplicationCreateView(CreateView):
     template_name = 'applications/application_form.html'
 
     def form_valid(self, form):
-        """Set the child before saving the application"""
-        child = get_object_or_404(Child, id=self.kwargs['child_id'])
-        form.instance.child = child
-        return super().form_valid(form)
-    
-    success_url = reverse_lazy('application-list')
+        # Retrieve child_id from URL
+        child_id = self.kwargs.get('child_id')
+
+        # Get the child object (raises 404 if not found)
+        child = get_object_or_404(Child, id=child_id)
+
+        # Check if an application already exists for the given child
+        existing_application = PupilApplication.objects.filter(child=child).first()
+
+        if existing_application:
+            # Option 1: Handle this by returning a message or redirecting
+            return redirect('home')  # Or show a message indicating application exists.
+
+        # If no existing application, save the new one
+        application = form.save(commit=False)
+        application.child = child  # Link the child to the application
+        application.save()
+
+        # Redirect to success page after form submission
+        success_url = reverse_lazy('home')
+        
 
 # Event views
 class EventListView(ListView):
@@ -154,16 +179,6 @@ class EventListView(ListView):
 class EventDetailView(DetailView):
     model = Event
     template_name = 'event_detail.html'
-
-# Activity views
-class ActivityListView(ListView):
-    model = Activity
-    template_name = 'activity_list.html'
-
-class ActivityDetailView(DetailView):
-    model = Activity
-    template_name = 'activity_detail.html'
-
 
 def contact_view(request):
     if request.method == "POST":
@@ -241,3 +256,6 @@ def staff_create_view(request):
     else:
         form = StaffForm()
     return render(request, 'staff_form.html', {'form': form})
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')

@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django import forms
-from .models import Parent, Child, PupilApplication, Staff, Event, Activity, Exit 
+from .models import Parent, Child, PupilApplication, Staff, Event, Exit 
 from datetime import date
 
 
@@ -130,12 +130,6 @@ class ExitForm(forms.ModelForm):
         fields = ["child", "exit_date", "reason"]
 
 
-class ActivityForm(forms.ModelForm):
-    class Meta:
-        model = Activity
-        fields = ["title", "description", "date"]
-
-
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -144,9 +138,16 @@ class EventForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, label="Your Name")
-    email = forms.EmailField(label="Your Email")
+    email = forms.EmailField(label="Your Email Address")
     subject = forms.CharField(max_length=100, label="Subject")
     message = forms.CharField(widget=forms.Textarea, label="Message")
+
+    # Added custom validation or clean methods
+    def clean_message(self):
+        message = self.cleaned_data.get("message")
+        if len(message) < 10:
+            raise forms.ValidationError("Message must be at least 10 characters long.")
+        return message
     
 
 
