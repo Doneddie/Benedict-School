@@ -90,11 +90,6 @@ class ParentListView(ListView):
     template_name = 'parents/parent_list.html'
     context_object_name = 'parents'
 
-class ParentDetailView(DetailView):
-    model = Parent
-    template_name = 'parents/parent_detail.html'
-    context_object_name = 'parent'
-
 class ParentUpdateView(UpdateView):
     model = Parent
     form_class = ParentForm
@@ -119,11 +114,6 @@ class ChildListView(ListView):
         parent = get_object_or_404(Parent, id=self.kwargs['parent_id'])
         return Child.objects.filter(parent=parent)
 
-class ChildDetailView(DetailView):
-    model = Child
-    template_name = 'children/child_detail.html'
-    context_object_name = 'child'
-
 class ChildUpdateView(UpdateView):
     model = Child
     form_class = ChildForm
@@ -138,9 +128,9 @@ class ChildDeleteView(DeleteView):
 
 # Pupil Application Views
 
-class PupilApplicationDetailView(DetailView):
+class PupilApplicationListView(ListView):
     model = PupilApplication
-    template_name = 'applications/application_detail.html'
+    template_name = 'applications/application_list.html'
     context_object_name = 'application'
 
 class PupilApplicationCreateView(CreateView):
@@ -175,10 +165,6 @@ class PupilApplicationCreateView(CreateView):
 class EventListView(ListView):
     model = Event
     template_name = 'event_list.html'
-
-class EventDetailView(DetailView):
-    model = Event
-    template_name = 'event_detail.html'
 
 def contact_view(request):
     if request.method == "POST":

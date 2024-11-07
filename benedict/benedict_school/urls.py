@@ -7,16 +7,13 @@ from .views import (
     ParentCreateChildCreateView,
     PupilApplicationCreateView,
     ParentListView,
-    ParentDetailView,
     ParentUpdateView,
     ParentDeleteView,
     ChildListView,
-    ChildDetailView,
     ChildUpdateView,
     ChildDeleteView,
-    PupilApplicationDetailView,
+    PupilApplicationListView,
     EventListView,
-    EventDetailView,
     LoginViews,
     staff_create_view
 )
@@ -40,8 +37,6 @@ urlpatterns = [
     
     # parent urls
     path("parents/", ParentListView.as_view(), name="parent-list"),  # List all parents
-    path("parent/<int:pk>/", ParentDetailView.as_view(), name="parent-detail"
-    ),  # Parent detail page
     path("parent/<int:pk>/edit/", ParentUpdateView.as_view(), name="parent-update"
     ),  # Edit a parent
     path("parent/<int:pk>/delete/", ParentDeleteView.as_view(), name="parent-delete"
@@ -50,8 +45,6 @@ urlpatterns = [
     # child urls
     path("parent/<int:parent_id>/children/", ChildListView.as_view(), name="child-list"
     ),  # List all children for a parent
-    path("child/<int:pk>/", ChildDetailView.as_view(), name="child-detail"
-    ),  # Child detail page
     path("child/<int:pk>/edit/", ChildUpdateView.as_view(), name="child-update"
     ),  # Edit a child
     path("child/<int:pk>/delete/", ChildDeleteView.as_view(), name="child-delete"
@@ -60,11 +53,9 @@ urlpatterns = [
     # Pupil Application URLs
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",
     ),  # Create a pupil application
-    path("application/<int:pk>/", PupilApplicationDetailView.as_view(), name="pupil-application-detail",
-    ),  # View a specific pupil application
+    path("application/<int:pk>/", PupilApplicationListView.as_view(), name="pupil-application-list",
+    ),  # List all pupil applications
 
     # ---------- Event URLs ----------
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
-    path("event/<int:pk>/", EventDetailView.as_view(), name="event-detail"
-    ),  # Event detail page
 ]
