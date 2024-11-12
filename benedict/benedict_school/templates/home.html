@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'css/home-styles.css' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section with Animated Background -->
