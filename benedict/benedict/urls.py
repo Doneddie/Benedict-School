@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # This includes the admin panel
     path("", views.HomeView.as_view(), name="home"),
     path('benedict_school/', include('benedict_school.urls')), # Keep other URLs here
+    path('admin-dashboard/', include('benedict_school.urls')),
     # Other patterns (for debugging, etc.)
     path('__debug__/', include('debug_toolbar.urls')),
 ]
