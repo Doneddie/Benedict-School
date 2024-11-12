@@ -3,25 +3,26 @@
 
 {% block content %}
 <!-- Hero Section with Animated Background -->
+<!-- Hero Section with Background Image and Overlaid Content -->
 <section class="hero-section">
-    <div class="hero-content">
-        <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>
-        <p class="tagline animate__animated animate__fadeIn">{{ tagline|default:"Love Learning!" }}</p>
-        <img src="{% static 'images/hero_picture.jpg' %}" alt="Happy children learning" class="hero-image">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>
+            <p class="tagline animate__animated animate__fadeIn">{{ tagline|default:"Love Learning!" }}</p>
+            
+            <!-- Call to Action Buttons -->
+            <div class="cta-container">
+                <a href="{% url 'school_tour' %}" class="cta-button tour">
+                    <i class="fas fa-school"></i> Tour Our School
+                </a>
+                <a href="{% url 'contact' %}" class="cta-button contact">
+                    <i class="fas fa-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Call to Action Buttons -->
-<section class="cta-section">
-    <div class="cta-container">
-        <a href="{% url 'school_tour' %}" class="cta-button tour">
-            <i class="fas fa-school"></i> Tour Our School
-        </a>
-        <a href="{% url 'contact' %}" class="cta-button contact">
-            <i class="fas fa-envelope"></i> Contact Us
-        </a>
-    </div>
-</section>
 
 <!-- Welcome Message -->
 <section class="welcome-section">
