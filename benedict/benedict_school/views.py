@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import (
     ListView,
     DetailView,
@@ -83,56 +84,7 @@ class ParentCreateChildCreateView(CreateView):
             'child_form': child_form
         })
 
-
-# Parent views
-class ParentListView(ListView):
-    model = Parent
-    template_name = 'parents/parent_list.html'
-    context_object_name = 'parents'
-
-class ParentUpdateView(UpdateView):
-    model = Parent
-    form_class = ParentForm
-    template_name = 'register_parent_and_child.html'
-    fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
-    success_url = reverse_lazy('parent-list')
-
-class ParentDeleteView(DeleteView):
-    model = Parent
-    template_name = 'parents/parent_confirm_delete.html' # Confirmation before deletion
-    success_url = reverse_lazy('parent-list')
-
-# Child views
-
-class ChildListView(ListView):
-    model = Child
-    template_name = 'children/child_list.html'
-    context_object_name = 'children'
-
-    def get_queryset(self):
-        """Override to filter children by their parent"""
-        parent = get_object_or_404(Parent, id=self.kwargs['parent_id'])
-        return Child.objects.filter(parent=parent)
-
-class ChildUpdateView(UpdateView):
-    model = Child
-    form_class = ChildForm
-    template_name = 'register_parent_and_child'
-    fields = ['name', 'date_of_birth', 'profile_image', 'application_status']
-    success_url = reverse_lazy('child-list')
-
-class ChildDeleteView(DeleteView):
-    model = Child
-    template_name = 'children/child_confirm_delete.html' # Confirmation before deletion
-    success_url = reverse_lazy('child-list')
-
 # Pupil Application Views
-
-class PupilApplicationListView(ListView):
-    model = PupilApplication
-    template_name = 'applications/application_list.html'
-    context_object_name = 'application'
-
 class PupilApplicationCreateView(CreateView):
     model = PupilApplication
     form_class = PupilApplicationForm
@@ -188,18 +140,6 @@ def contact_view(request):
     return render(request, "contact.html", {"form": form})
 
 
-class LoginViews(LoginView):
-    template_name = "login.html"  # Specify your login template here
-
-    def form_valid(self, form):
-        # Optional: Add any extra processing before login
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        # Redirect to a specific URL after login
-        return reverse_lazy("home")  
-
-
 #search functions views
 
 def search_view(request):
@@ -233,15 +173,70 @@ def about_view(request):
     about_content = About.objects.first()  # Assuming a single entry for the "About" page
     return render(request, 'about.html', {'about': about_content})
 
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff  # Checks if user is admin
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def admin_dashboard(request):
+    # Your admin view logic
+    return render(request, 'admin_dashboard.html')
+
+# Admin view to create a new staff member
+@user_passes_test(is_admin, login_url='/admin-login/')
 def staff_create_view(request):
     if request.method == 'POST':
         form = StaffForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('staff_list')  # Redirect to the list of staff members or another page
+            return redirect('staff_list')  # Redirect to a list of staff members after creation
     else:
         form = StaffForm()
-    return render(request, 'staff_form.html', {'form': form})
+    return render(request, 'create_staff.html', {'form': form})
+# Staff list
+@user_passes_test(is_admin, login_url='/admin-login/')
+def staff_list(request):
+    staff_members = Staff.objects.all()
+    return render(request, 'staff_list.html', {'staff_members': staff_members})
+# Delete staff
+@user_passes_test(is_admin, login_url='/admin-login/')
+def delete_staff(request, staff_id):
+    staff_member = get_object_or_404(Staff, id=staff_id)
+    staff_member.delete()
+    return redirect('staff-list')
 
-def privacy_policy(request):
-    return render(request, 'privacy_policy.html')
+# Parent views
+@user_passes_test(is_admin, login_url='/admin-login/')
+def parent_list(request):
+    parents = Parent.objects.all()
+    return render(request, 'parent_list.html', {'parents': parents})
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def delete_parent(request, parent_id):
+    parent = get_object_or_404(Parent, id=parent_id)
+    parent.delete()
+    return redirect('parent-list')
+
+# Child views
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def child_list(request):
+    children = Child.objects.all()
+    return render(request, 'child_list.html', {'children': children})
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def delete_child(request, child_id):
+    child = get_object_or_404(Child, id=child_id)
+    child.delete()
+    return redirect('child-list')
+
+# Application view
+@user_passes_test(is_admin, login_url='/admin-login/')
+def application_list(request):
+    applications = Application.objects.all()
+    return render(request, 'application_list.html', {'applications': applications})
+
+
+

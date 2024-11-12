@@ -23,11 +23,12 @@
       </div>
       <nav>
         <ul>
-          <li><a href = '{% url "home" %}'> HOME </a></li>
+          <li><a href = '{% url "home" %}'> HOME </a></li> 
           <li><a href = '{% url "aboutus" %}'> ABOUT US </a></li>
-          <li><a href = '{% url "event-list" %}'> EVENTS </a></li>
+          <li><a href = '{% url "event-list" %}'> EVENT LIST</a></li>
           <li><a href = '{% url "contact" %}'> CONTACT US </a></li>
-          <li><a href = '{% url "admissions" %}'> ADMISSIONS</a></li>
+          <li><a href = '{% url "admissions" %}'> ADMISSIONS </a></li>
+          <li><a href = '{% url "admin-login" %}'> ADMIN LOGIN </a></li>
           <!-- Adding a search bar inside the navbar bootstrap -->
           <form class="d-flex" action="{% url 'search' %}" method="get">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">

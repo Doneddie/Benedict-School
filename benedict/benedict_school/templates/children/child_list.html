@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Child List</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Profile Image</th>
+              <th>Name</th>
+              <th>Date of Birth</th>
+              <th>Study Class</th>
+              <th>Application Status</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for child in children %}
+          <tr>
+              <!-- Profile Image -->
+              <td>
+                  {% if child.profile_image %}
+                      <img src="{{ child.profile_image.url }}" alt="{{ child.name }}'s profile image" width="50" height="50">
+                  {% else %}
+                      <span>No Image</span>
+                  {% endif %}
+              </td>
+              
+              <!-- Child Details -->
+              <td>{{ child.name }}</td>
+              <td>{{ child.date_of_birth }}</td>
+              <td>{{ child.study_class }}</td>
+              <td>{{ child.application_status }}</td>
+              
+              <!-- Action Links -->
+              <td>
+                  <a href="{% url 'delete-child' child.id %}">Delete</a>
+                  <!-- Add more actions here if needed, such as Edit -->
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <a href="{% url 'create-child' %}">Add New Child</a>
+{% endblock %}

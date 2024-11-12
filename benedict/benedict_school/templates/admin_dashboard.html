@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} ADMIN DASHBOARD {% endblock title %}
+{% block content %}
+<h1>Welcome to the Admin Dashboard</h1>
+<p>Manage the school system from here.</p>
+<ul>
+    <li><a href="{% url 'staff-list' %}">Staff List</a></li>
+    <li><a href="{% url 'parent-list' %}">Parent List</a></li>
+    <li><a href="{% url 'child-list' %}">Child List</a></li>
+    <li><a href="{% url 'application-list' %}">Application List</a></li>
+    <li><a href="{% url 'create-staff' %}">Create Staff</a></li>
+    <li><a href="{% url 'delete-parent' %}">Delete Parent</a></li>
+    <li><a href="{% url 'delete-child' %}">Delete Child</a></li>
+    <li><a href="{% url 'delete-staff' %}">Delete Staff</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% endif %}
+
+{% endblock %}
+
+
+

@@ -150,12 +150,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # For example, using Gmail's SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "benedictkindergarten@gmail.com"  # Your email address for sending emails
+EMAIL_HOST_USER = "julia07n@yahoo.com"  # Your email address for sending emails
 EMAIL_HOST_PASSWORD = 'your_email_password'  # Your email password (or app-specific password)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the email you send from as the default sender address
 
 
-CONTACT_EMAIL = "benedictkindergarten@gmail.com"
+CONTACT_EMAIL = "julia07n@yahoo.com"
 
 # Add trusted origins for CSRF protection
 CSRF_TRUSTED_ORIGINS = [
@@ -163,4 +163,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',   # Add for HTTP if not using HTTPS
     'http://127.0.0.1:8000',   # Using the 127.0.0.1 IP address
 ]
+
+LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
+LOGOUT_REDIRECT_URL = '/admin-login/'     # Redirect to login page after logout
+
 

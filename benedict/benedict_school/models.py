@@ -19,8 +19,22 @@ class Child(models.Model):
     parent = models.ForeignKey(
         Parent, on_delete=models.CASCADE, related_name="children"
     )
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
+    study_class = models.CharField(
+        max_length=20, 
+        choices=[
+            ("baby_class", "Baby Class"),
+            ("middle_class", "Middle class"),
+            ("top_class", "Top class"),
+            ("primary_one", "Primary one"),
+            ("primary_two", "Primary two"),
+            ("primary_three", "Primary three"),
+            ("primary_four", "Primary four")
+        ],
+        default="primary_one",
+    )
+
     profile_image = models.ImageField(upload_to="child_images/", null=True, blank=True)
     application_status = models.CharField(
         max_length=20,
@@ -74,9 +88,9 @@ class Event(models.Model):
 
 class Staff(models.Model):
     # Personal information
-    username = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='Unknown')
     email = models.EmailField(unique=True)
-    teacher_name = models.CharField(max_length=100, default='Unknown')
     class_name = models.CharField(max_length=50, default='Primary One')
 
     # Staff-related information

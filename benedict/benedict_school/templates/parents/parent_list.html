@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Parent List</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Profile Image</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>ID Number</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for parent in parents %}
+          <tr>
+              <td>
+                  {% if parent.profile_image %}
+                      <img src="{{ parent.profile_image.url }}" alt="{{ parent.first_name }}'s profile image" width="50" height="50">
+                  {% else %}
+                      <span>No Image</span>
+                  {% endif %}
+              </td>
+              <td>{{ parent.first_name }}</td>
+              <td>{{ parent.last_name }}</td>
+              <td>{{ parent.ID_number }}</td>
+              <td>{{ parent.email }}</td>
+              <td>{{ parent.address }}</td>
+              <td>
+                  <a href="{% url 'delete-parent' parent.id %}">Delete</a>
+                  <!-- Add other actions here if needed, like Edit -->
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <a href="{% url 'create-parent' %}">Add New Parent</a>
+{% endblock %}

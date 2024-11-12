@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Pupil Applications</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Child Name</th>
+              <th>Documents</th>
+              <th>Notes</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for application in applications %}
+          <tr>
+              <!-- Linked Child's Name -->
+              <td>{{ application.child.name }}</td>
+
+              <!-- Documents -->
+              <td>
+                  {% if application.documents %}
+                      <a href="{{ application.documents.url }}" target="_blank">View Document</a>
+                  {% else %}
+                      <span>No Document Uploaded</span>
+                  {% endif %}
+              </td>
+
+              <!-- Notes -->
+              <td>{{ application.notes }}</td>
+
+              <!-- Actions -->
+              <td>
+                  <a href="{% url 'delete-application' application.id %}">Delete</a>
+                  <!-- Add more actions here if needed, such as Edit -->
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <a href="{% url 'create-application' %}">Add New Application</a>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} ADMIN LOGIN {% endblock title %}
+{% block content %}
+<h2>Admin Login</h2>
+<form method="post" action="{% url 'admin-login' %}">
+    {% csrf_token %}
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+    <button type="submit">Login</button>
+</form>
+
+{% if form.errors %}
+<p class="error">Invalid credentials. Please try again.</p>
+{% endif %}
+
+{% endblock %}

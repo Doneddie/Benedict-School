@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h2>Staff List</h2>
+  <table>
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>ID Number</th>
+              <th>Email</th>
+              <th>Class Name</th>
+              <th>Subjects Handled</th>
+              <th>Years of Experience</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for staff in staff_members %}
+          <tr>
+              <td>{{ staff.name }}</td>
+              <td>{{ staff.ID_number }}</td>
+              <td>{{ staff.email }}</td>
+              <td>{{ staff.class_name }}</td>
+              <td>{{ staff.subjects_handled }}</td>
+              <td>{{ staff.years_of_experience }}</td>
+              <td>
+                  <a href="{% url 'delete-staff' staff.id %}">Delete</a>
+                  <!-- Add other actions here if needed, like Edit -->
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <a href="{% url 'create-staff' %}">Add New Staff Member</a>
+{% endblock %}
+

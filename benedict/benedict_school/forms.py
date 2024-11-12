@@ -26,17 +26,17 @@ class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
         fields = [
-            "username",
+            "name",
+            "ID_number",
             "email",
-            "teacher_name",
             "class_name",
             "subjects_handled",
             "years_of_experience",
         ]
         widgets = {
-            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "ID_number": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
-            "teacher_name": forms.TextInput(attrs={"class": "form-control"}),
             "class_name": forms.TextInput(attrs={"class": "form-control"}),
             "subjects_handled": forms.Select(attrs={"class": "form-control"}),
             "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
@@ -80,7 +80,7 @@ class ParentForm(forms.ModelForm):
 class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
-        fields = ['name', 'date_of_birth', 'profile_image', 'application_status']
+        fields = ['name', 'date_of_birth', 'study_class', 'profile_image', 'application_status']
 
     def clean_date_of_birth(self):
         date_of_birth = self.cleaned_data.get('date_of_birth')
