@@ -2,7 +2,7 @@
 .hero-section {
     position: relative;
     height: 100vh; /* Full viewport height */
-    background:  no-repeat center center/cover; /* Background image */
+    background: green  no-repeat center center/cover; /* Background image */
     display: flex;
     align-items: center;
     justify-content: center;
