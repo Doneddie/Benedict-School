@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/admin_login.css' %}">
+{% endblock %}
 {% block title %} ADMIN LOGIN {% endblock title %}
 {% block content %}
 <h2>Admin Login</h2>
