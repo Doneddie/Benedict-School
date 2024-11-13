@@ -196,3 +196,11 @@ footer a:hover {
 .navbar ul li a:hover {
     color: var(--lemon-green);
 }
+body{
+  margin: o;
+  padding: 0;
+  font-family: "Roboto" Arial, sans-serif;
+  box-sizing: borderbox;
+  scroll-behaviour: smooth
+  display: grid;
+}
