@@ -42,6 +42,9 @@ header h1 {
 .navbar {
     background-color: var(--orange);
     padding: 0.5rem;
+    z-index: 1000;
+    position: sticky;
+    top: 0;
 }
 
 .navbar ul {
