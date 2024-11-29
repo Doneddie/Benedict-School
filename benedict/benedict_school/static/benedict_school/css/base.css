@@ -18,7 +18,7 @@
 
 /* Body Styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Roboto", sans-serif;
     color: var(--black);
     background-color: var(--white);
     line-height: 1.6;
