@@ -31,12 +31,10 @@
               <td>{{ parent.email }}</td>
               <td>{{ parent.address }}</td>
               <td>
-                  <a href="{% url 'delete-parent' parent.id %}">Delete</a>
-                  <!-- Add other actions here if needed, like Edit -->
+                <a href="{% url 'delete-parent' pk=parent.pk %}">Delete</a>
               </td>
           </tr>
           {% endfor %}
       </tbody>
   </table>
-  <a href="{% url 'create-parent' %}">Add New Parent</a>
 {% endblock %}

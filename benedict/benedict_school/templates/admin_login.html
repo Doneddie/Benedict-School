@@ -6,20 +6,29 @@
 {% endblock %}
 {% block title %} ADMIN LOGIN {% endblock title %}
 {% block content %}
-<h2>Admin Login</h2>
-<form method="post" action="{% url 'admin-login' %}">
-    {% csrf_token %}
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
+<div class="container d-flex justify-content-center align-items-center my-5">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+      <h3 class="text-center mb-2">Admin Login</h3>
+      <form method="post" action="{% url 'admin-login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="rememberMe">
+          <label class="form-check-label" for="rememberMe">Remember Me</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-80">Login</button>
+      </form>
     </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-    </div>
-    <button type="submit">Login</button>
-</form>
-
+</div>
+  
+  
 {% if form.errors %}
 <p class="error">Invalid credentials. Please try again.</p>
 {% endif %}

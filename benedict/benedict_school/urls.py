@@ -6,6 +6,8 @@ from .views import (
     about_view,
     contact_view,
     ParentCreateChildCreateView,
+    ParentDeleteView,
+    DeleteChildView,
     PupilApplicationCreateView,
     EventListView,
     staff_create_view,
@@ -31,9 +33,9 @@ urlpatterns = [
     path('staff/', views.staff_list, name='staff-list'),
     path('staff/<int:staff_id>/delete/', views.delete_staff, name='delete-staff'),
     path('parent/', views.parent_list, name='parent-list'),
-    path('parent/<int:parent_id>/delete/', views.delete_parent, name='delete-parent'),
+    path('parent/<int:pk>/delete/', ParentDeleteView.as_view(), name='delete-parent'),
     path('child/', views.child_list, name='child-list'),
-    path('child/<int:child_id>/delete/', views.delete_child, name='delete-child'),
+    path('child/<int:child_id>/delete/', views.DeleteChildView.as_view(), name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
 
     # Pupil Application URLs
