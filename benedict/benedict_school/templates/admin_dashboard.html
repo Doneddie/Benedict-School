@@ -9,13 +9,21 @@
     <li><a href="{% url 'parent-list' %}">Parent List</a></li>
     <li><a href="{% url 'child-list' %}">Child List</a></li>
     <li><a href="{% url 'application-list' %}">Application List</a></li>
-    <li><a href="{% url 'create-staff' %}">Create Staff</a></li>
-    <li><a href="{% url 'delete-parent' %}">Delete Parent</a></li>
-    <li><a href="{% url 'delete-child' %}">Delete Child</a></li>
-    <li><a href="{% url 'delete-staff' %}">Delete Staff</a></li>
-    <li><a href="{% url 'logout' %}">Logout</a></li>
+    <li><a href="{% url 'staff_create' %}">Create Staff</a></li>
+    {% for parent in parents %}
+    <li><a href="{% url 'delete-parent' parent.id %}">Delete Parent: {{ parent.first_name }} {{ parent.last_name }}</a></li>
+    {% endfor %}
+    {% for child in children %}
+    <li><a href="{% url 'delete-child' child.id %}">Delete Child: {{ child.first_name }} {{ child.last_name }}</a></li>
+    {% endfor %}
+    {% for staff in staff %}
+    <li><a href="{% url 'delete-staff' staff.id %}">Delete Staff: {{ staff.first_name }} {{ staff.last_name }}</a></li>
+    {% endfor %}
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
 </ul>
-{% endif %}
 
 {% endblock %}
 

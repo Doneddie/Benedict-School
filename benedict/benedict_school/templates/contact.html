@@ -5,54 +5,73 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Contact Us</title>
+        <!-- Include Bootstrap CSS from CDN -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/contact_styles.css' %}">  <!-- Include styles.css file -->
     </head>
 
-    <body>
-        <h1>Contact Us</h1>
-        
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}  <!-- Render the form fields with automatic HTML <p> tags -->
-                
-            <button type="submit">Send Message</button>
-        </form>
-        
-        {% if form.errors %}
-        <div class="errors">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                     <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Header -->
+        <div class="container text-center my-5">
+            <h1 class="display-4">Contact Us</h1>
         </div>
-        {% endif %}
-    </body>
-     <!-- Footer Section -->
-     <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+        
+        <!-- Form Container -->
+        <div class="container d-flex justify-content-center">
+            <div class="col-md-6">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.as_p }}  <!-- Render the form fields with automatic HTML <p> tags -->
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                </form>
 
-            <!-- Privacy Policy Link -->
-            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
-
-            <!-- Social Media Icons -->
-            <div class="social-media">
-                <a href="https://facebook.com" target="_blank" class="social-icon">
-                    <img src="{% static 'images/facebook-icon.png' %}" alt="Facebook">
-                </a>
-                <a href="https://twitter.com" target="_blank" class="social-icon">
-                    <img src="{% static 'images/twitter-icon.png' %}" alt="Twitter">
-                </a>
-                <a href="https://instagram.com" target="_blank" class="social-icon">
-                    <img src="{% static 'images/instagram-icon.png' %}" alt="Instagram">
-                </a>
-                <a href="https://linkedin.com" target="_blank" class="social-icon">
-                    <img src="{% static 'images/linkedin-icon.png' %}" alt="LinkedIn">
-                </a>
+                {% if form.errors %}
+                    <div class="alert alert-danger mt-3">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
         </div>
-    </footer>
+
+        <!-- Footer Section -->
+        <footer class="mt-auto bg-dark text-white py-4">
+            <div class="container text-center">
+                <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+
+                <!-- Privacy Policy Link -->
+                <a href="{% url 'privacy_policy' %}" class="footer-link text-white">Privacy Policy</a>
+
+                <!-- Social Media Icons -->
+                <div class="social-media mt-3">
+                    <a href="https://facebook.com" target="_blank" class="social-icon mx-2">
+                        <img src="{% static 'images/facebook-icon.png' %}" alt="Facebook" width="30" height="30">
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon mx-2">
+                        <img src="{% static 'images/twitter-icon.png' %}" alt="Twitter" width="30" height="30">
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon mx-2">
+                        <img src="{% static 'images/instagram-icon.png' %}" alt="Instagram" width="30" height="30">
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="social-icon mx-2">
+                        <img src="{% static 'images/linkedin-icon.png' %}" alt="LinkedIn" width="30" height="30">
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Include Bootstrap JS and dependencies from CDN -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
 </html>

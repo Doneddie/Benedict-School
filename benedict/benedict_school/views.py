@@ -84,6 +84,30 @@ class ParentCreateChildCreateView(CreateView):
             'child_form': child_form
         })
 
+class ParentDeleteView(DeleteView):
+    model = Parent
+    template_name = 'parent_confirm_delete.html'  # Custom delete confirmation template
+    context_object_name = 'parent'  # Context name for the parent instance
+    success_url = reverse_lazy('parent-list')  # Redirect after successful delete
+
+    def get_queryset(self):
+        """
+        Ensure that only superusers or admins can delete parents.
+        """
+        return Parent.objects.all()  # You can filter here if needed based on user permissions
+
+class DeleteChildView(DeleteView):
+    model = Child
+    template_name = 'child_confirm_delete.html'  # Custom template for confirmation
+    context_object_name = 'child'
+    success_url = reverse_lazy('child-list')  # Redirect after successful delete
+
+    def get_queryset(self):
+        """
+        This can be adjusted to ensure only admins can delete children.
+        """
+        return Child.objects.all()
+
 # Pupil Application Views
 class PupilApplicationCreateView(CreateView):
     model = PupilApplication
@@ -181,8 +205,10 @@ def is_admin(user):
 
 @user_passes_test(is_admin, login_url='/admin-login/')
 def admin_dashboard(request):
-    # Your admin view logic
-    return render(request, 'admin_dashboard.html')
+    # My admin view logic
+    parents = Parent.objects.all()  # Get all parents from the database
+    children = Child.objects.all()  # Fetch all children
+    return render(request, 'admin_dashboard.html', {'parents': parents}, {'children': children})
 
 # Admin view to create a new staff member
 @user_passes_test(is_admin, login_url='/admin-login/')

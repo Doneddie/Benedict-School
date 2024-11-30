@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Parent{% endblock %}
+
+{% block content %}
+  <h1>Are you sure you want to delete this parent?</h1>
+  <p>First Name: {{ parent.first_name }}</p>
+  <p>Last Name: {{ parent.last_name }}</p>
+  <p>Email: {{ parent.email }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'parent-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
