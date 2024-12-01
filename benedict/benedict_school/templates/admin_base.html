@@ -1,0 +1,72 @@
+{% load static %}
+{% load bootstrap4 %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'admin_dashboard' %}">School Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'staff-list' %}"><i class="fas fa-users"></i> Staff List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'child-list' %}"><i class="fas fa-child"></i> Children List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'application-list' %}"><i class="fas fa-clipboard-list"></i> Applications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'parent-list' %}"><i class="fas fa-user-friends"></i> Parent's List</a>
+            </li>
+            <form action="{% url 'logout' %}" method="POST" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </form>
+          </ul>
+        </div>
+      </div>
+    </nav>
+         
+
+    <main class="container my-4">
+      {% block content %}
+      <!-- Default content will go here -->
+      {% endblock %}
+    </main>
+
+    <footer class="bg-dark text-white py-4">
+      <div class="container text-center">
+        <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+        <p>
+          <a class="text-white" href="{% url 'privacy_policy' %}">Privacy Policy</a>
+        </p>
+        <p>Follow us: 
+          <a class="text-white" href="https://facebook.com/[schoolname]" target="_blank">Facebook</a> | 
+          <a class="text-white" href="https://instagram.com/[schoolname]" target="_blank">Instagram</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoH8N1KnZI7SbFU3xZZr9AF6bY3qE0IwL3ttxgDfu1F4fAc" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

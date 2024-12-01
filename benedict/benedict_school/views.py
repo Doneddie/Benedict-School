@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import (
     ListView,
     DetailView,
@@ -208,6 +209,17 @@ def admin_dashboard(request):
     # My admin view logic
     parents = Parent.objects.all()  # Get all parents from the database
     children = Child.objects.all()  # Fetch all children
+    total_staff = Staff.objects.count()
+    total_children = Child.objects.count()
+    total_applications = PupilApplication.objects.count()
+
+    # Pass data to the template
+    context = {
+        'total_staff': total_staff,
+        'total_children': total_children,
+        'total_applications': total_applications,
+    }
+    return render(request, 'admin_dashboard.html', context)
     return render(request, 'admin_dashboard.html', {'parents': parents}, {'children': children})
 
 # Admin view to create a new staff member
@@ -261,7 +273,7 @@ def delete_child(request, child_id):
 # Application view
 @user_passes_test(is_admin, login_url='/admin-login/')
 def application_list(request):
-    applications = Application.objects.all()
+    applications = PupilApplication.objects.select_related('child').all()
     return render(request, 'application_list.html', {'applications': applications})
 
 

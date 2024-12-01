@@ -163,6 +163,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
-LOGOUT_REDIRECT_URL = '/admin-login/'     # Redirect to login page after logout
+LOGOUT_REDIRECT_URL = '/'     # Redirect to login page after logout
 
 
