@@ -14,7 +14,7 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff
+from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
@@ -214,6 +214,10 @@ def about_view(request):
 
 def privacy_policy(request):
     return render(request, 'privacy_policy.html')
+
+def gallery(request):
+    images = GalleryImage.objects.all()
+    return render(request, 'gallery.html', {'images': images})
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff  # Checks if user is admin

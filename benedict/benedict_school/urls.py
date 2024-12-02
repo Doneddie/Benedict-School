@@ -40,6 +40,7 @@ urlpatterns = [
     path('child/<int:child_id>/delete/', delete_child, name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
     path('api/childrenData/', views.children_data, name='children_data'),  # The API endpoint for fetching data
+    path('gallery/', views.gallery, name='gallery'),
 
     # Pupil Application URLs
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",

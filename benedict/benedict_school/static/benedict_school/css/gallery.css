@@ -1,0 +1,35 @@
+/* Gallery container padding and text centering */
+.gallery-container {
+    padding: 40px 0;
+}
+
+/* Card image styling */
+.card-img-top {
+    object-fit: cover; /* Ensures the image fills the card properly */
+    height: 200px; /* Set a fixed height for uniformity */
+}
+
+/* Card title and text styling */
+.card-title {
+    font-size: 1.25rem; /* Slightly larger font size for titles */
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem; /* Default size for descriptions */
+    color: #555; /* Subtle text color for descriptions */
+}
+
+/* Hover effect for card */
+.card:hover {
+    transform: translateY(-10px); /* Creates a "lift" effect when hovering */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Enhanced shadow on hover */
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gallery-container {
+        padding: 20px 0;
+    }
+}

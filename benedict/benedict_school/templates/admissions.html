@@ -1,99 +1,121 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% load static %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/admissions.css' %}">
+{% endblock %}
 
 {% block content %}
 <body>
-
     <!-- Header Section -->
-    <header>
+    <header class="text-center py-4 bg-primary text-white">
         <h1>BENEDICT KINDERGARTEN AND PRIMARY SCHOOL</h1>
         <p>Heads but not tails!</p>
     </header>
     
     <!-- Hero Section -->
-    <section class="hero">
+    <section>
         <h2>Welcome to Our School</h2>
         <p>Begin your child's educational journey with us!</p>
-        <a href="{% url 'register_parent_and_child' %}" class="cta-btn">Apply Now</a>
+        <a href="{% url 'register_parent_and_child' %}" class="cta-btn btn btn-light btn-lg" data-aos="fade-up">Apply Now</a>
     </section>
     
     <!-- Admissions Overview Section -->
-    <section class="section">
-        <h2>Admissions Overview</h2>
-        <p>Thank you for considering Benedict Kindergarten and Primary School for your child’s early education. We are excited to partner with you in their growth and development. Below, you'll find everything you need to begin the admissions process.</p>
-        <h3>Key Dates</h3>
-        <ul>
-            <li>Applications for the 2024-2025 school year are now open.</li>
-            <li>Early registration ends on 15th January, 2025.</li>
-        </ul>
+    <section>
+        <div>
+            <h2>Admissions Overview</h2>
+            <p>Thank you for considering Benedict Kindergarten and Primary School for your child’s early education...</p>
+            <h3>Key Dates</h3>
+            <ul>
+                <li>Applications for the 2024-2025 school year are now open.</li>
+                <li>Early registration ends on 15th January, 2025.</li>
+            </ul>
+        </div>
     </section>
     
     <!-- How to Apply Section -->
-    <section class="section">
-        <h2>How to Apply</h2>
-        <ol>
-            <li class="step">Complete the online application form.</li>
-            <li class="step">Submit required documents (proof of previous education, etc.).</li>
-            <li class="step">Schedule a tour of the school.</li>
-            <li class="step">Attend an interview or orientation (if applicable).</li>
-            <li class="step">Receive admission confirmation.</li>
-        </ol>
-        <a href="{% url 'register_parent_and_child' %}" class="cta-btn">Apply Now</a>
+    <section>
+        <div>
+            <h2>How to Apply</h2>
+            <ol>
+                <li>Complete the online application form.</li>
+                <li>Submit required documents (proof of previous education, etc.).</li>
+                <li>Schedule a tour of the school.</li>
+                <li>Attend an interview or orientation (if applicable).</li>
+                <li>Receive admission confirmation.</li>
+            </ol>
+            <a href="{% url 'register_parent_and_child' %}" class="cta-btn btn btn-primary btn-lg" data-aos="fade-up">Apply Now</a>
+        </div>
     </section>
     
     <!-- Requirements Section -->
-    <section class="section">
-        <h2>Requirements</h2>
-        <p>Children must be between the ages of 3 and 5 to apply for Kindergarten or 6 and 10 to apply for primary.</p>
-        <h3>Documents Needed</h3>
-        <ul>
-            <li>Birth certificate</li>
-            <li>Proof of previous education</li>
-            <li>Medical records</li>
-            <li>Parent identification</li>
-        </ul>
+    <section>
+        <div>
+            <h2>Requirements</h2>
+            <p>Children must be between the ages of 3 and 5 to apply for Kindergarten or 6 and 10 for Primary.</p>
+            <h3>Documents Needed</h3>
+            <ul>
+                <li>Birth certificate</li>
+                <li>Proof of previous education</li>
+                <li>Medical records</li>
+                <li>Parent identification</li>
+            </ul>
+        </div>
     </section>
     
     <!-- Tuition and Fees Section -->
-    <section class="section">
-        <h2>Tuition and Fees</h2>
-        <p>Our tuition fees for the 2024-2025 school year are as follows:</p>
-        <ul>
-            <li>Full-day program: $X,XXX</li>
-            <li>Half-day program: $X,XXX</li>
-        </ul>
-        <p>We also offer payment plans and financial aid options. For more details, please <a href="{% url 'contact' %}">contact us</a>.</p>
+    <section>
+        <div>
+            <h2>Tuition and Fees</h2>
+            <p>Our tuition fees for the 2024-2025 school year are as follows:</p>
+            <ul>
+                <li>Full-day program: 450,000/=</li>
+                <li>Half-day program: 350,000/=</li>
+            </ul>
+            <p>We also offer payment plans and financial aid options. For more details, please <a href="{% url 'contact' %}">Contact Us</a>.</p>
+        </div>
     </section>
     
-    <!-- Frequently Asked Questions (FAQ) Section -->
-    <section class="section">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-item">
-            <h4>Do you offer half-day or full-day programs?</h4>
-            <p>Yes, we offer both half-day and full-day kindergarten programs. You can choose the option that best suits your child's needs.</p>
-        </div>
-        <div class="faq-item">
-            <h4>What is your student-to-teacher ratio?</h4>
-            <p>We maintain a low student-to-teacher ratio to ensure each child receives personalized attention. Our ratio is 8:1.</p>
-        </div>
-        <div class="faq-item">
-            <h4>How do I schedule a tour?</h4>
-            <p>You can schedule a tour by clicking the "Schedule a Tour" button in our <a href="{% url 'contact' %}">Contact Page</a>.</p>
-        </div>
-        <div class="faq-item">
-            <h4>What safety measures are in place?</h4>
-            <p>We prioritize your child's safety with secure facilities, background-checked staff, and health protocols in place.</p>
+    <!-- FAQ Section -->
+    <section>
+        <div>
+            <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+            <div class="faq-item mb-4">
+                <h4>Do you offer half-day or full-day programs?</h4>
+                <p>Yes, we offer both half-day and full-day kindergarten programs. You can choose the option that best suits your child's needs.</p>
+            </div>
+            <div class="faq-item mb-4">
+                <h4>What is your student-to-teacher ratio?</h4>
+                <p>We maintain a low student-to-teacher ratio to ensure each child receives personalized attention. Our ratio is 10:1.</p>
+            </div>
+            <div class="faq-item mb-4">
+                <h4>How do I schedule a tour?</h4>
+                <p>You can schedule a tour by sending us a message in our <a href="{% url 'contact' %}">Contact Us</a> Page.</p>
+            </div>
+            <div class="faq-item mb-4">
+                <h4>What safety measures are in place?</h4>
+                <p>We prioritize your child's safety with secure facilities, background-checked staff, and health protocols in place. <a href="{% url 'privacy_policy' %}" class="text-black">Privacy and Child Protection Policy</a>.</p>
+            </div>
         </div>
     </section>
     
     <!-- Contact Information Section -->
-    <section id="contact" class="contact-info">
-        <h2>Contact Us</h2>
-        <p>If you have any questions about the admissions process or need more information, please don't hesitate to reach out!</p>
-        <p>Phone: (+256) 784-499434</p>
-        <p>Email: julia07n@yahoo.co.uk</p>
-        <p><a href="mailto:julia07n@yahoo.co.uk" class="cta-btn">Email Us</a></p>
+    <section>
+        <div>
+            <h2>Contact Us</h2>
+            <p>If you have any questions about the admissions process, please reach out!</p>
+            <p>Phone: (+256) 784-499434</p>
+            <p>Email: <a href="mailto:julia07n@yahoo.co.uk" class="cta-btn btn btn-light">Email Us</a></p>
+        </div>
     </section>
-    
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        // Initialize AOS library
+        AOS.init({
+            offset: 200, // start animations a bit earlier
+            delay: 100,  // delay the animation a bit
+            duration: 600, // animation speed
+        });
+    </script>
 </body>
 {% endblock %}
