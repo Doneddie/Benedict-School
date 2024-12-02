@@ -46,7 +46,7 @@ class StaffForm(forms.ModelForm):
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
+        fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'parent_image']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

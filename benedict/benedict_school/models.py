@@ -7,7 +7,7 @@ class Parent(models.Model):
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True) 
     address = models.CharField(max_length=100)
-    profile_image = models.ImageField(
+    parent_image = models.ImageField(
         upload_to="parent_images/", null=True, blank=True
     )
     

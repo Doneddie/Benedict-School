@@ -23,8 +23,8 @@
                 {% for parent in parents %}
                 <tr>
                     <td>
-                        {% if parent.profile_image %}
-                            <img src="{{ parent.profile_image.url }}" alt="{{ parent.first_name }}'s profile image" class="profile-img">
+                        {% if parent.parent_image %}
+                            <img src="{{ parent.parent_image.url }}" alt="{{ parent.first_name }}'s profile image" class="profile-img">
                         {% else %}
                             <span>No Image</span>
                         {% endif %}
