@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Parent(models.Model): 
-    first_name = models.CharField(max_length=50, default='Unknown')
-    last_name = models.CharField(max_length=50, default='Unknown') 
-    ID_number = models.CharField(max_length=14, unique=True, null=False, default='AA0000000A00AA')
+    first_name = models.CharField(max_length=50, default='')
+    last_name = models.CharField(max_length=50, default='') 
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True) 
     address = models.CharField(max_length=100)
     profile_image = models.ImageField(

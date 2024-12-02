@@ -3,23 +3,166 @@
 
 {% block content %}
 <body>
-    <h1>Register Child</h1>
+    <h1>Register Your Child</h1>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <h2>Parent Information</h2>
-        {{ parent_form.as_p }}  <!-- Render parent form fields -->
-        
-        <h2>Child Information</h2>
-        {{ child_form.as_p }}  <!-- Render child form fields -->
+        <div class="form-container">
+            <!-- Parent Information Section -->
+            <h2>Parent Information</h2>
+            <div class="form-group">
+                {{ parent_form.as_p }}
+            </div>
 
-        <!-- Add a hidden input field for child_id if it's not part of the form fields -->
-        <input type="hidden" name="child_id" value="{{ child.id }}">
+            <!-- Child Information Section -->
+            <h2>Child Information</h2>
+            <div class="form-group">
+                {{ child_form.as_p }}
+                <small class="date-format">Date format: YYYY-MM-DD</small> <!-- Date format reminder -->
+            </div>
 
-        <button type="submit">Register</button>
+            <!-- Hidden input for child_id -->
+            <input type="hidden" name="child_id" value="{{ child.id }}">
+
+            <button type="submit" class="btn-submit">Register</button>
+        </div>
     </form>
 
-</body>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #4CAF50;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+            font-size: 1.5em;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .form-group .date-format {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .btn-submit {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: #45a049;
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: #f44336;
+            background-color: #fdecea;
+            border-left: 4px solid #f44336;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .error-message ul {
+            list-style-type: none;
+        }
+
+        .error-message ul li {
+            padding-left: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 10px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+
+            .btn-submit {
+                font-size: 1.1em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+
+    <script>
+        // Add error handling and UX improvements via JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                const dateInput = document.querySelector('[name="child_date_of_birth"]');
+                const dateValue = dateInput.value;
+                const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+                if (dateValue && !datePattern.test(dateValue)) {
+                    event.preventDefault(); // Prevent form submission
+                    alert("Please enter the date of birth in the correct format: YYYY-MM-DD.");
+                }
+            });
+        });
+    </script>
+</body>
 {% endblock %}
+

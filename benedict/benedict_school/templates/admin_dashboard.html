@@ -105,12 +105,12 @@
         var childrenClassChart = new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: ['Class 1', 'Class 2', 'Class 3', 'Class 4'],
+                labels: ["baby_class", "middle_class", "top_class", "primary_one", "primary_two", "primary_three", "primary_four"], // Will be populated dynamically
                 datasets: [{
                     label: 'Children by Class',
-                    data: [120, 150, 80, 95],  // Example data
-                    backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
+                    data: [50, 20, 75, 22, 15, 12, 10],  // Example data
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
                     borderWidth: 1
                 }]
             },
@@ -122,6 +122,21 @@
                 }
             }
         });
+        // Fetch data from the backend and update the chart
+        fetch('/api/childrenData/')  // The URL of your backend endpoint
+        .then(response => response.json())
+        .then(data => {
+            // Log data to the console for debugging
+            console.log(data);
+            
+            // Update chart data dynamically
+            childrenClassChart.data.labels = data.labels;
+            childrenClassChart.data.datasets[0].data = data.data;
+            // Update the chart
+            childrenClassChart.update();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
 
         var ctx2 = document.getElementById('applicationsStatusChart').getContext('2d');
         var applicationsStatusChart = new Chart(ctx2, {

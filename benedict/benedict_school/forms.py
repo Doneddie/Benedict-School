@@ -81,6 +81,9 @@ class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
         fields = ['name', 'date_of_birth', 'study_class', 'profile_image', 'application_status']
+        date_of_birth = forms.DateField(
+        widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+    )
 
     def clean_date_of_birth(self):
         date_of_birth = self.cleaned_data.get('date_of_birth')

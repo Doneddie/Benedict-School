@@ -2,34 +2,117 @@
 {% load static %}
 
 {% block content %}
-<h2>Pupil Applications</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Child Name</th>
-            <th>Documents</th>
-            <th>Notes</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for application in applications %}
-        <tr>
-            <!-- Linked Child's Name -->
-            <td>{{ application.child.name }}</td>
-            <!-- Documents -->
-            <td>
-                {% if application.documents %}
-                <a href="{{ application.documents.url }}" target="_blank">View Document</a>
-                {% else %}
-                <span>No Document Uploaded</span>
-                {% endif %}
-            </td>
+<body>
+    <h2>Pupil Applications</h2>
 
-            <!-- Notes -->
-            <td>{{ application.notes }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <!-- Table displaying pupil application information -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Child Name</th>
+                    <th>Documents</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>{{ application.child.name }}</td>
+                    <td>
+                        {% if application.documents %}
+                            <a href="{{ application.documents.url }}" target="_blank" class="document-link">View Document</a>
+                        {% else %}
+                            <span>No Document Uploaded</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ application.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
+    <!-- Inline CSS for table and page design -->
+    <style>
+        /* General resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+
+        /* Table container */
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Document link styling */
+        .document-link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .document-link:hover {
+            text-decoration: underline;
+            color: #45a049;
+        }
+
+        /* Responsive Styles for small screens */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.5em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+
+</body>
 {% endblock %}
+

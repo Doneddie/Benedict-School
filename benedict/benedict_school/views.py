@@ -22,6 +22,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
+from django.http import JsonResponse
+from django.db.models import Count
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -76,14 +78,26 @@ class ParentCreateChildCreateView(CreateView):
             # Get the child_id from the saved child object
             child_id = child.id
 
-            # Redirect to the admission form for the newly created child
-            return HttpResponseRedirect(reverse('admission_form', kwargs={'child_id': child_id}))
+            # Redirect to the application form for the newly created child
+            return HttpResponseRedirect(reverse('pupil-application-create', kwargs={'child_id': child_id}))
 
         # If forms are not valid, re-render the form with errors
         return render(request, 'register_parent_and_child.html', {
             'parent_form': parent_form,
             'child_form': child_form
         })
+
+def children_data(request):
+    # Query the Child model and count the number of children per class (study_class)
+    class_data = Child.objects.values('study_class').annotate(num_children=Count('study_class'))
+
+    # Map the result to match the expected format for the chart
+    # This will give us two lists: labels (class names) and data (number of children in each class)
+    labels = [item['study_class'] for item in class_data]
+    data = [item['num_children'] for item in class_data]
+
+    # Return the data as JSON to the frontend
+    return JsonResponse({'labels': labels, 'data': data})
 
 class ParentDeleteView(DeleteView):
     model = Parent
@@ -113,7 +127,7 @@ class DeleteChildView(DeleteView):
 class PupilApplicationCreateView(CreateView):
     model = PupilApplication
     form_class = PupilApplicationForm
-    template_name = 'applications/application_form.html'
+    template_name = 'application_form.html'
 
     def form_valid(self, form):
         # Retrieve child_id from URL
@@ -229,7 +243,7 @@ def staff_create_view(request):
         form = StaffForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('staff_list')  # Redirect to a list of staff members after creation
+            return redirect('staff-list')  # Redirect to a list of staff members after creation
     else:
         form = StaffForm()
     return render(request, 'create_staff.html', {'form': form})
