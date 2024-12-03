@@ -89,7 +89,7 @@ class Event(models.Model):
 class Staff(models.Model):
     # Personal information
     name = models.CharField(max_length=50, unique=True)
-    ID_number = models.CharField(max_length=14, unique=True, null=False, default='Unknown')
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
     class_name = models.CharField(max_length=50, default='Primary One')
 
