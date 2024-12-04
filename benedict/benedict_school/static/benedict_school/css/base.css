@@ -50,6 +50,7 @@ header {
 
 .navbar ul li {
     margin: 0 15px;
+    justify-content:space-between;
 }
 
 .navbar ul li a {
@@ -61,17 +62,6 @@ header {
 
 .navbar ul li a:hover {
     color: var(--lemon-green);
-}
-
-/* Search Bar (below navbar, full width) */
-.navbar + .d-flex {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.5rem;
-    background-color: var(--white);
-    border-top: 2px solid var(--lemon-green);
-    border-bottom: 2px solid var(--lemon-green);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .d-flex .form-control {
@@ -135,21 +125,6 @@ footer a:hover {
     color: var(--orange);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    .navbar ul {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .navbar ul li {
-        margin: 10px 0;
-    }
-
     .d-flex {
         flex-direction: column;
     }
@@ -172,6 +147,7 @@ footer a:hover {
     background-color: var(--orange);
     padding: 0.5rem;
     transition: top 0.3s; /* Smooth transition for hiding */
+    cursor: pointer;
 }
 
 .navbar ul {
@@ -201,4 +177,13 @@ body{
   box-sizing: borderbox;
   scroll-behavior: smooth;
   display: grid;
+}
+
+#navbar1{
+    justify-content: space-between;
+}
+header nav div a img{
+width: 50px;
+height: 50px;
+border-radius: 50px;
 }
