@@ -20,23 +20,17 @@
 body {
     font-family: "Roboto", sans-serif;
     color: var(--black);
-    background-color: var(--white);
+    background-color: var(--lemon-green);
     line-height: 1.6;
 }
 
 /* Header */
 header {
-    background-color: var(--lemon-green);
+    /*background-color: var(--lemon-green);*/
     color: var(--black);
     text-align: center;
-    padding: 1rem;
-}
-
-header h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--orange);
-    margin-bottom: 0.5rem;
+    margin: 0;
+    justify-content: space-between;
 }
 
 /* Navbar */
