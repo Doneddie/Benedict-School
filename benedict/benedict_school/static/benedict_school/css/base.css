@@ -1,5 +1,4 @@
 /* General Reset */
-
 *,
 *::before,
 *::after {
@@ -22,11 +21,14 @@ body {
     color: var(--black);
     background-color: var(--lemon-green);
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    scroll-behavior: smooth;
 }
 
 /* Header */
 header {
-    /*background-color: var(--lemon-green);*/
     color: var(--black);
     text-align: center;
     margin: 0;
@@ -40,6 +42,7 @@ header {
     z-index: 1000;
     position: sticky;
     top: 0;
+    transition: top 0.3s; /* Smooth transition for hiding */
 }
 
 .navbar ul {
@@ -50,7 +53,8 @@ header {
 
 .navbar ul li {
     margin: 0 15px;
-    justify-content:space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .navbar ul li a {
@@ -64,6 +68,7 @@ header {
     color: var(--lemon-green);
 }
 
+/* Search Form */
 .d-flex .form-control {
     flex: 1;
     border: 2px solid var(--lemon-green);
@@ -125,65 +130,27 @@ footer a:hover {
     color: var(--orange);
 }
 
-    .d-flex {
-        flex-direction: column;
-    }
-
-    .d-flex .btn {
-        width: 100%;
-        margin-top: 0.5rem;
-    }
-
-    main, aside, footer {
-        padding: 1rem;
-    }
+/* Navbar Adjustments for Mobile */
+.d-flex {
+    flex-direction: column;
 }
 
-/* Navbar (sticky and styled) */
-.navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000; /* Ensure navbar stays on top */
-    background-color: var(--orange);
-    padding: 0.5rem;
-    transition: top 0.3s; /* Smooth transition for hiding */
-    cursor: pointer;
+.d-flex .btn {
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
-.navbar ul {
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
+main, aside, footer {
+    padding: 1rem;
 }
 
-.navbar ul li {
-    margin: 0 15px;
-}
-
-.navbar ul li a {
-    text-decoration: none;
-    color: var(--white);
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.navbar ul li a:hover {
-    color: var(--lemon-green);
-}
-body{
-  margin: 0;
-  padding: 0;
-  font-family: "Roboto" Arial, sans-serif;
-  box-sizing: borderbox;
-  scroll-behavior: smooth;
-  display: grid;
-}
-
-#navbar1{
+/* Navbar (Sticky and Styled) */
+#navbar1 {
     justify-content: space-between;
 }
-header nav div a img{
-width: 50px;
-height: 50px;
-border-radius: 50px;
+
+header nav div a img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
 }
