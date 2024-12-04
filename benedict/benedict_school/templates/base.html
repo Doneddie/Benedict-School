@@ -42,7 +42,7 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'admissions' %}">Admissions</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'gallery' %}">Our Gallery</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'admin-login' %}">Admin Login</a></li>
+            
           </ul>
           <form class="d-flex" action="{% url 'search' %}" method="get">
             <input class="form-control me-2" type="search" placeholder="Search" name="q" aria-label="Search">
@@ -59,6 +59,11 @@
     </main>
 
     <footer class="bg-dark text-white py-4">
+      <div>
+        <ul>
+          <li class="nav-item"><a class="nav-link" href="{% url 'admin-login' %}">Admin Login</a></li>
+        </ul>
+      </div>
       <div class="container text-center">
         <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
         <p>
