@@ -3,12 +3,13 @@
 {% block stylesheets %}
     {{ block.super }}  <!-- This includes the CSS from the base.html -->
     <link rel="stylesheet" href="{% static 'benedict_school/css/home-styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <!-- Hero Section with Animated Background -->
 <!-- Hero Section with Background Image and Overlaid Content -->
-<section class="hero-section">
+<section class="hero-section" style="background-image: url('/static/images/hero_picture.jpg');">
     <div class="hero-overlay">
         <div class="hero-content">
             <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>

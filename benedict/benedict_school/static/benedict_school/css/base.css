@@ -19,7 +19,7 @@
 body {
     font-family: "Roboto", sans-serif;
     color: var(--black);
-    background-color: var(--lemon-green);
+    background: linear-gradient(to bottom, #F0FFFF, #e8eaeb); 
     line-height: 1.6;
     margin: 0;
     padding: 0;
