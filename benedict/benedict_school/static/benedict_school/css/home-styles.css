@@ -2,13 +2,18 @@
 .hero-section {
     position: relative;
     height: 100vh; /* Full viewport height */
-    background: green  no-repeat center center/cover; /* Background image */
+    background-image: url("{% static 'images/hero_picture.jpg' %}"); 
+    background-size: cover; /* Ensures the image covers the full section */
+    background-position: center center; /* Center the image */
+    /* background: green  no-repeat center center/cover; Background image */
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     text-align: center;
     padding: 20px;
+    width:100%; 
+    margin: 20px;
 }
 
 .hero-overlay {
@@ -25,6 +30,8 @@
 
 .hero-content {
     z-index: 1; /* Ensure content appears above the overlay */
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-content h1 {
