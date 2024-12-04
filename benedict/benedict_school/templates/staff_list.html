@@ -1,9 +1,10 @@
-{% extends "base.html" %}
+{% extends "admin_base.html" %}
 {% load static %}
 
 {% block content %}
   <h2>Staff List</h2>
-  <table>
+
+  <table class="staff-table">
       <thead>
           <tr>
               <th>Name</th>
@@ -24,14 +25,117 @@
               <td>{{ staff.class_name }}</td>
               <td>{{ staff.subjects_handled }}</td>
               <td>{{ staff.years_of_experience }}</td>
-              <td>
-                  <a href="{% url 'delete-staff' staff.id %}">Delete</a>
-                  <!-- Add other actions here if needed, like Edit -->
+              <td class="action-buttons">
+                  <a href="{% url 'delete-staff' staff.id %}" class="btn-delete">Delete</a>
+                  <!-- Add other actions like Edit if needed -->
               </td>
           </tr>
           {% endfor %}
       </tbody>
   </table>
-  <a href="{% url 'staff_create'%}">Add New Staff Member</a>
+
+  <a href="{% url 'staff_create' %}" class="btn-add">Add New Staff Member</a>
+  
+  <style>
+      /* Basic Reset */
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      
+      body {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+      }
+
+      h2 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      /* Table Styles */
+      .staff-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+      }
+
+      .staff-table th, .staff-table td {
+          padding: 12px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+      }
+
+      .staff-table th {
+          background-color: #f2f2f2;
+      }
+
+      /* Responsive Table: Stack on small screens */
+      @media (max-width: 768px) {
+          .staff-table thead {
+              display: none;
+          }
+
+          .staff-table, .staff-table tbody, .staff-table tr, .staff-table td {
+              display: block;
+              width: 100%;
+          }
+
+          .staff-table tr {
+              margin-bottom: 10px;
+          }
+
+          .staff-table td {
+              position: relative;
+              padding-left: 50%;
+              text-align: right;
+          }
+
+          .staff-table td::before {
+              content: attr(data-label);
+              position: absolute;
+              left: 10px;
+              font-weight: bold;
+          }
+      }
+
+      /* Button Styles */
+      .btn-add, .btn-delete {
+          display: inline-block;
+          padding: 10px 20px;
+          margin: 5px;
+          border-radius: 5px;
+          text-decoration: none;
+          text-align: center;
+      }
+
+      .btn-add {
+          background-color: #ff9800;
+          color: white;
+          font-weight: bold;
+      }
+
+      .btn-delete {
+          background-color: #f44336;
+          color: white;
+          font-weight: bold;
+      }
+
+      /* Hover Effects */
+      .btn-add:hover {
+          background-color: #e68900;
+      }
+
+      .btn-delete:hover {
+          background-color: #d32f2f;
+      }
+
+      /* Actions Column */
+      .action-buttons {
+          display: flex;
+          gap: 10px;
+      }
+  </style>
 {% endblock %}
 

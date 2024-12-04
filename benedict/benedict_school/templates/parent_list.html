@@ -1,40 +1,145 @@
-{% extends "base.html" %}
+{% extends "admin_base.html" %}
 {% load static %}
 
 {% block content %}
-  <h2>Parent List</h2>
-  <table>
-      <thead>
-          <tr>
-              <th>Profile Image</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>ID Number</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for parent in parents %}
-          <tr>
-              <td>
-                  {% if parent.profile_image %}
-                      <img src="{{ parent.profile_image.url }}" alt="{{ parent.first_name }}'s profile image" width="50" height="50">
-                  {% else %}
-                      <span>No Image</span>
-                  {% endif %}
-              </td>
-              <td>{{ parent.first_name }}</td>
-              <td>{{ parent.last_name }}</td>
-              <td>{{ parent.ID_number }}</td>
-              <td>{{ parent.email }}</td>
-              <td>{{ parent.address }}</td>
-              <td>
-                <a href="{% url 'delete-parent' pk=parent.pk %}">Delete</a>
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+<body>
+    <h2>Parent List</h2>
+
+    <!-- Table displaying parent information -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Profile Image</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>ID Number</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parent in parents %}
+                <tr>
+                    <td>
+                        {% if parent.parent_image %}
+                            <img src="{{ parent.parent_image.url }}" alt="{{ parent.first_name }}'s profile image" class="profile-img">
+                        {% else %}
+                            <span>No Image</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ parent.first_name }}</td>
+                    <td>{{ parent.last_name }}</td>
+                    <td>{{ parent.ID_number }}</td>
+                    <td>{{ parent.email }}</td>
+                    <td>{{ parent.address }}</td>
+                    <td>
+                        <a href="{% url 'delete-parent' pk=parent.pk %}" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inline CSS for table and page design -->
+    <style>
+        /* General resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+
+        /* Table container */
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Profile Image Styles */
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Delete button styles */
+        .delete-btn {
+            color: red;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .delete-btn:hover {
+            color: darkred;
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles for small screens */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.5em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .profile-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .delete-btn {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+
+</body>
 {% endblock %}
+

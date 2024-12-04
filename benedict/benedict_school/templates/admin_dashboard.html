@@ -1,31 +1,158 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %} ADMIN DASHBOARD {% endblock title %}
-{% block content %}
-<h1>Welcome to the Admin Dashboard</h1>
-<p>Manage the school system from here.</p>
-<ul>
-    <li><a href="{% url 'staff-list' %}">Staff List</a></li>
-    <li><a href="{% url 'parent-list' %}">Parent List</a></li>
-    <li><a href="{% url 'child-list' %}">Child List</a></li>
-    <li><a href="{% url 'application-list' %}">Application List</a></li>
-    <li><a href="{% url 'staff_create' %}">Create Staff</a></li>
-    {% for parent in parents %}
-    <li><a href="{% url 'delete-parent' parent.id %}">Delete Parent: {{ parent.first_name }} {{ parent.last_name }}</a></li>
-    {% endfor %}
-    {% for child in children %}
-    <li><a href="{% url 'delete-child' child.id %}">Delete Child: {{ child.first_name }} {{ child.last_name }}</a></li>
-    {% endfor %}
-    {% for staff in staff %}
-    <li><a href="{% url 'delete-staff' staff.id %}">Delete Staff: {{ staff.first_name }} {{ staff.last_name }}</a></li>
-    {% endfor %}
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - School</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'admin_dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'staff-list' %}">
+                                <i class="fas fa-users"></i> Staff List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'child-list' %}">
+                                <i class="fas fa-child"></i> Children List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'parent-list' %}">
+                                <i class="fas fa-user-friends"></i> Parent List
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'application-list' %}">
+                                <i class="fas fa-clipboard-list"></i> Applications
+                            </a>
+                        </li>
+                        <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </form>
+                    </ul>
+                </div>
+            </nav>
 
-{% endblock %}
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <h1 class="h2">Admin Dashboard</h1>
+                <div class="row">
+                    <!-- Card 1: Total Staff -->
+                    <div class="col-md-4">
+                        <div class="card text-white bg-primary mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Staff</h5>
+                                <p class="card-text">{{ total_staff }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2: Total Children -->
+                    <div class="col-md-4">
+                        <div class="card text-white bg-success mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Children</h5>
+                                <p class="card-text">{{ total_children }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3: Total Applications -->
+                    <div class="col-md-4">
+                        <div class="card text-white bg-warning mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Applications</h5>
+                                <p class="card-text">{{ total_applications }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Charts -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Children by Class</h4>
+                        <canvas id="childrenClassChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Applications Status</h4>
+                        <canvas id="applicationsStatusChart"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Chart.js Graphs
+        var ctx1 = document.getElementById('childrenClassChart').getContext('2d');
+        var childrenClassChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ["baby_class", "middle_class", "top_class", "primary_one", "primary_two", "primary_three", "primary_four"], // Will be populated dynamically
+                datasets: [{
+                    label: 'Children by Class',
+                    data: [50, 20, 75, 22, 15, 12, 10],  // Example data
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        // Fetch data from the backend and update the chart
+        fetch('/api/childrenData/')  // The URL of your backend endpoint
+        .then(response => response.json())
+        .then(data => {
+            // Log data to the console for debugging
+            console.log(data);
+            
+            // Update chart data dynamically
+            childrenClassChart.data.labels = data.labels;
+            childrenClassChart.data.datasets[0].data = data.data;
+            // Update the chart
+            childrenClassChart.update();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+
+        var ctx2 = document.getElementById('applicationsStatusChart').getContext('2d');
+        var applicationsStatusChart = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Approved', 'Pending', 'Rejected'],
+                datasets: [{
+                    label: 'Applications Status',
+                    data: [60, 30, 10],  // Example data
+                    backgroundColor: ['#28a745', '#ffcd56', '#dc3545'],
+                    hoverOffset: 4
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
 
 

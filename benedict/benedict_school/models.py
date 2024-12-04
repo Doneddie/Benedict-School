@@ -2,12 +2,12 @@ from django.db import models
 
 
 class Parent(models.Model): 
-    first_name = models.CharField(max_length=50, default='Unknown')
-    last_name = models.CharField(max_length=50, default='Unknown') 
-    ID_number = models.CharField(max_length=14, unique=True, null=False, default='AA0000000A00AA')
+    first_name = models.CharField(max_length=50, default='')
+    last_name = models.CharField(max_length=50, default='') 
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True) 
     address = models.CharField(max_length=100)
-    profile_image = models.ImageField(
+    parent_image = models.ImageField(
         upload_to="parent_images/", null=True, blank=True
     )
     
@@ -89,7 +89,7 @@ class Event(models.Model):
 class Staff(models.Model):
     # Personal information
     name = models.CharField(max_length=50, unique=True)
-    ID_number = models.CharField(max_length=14, unique=True, null=False, default='Unknown')
+    ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
     class_name = models.CharField(max_length=50, default='Primary One')
 
@@ -124,3 +124,11 @@ class About(models.Model):
 
     def __str__(self):
         return "About Page Content"
+
+class GalleryImage(models.Model):
+    image = models.ImageField(upload_to='gallery_images/')  # Save images in a specific folder
+    title = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title or f"Image {self.id}"

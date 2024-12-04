@@ -61,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "benedict.urls"
@@ -163,6 +164,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
-LOGOUT_REDIRECT_URL = '/admin-login/'     # Redirect to login page after logout
+LOGOUT_REDIRECT_URL = '/'     # Redirect to login page after logout
 
 

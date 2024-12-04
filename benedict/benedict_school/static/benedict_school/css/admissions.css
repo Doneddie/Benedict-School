@@ -1,0 +1,119 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h2, h3, h4 {
+    color: #f0ba09;
+}
+
+/* Header Section with background image */
+header {
+    background-image: url(''); /* Replace with the path to your image */
+    background-size: cover; /* Makes sure the image covers the entire header */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Ensures the image doesn't repeat */
+    color: white; /* Makes the text color white for contrast */
+    padding: 10px 0; /* Adjust the padding to ensure the content is well spaced */
+}
+
+
+/* Hero Section */
+.hero {
+    background-color: #17a2b8;
+    padding: 100px 0;
+}
+
+.cta-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.cta-btn:hover {
+    background-color: #218838;
+}
+
+/* Section Styles */
+.section {
+    padding: 60px 0;
+}
+
+.bg-light {
+    background-color: #f9f9f9;
+}
+
+/* Requirements and FAQs */
+ul, ol {
+    font-size: 1.1em;
+    margin-left: 30px;
+}
+
+.faq-item {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.faq-item h4 {
+    color: #007bff;
+}
+
+/* Contact Section */
+.contact-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .hero {
+        padding: 20px 0;
+    }
+
+    .cta-btn {
+        font-size: 1.2em;
+    }
+}
+
+/* Centering unordered and ordered lists */
+ul, ol {
+    list-style-position: inside;  /* Ensures the bullets/numbers are inside the content area */
+    text-align: center;           /* Centers the list items */
+    padding-left: 0;              /* Removes any default left padding */
+    margin-left: auto;
+    margin-right: auto;
+    display: table;               /* Makes the lists behave like table elements for centering */
+}
+
+/* Styling list items */
+ul li, ol li {
+    display: list-item;        /* Makes each list item in verticle alignment */
+    margin: 10px 0;            /* Adds space between list items */
+}
+
+/* Optional: For ordered lists, add a little spacing between the number and the text */
+ol {
+    counter-reset: list;         /* Resets the numbering */
+}
+
+ol li::before {
+    content: counter(list) ". "; /* Adds number before the list item */
+    position: absolute;
+    left: -30px;                 /* Adjust this value for desired distance from the text */
+    font-weight: bold;
+    font-size: 16px;
+}
+

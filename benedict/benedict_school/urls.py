@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LogoutView
 from . import views
 from .views import (
     HomeView,
@@ -8,6 +9,7 @@ from .views import (
     ParentCreateChildCreateView,
     ParentDeleteView,
     DeleteChildView,
+    delete_child,
     PupilApplicationCreateView,
     EventListView,
     staff_create_view,
@@ -35,8 +37,10 @@ urlpatterns = [
     path('parent/', views.parent_list, name='parent-list'),
     path('parent/<int:pk>/delete/', ParentDeleteView.as_view(), name='delete-parent'),
     path('child/', views.child_list, name='child-list'),
-    path('child/<int:child_id>/delete/', views.DeleteChildView.as_view(), name='delete-child'),
+    path('child/<int:child_id>/delete/', delete_child, name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
+    path('api/childrenData/', views.children_data, name='children_data'),  # The API endpoint for fetching data
+    path('gallery/', views.gallery, name='gallery'),
 
     # Pupil Application URLs
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",

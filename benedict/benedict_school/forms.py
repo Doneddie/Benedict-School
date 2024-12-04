@@ -46,7 +46,7 @@ class StaffForm(forms.ModelForm):
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'profile_image']
+        fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'parent_image']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -81,6 +81,9 @@ class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
         fields = ['name', 'date_of_birth', 'study_class', 'profile_image', 'application_status']
+        date_of_birth = forms.DateField(
+        widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+    )
 
     def clean_date_of_birth(self):
         date_of_birth = self.cleaned_data.get('date_of_birth')

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="gallery-container">
+    <h2 class="text-center mb-5">Our Gallery</h2>
+    <div class="row">
+        {% for image in images %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ image.title }}</h5>
+                    <p class="card-text">{{ image.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+

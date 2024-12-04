@@ -8,24 +8,148 @@
         <!-- Include Bootstrap CSS from CDN -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/contact_styles.css' %}">  <!-- Include styles.css file -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            /* Body and General Styles */
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f9f9f9;
+                color: #362424;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                font-weight: 700;
+                color: #f1b204;
+            }
+
+            /* Form Section Styling */
+            .form-container {
+                background-color: rgb(236, 240, 207);
+                padding: 40px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(158, 115, 34, 0.1);
+            }
+
+            .form-group label {
+                font-size: 1.1em;
+                color: #555;
+            }
+
+            .btn-primary {
+                background-color: #007bff;
+                border-color: #007bff;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+            .form-group input, .form-group textarea {
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                padding: 10px;
+                width: 100%;
+                font-size: 1em;
+                margin-top: 8px;
+                transition: border-color 0.3s ease;
+            }
+
+            .form-group input:focus, .form-group textarea:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            /* Error Message Styles */
+            .alert-danger {
+                background-color: #f8d7da;
+                color: #721c24;
+                border-radius: 5px;
+                padding: 15px;
+            }
+
+            .alert-danger ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .alert-danger li {
+                margin-bottom: 10px;
+            }
+
+            /* Footer Section */
+            footer {
+                background-color: #333;
+                color: white;
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .footer-link {
+                color: #ddd;
+                text-decoration: none;
+                margin: 0 15px;
+                font-size: 1em;
+                transition: color 0.3s;
+            }
+
+            .footer-link:hover {
+                color: #007bff;
+            }
+
+            .social-icon {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                margin: 0 10px;
+                background-color: #444;
+                border-radius: 50%;
+                padding: 8px;
+                transition: background-color 0.3s ease;
+            }
+
+            .social-icon:hover {
+                background-color: #007bff;
+            }
+
+            .social-icon img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            /* Media Queries for Responsiveness */
+            @media (max-width: 768px) {
+                .form-container {
+                    padding: 30px;
+                }
+
+                .btn-primary {
+                    width: 100%;
+                }
+            }
+        </style>
     </head>
 
     <body class="d-flex flex-column min-vh-100">
-        <!-- Header -->
+        <!-- Header Section -->
         <div class="container text-center my-5">
             <h1 class="display-4">Contact Us</h1>
+            <p class="lead text-muted">We're here to help. Reach out to us for any inquiries.</p>
         </div>
-        
-        <!-- Form Container -->
-        <div class="container d-flex justify-content-center">
-            <div class="col-md-6">
+
+        <!-- Form Section -->
+        <div class="container d-flex justify-content-center mb-5">
+            <div class="col-md-8 col-lg-6 form-container">
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         {{ form.as_p }}  <!-- Render the form fields with automatic HTML <p> tags -->
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary btn-block">Send Message</button>
                 </form>
 
@@ -44,28 +168,25 @@
         </div>
 
         <!-- Footer Section -->
-        <footer class="mt-auto bg-dark text-white py-4">
-            <div class="container text-center">
-                <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+        <footer class="mt-auto">
+            <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+            <!-- Privacy Policy Link -->
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy and Child protection Policy</a>
 
-                <!-- Privacy Policy Link -->
-                <a href="{% url 'privacy_policy' %}" class="footer-link text-white">Privacy Policy</a>
-
-                <!-- Social Media Icons -->
-                <div class="social-media mt-3">
-                    <a href="https://facebook.com" target="_blank" class="social-icon mx-2">
-                        <img src="{% static 'images/facebook-icon.png' %}" alt="Facebook" width="30" height="30">
-                    </a>
-                    <a href="https://twitter.com" target="_blank" class="social-icon mx-2">
-                        <img src="{% static 'images/twitter-icon.png' %}" alt="Twitter" width="30" height="30">
-                    </a>
-                    <a href="https://instagram.com" target="_blank" class="social-icon mx-2">
-                        <img src="{% static 'images/instagram-icon.png' %}" alt="Instagram" width="30" height="30">
-                    </a>
-                    <a href="https://linkedin.com" target="_blank" class="social-icon mx-2">
-                        <img src="{% static 'images/linkedin-icon.png' %}" alt="LinkedIn" width="30" height="30">
-                    </a>
-                </div>
+            <!-- Social Media Icons -->
+            <div class="social-media mt-3">
+                <a href="https://www.facebook.com/BenedictkindergartenBulungakikaaya" target="_blank" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
             </div>
         </footer>
 
@@ -75,3 +196,4 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>
+
