@@ -6,7 +6,7 @@
 /* Card image styling */
 .card-img-top {
     object-fit: cover; /* Ensures the image fills the card properly */
-    height: 200px; /* Set a fixed height for uniformity */
+    height: 400px; /* Set a fixed height for uniformity */
 }
 
 /* Card title and text styling */
@@ -32,4 +32,24 @@
     .gallery-container {
         padding: 20px 0;
     }
+}
+
+/* Initially hide the description */
+.description {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show the description when the 'show' class is added */
+.description.show {
+    display: block;
+    opacity: 1;
+}
+
+h2 {
+    font-size: 2.0rem;
+    text-align: center;
+    color: #eea70d;
+    margin-bottom: 15px;
 }

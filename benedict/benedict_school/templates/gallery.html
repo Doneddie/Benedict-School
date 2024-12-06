@@ -1,22 +1,61 @@
 {% extends "base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/gallery.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
 
 {% block content %}
 <div class="gallery-container">
     <h2 class="text-center mb-5">Our Gallery</h2>
-    <div class="row">
+
+    <div class="row gallery-images" "row g-3">
         {% for image in images %}
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ image.title }}</h5>
-                    <p class="card-text">{{ image.description }}</p>
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                <div class="card shadow-sm" hover-shadow hover-opacity">
+                    <img src="{{ image.image.url }}" 
+                         class="card-img-top  hover-shadow hover-opacity" 
+                         alt="{{ image.title }}" 
+                         data-title="{{ image.title }}" 
+                         data-description="{{ image.description }}"
+                         data-type="{% if image.image.width < image.image.height %}
+                         portrait
+                     {% else %}
+                         landscape
+                     {% endif %}"
+                         onclick="toggleDescription(this)">
+                    <div class="card-body collapse description">
+                        <h5 class="card-title">{{ image.title }}</h5>
+                        <p class="card-text">{{ image.description }}</p>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="toggleDescription(this)">
+                        View Description <i class="fas fa-eye"></i>
+                    </button>
+
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>
+
+<script>
+    function toggleDescription(imgElement) {
+        const cardBody = imgElement.nextElementSibling;
+        cardBody.classList.toggle('show');
+    }
+</script>
+<script>
+    function toggleDescription(imgElement) {
+        const cardBody = imgElement.closest('.card').querySelector('.description');
+        cardBody.classList.toggle('show'); // Toggle visibility by adding/removing the 'show' class
+    }
+</script>
+
+
 {% endblock %}
+
+
 
 

@@ -1,75 +1,40 @@
-/* Global Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-h2, h3, h4 {
-    color: #f0ba09;
-}
-
-/* Header Section with background image */
-header {
-    background-image: url(''); /* Replace with the path to your image */
-    background-size: cover; /* Makes sure the image covers the entire header */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Ensures the image doesn't repeat */
-    color: white; /* Makes the text color white for contrast */
-    padding: 10px 0; /* Adjust the padding to ensure the content is well spaced */
-}
-
-
-/* Hero Section */
-.hero {
-    background-color: #17a2b8;
-    padding: 100px 0;
-}
-
-.cta-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.cta-btn:hover {
-    background-color: #218838;
-}
-
-/* Section Styles */
-.section {
-    padding: 60px 0;
-}
-
-.bg-light {
+    font-family: "Roboto", sans-serif;
     background-color: #f9f9f9;
 }
-
-/* Requirements and FAQs */
-ul, ol {
-    font-size: 1.1em;
-    margin-left: 30px;
+.hero-section {
+    background-color: #ffa500;
+    color: #fff;
+    text-align: center;
+    padding: 50px 20px;
 }
-
-.faq-item {
-    background-color: #f1f1f1;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.cta-btn {
+    background-color: #32cd32; /* Lemon green */
+    color: #fff;
+    border: none;
 }
-
+.cta-btn:hover {
+    background-color: #28a745; /* Darker lemon green */
+}
+.section-title {
+    color: #ffa500;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+.card {
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
 .faq-item h4 {
-    color: #007bff;
-}
-
-/* Contact Section */
-.contact-info {
-    background-color: #17a2b8;
-    color: white;
+    color: #000;
 }
 
 /* Responsive Design */
