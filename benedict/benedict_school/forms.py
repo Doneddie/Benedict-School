@@ -29,6 +29,7 @@ class StaffForm(forms.ModelForm):
             "name",
             "ID_number",
             "email",
+            "tel_no",
             "class_name",
             "subjects_handled",
             "years_of_experience",
@@ -37,6 +38,7 @@ class StaffForm(forms.ModelForm):
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "ID_number": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "tel_no": forms.TextInput(attrs={"class": "form-control"}),
             "class_name": forms.TextInput(attrs={"class": "form-control"}),
             "subjects_handled": forms.Select(attrs={"class": "form-control"}),
             "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
@@ -46,7 +48,7 @@ class StaffForm(forms.ModelForm):
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        fields = ['first_name', 'last_name', 'ID_number', 'email', 'address', 'parent_image']
+        fields = ['first_name', 'last_name', 'ID_number', 'email', 'tel_no', 'address', 'parent_image']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

@@ -15,6 +15,7 @@
                     <th>Last Name</th>
                     <th>ID Number</th>
                     <th>Email</th>
+                    <th>Tel No</th>
                     <th>Address</th>
                     <th>Actions</th>
                 </tr>
@@ -33,6 +34,7 @@
                     <td>{{ parent.last_name }}</td>
                     <td>{{ parent.ID_number }}</td>
                     <td>{{ parent.email }}</td>
+                    <td>{{ parent.tel_no}} </td>
                     <td>{{ parent.address }}</td>
                     <td>
                         <a href="{% url 'delete-parent' pk=parent.pk %}" class="delete-btn">Delete</a>

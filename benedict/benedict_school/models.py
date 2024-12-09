@@ -5,7 +5,8 @@ class Parent(models.Model):
     first_name = models.CharField(max_length=50, default='')
     last_name = models.CharField(max_length=50, default='') 
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
-    email = models.EmailField(unique=True) 
+    email = models.EmailField(unique=True)
+    tel_no = models.CharField(max_length=15, default='') 
     address = models.CharField(max_length=100)
     parent_image = models.ImageField(
         upload_to="parent_images/", null=True, blank=True
@@ -91,6 +92,7 @@ class Staff(models.Model):
     name = models.CharField(max_length=50, unique=True)
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
+    tel_no = models.CharField(max_length=15, default='')
     class_name = models.CharField(max_length=50, default='Primary One')
 
     # Staff-related information
