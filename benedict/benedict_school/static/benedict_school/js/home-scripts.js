@@ -1,7 +1,7 @@
 function initMap() {
     const schoolLocation = {
-        lat: YOUR_SCHOOL_LATITUDE,  // Replace with actual latitude
-        lng: YOUR_SCHOOL_LONGITUDE   // Replace with actual longitude
+        lat: 0.313575,  // actual latitude
+        lng: 32.506578   // actual longitude
     };
 
     const map = new google.maps.Map(document.getElementById('school-map'), {
@@ -35,8 +35,8 @@ function initMap() {
         content: `
             <div style="padding: 10px;">
                 <h3 style="margin: 0 0 5px 0; color: #2c3e50;">Benedict School</h3>
-                <p style="margin: 0; color: #7f8c8d;">Your School Address Here</p>
-                <p style="margin: 5px 0 0 0; color: #7f8c8d;">Phone: Your Phone Number</p>
+                <p style="margin: 0; color: #7f8c8d;">Bulenga-Kikaaya, Wakiso</p>
+                <p style="margin: 5px 0 0 0; color: #7f8c8d;">Phone: +256784499434</p>
             </div>
         `
     });

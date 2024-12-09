@@ -122,12 +122,20 @@
                 We're located in a convenient location with easy access to public transportation.
             </p>
         </div>
-        <div id="school-map" class="mt-8" style="height: 400px;"></div>
+        
+        <!-- Embedded Google Map -->
+        <div id="school-map" class="mt-8" style="height: 400px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3989.758653300606!2d32.504067!3d0.3133494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177da328376e9b43%3A0x454471dbdb33afed!2sBenedict%20kindergarten%20and%20primary%20school!5e0!3m2!1sen!2sug!4v1733732843074!5m2!1sen!2sug"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
         <div class="text-center mt-6">
             <p class="text-gray-600">
-                <strong>Address:</strong> Your School Address Here
+                <strong>Address:</strong> Bulenga-Kikaaya, Wakiso
             </p>
-            <a href="https://maps.google.com/maps?q=YOUR_SCHOOL_COORDINATES" 
+            <a href="https://maps.google.com/maps?q=0.313575,32.506578" 
                target="_blank" 
                class="inline-flex items-center mt-2 text-blue-600 hover:text-blue-800">
                 Get Directions
@@ -140,12 +148,10 @@
     </div>
 </div>
 
+
 {% endblock %}
 
 {% block extra_head %}
-    <!-- Added Google Maps JavaScript API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}"></script>
-    
     <!-- Custom CSS for the map -->
     <link rel="stylesheet" href="{% static 'css/home-styles.css' %}">
     <!--Custom JS for the map-->
