@@ -3,7 +3,7 @@ body {
     background-color: #f9f9f9;
 }
 .hero-section {
-    background-color: #ffa500;
+    background-color: #e7650f;
     color: #fff;
     text-align: center;
     padding: 50px 20px;
@@ -17,7 +17,7 @@ body {
     background-color: #28a745; /* Darker lemon green */
 }
 .section-title {
-    color: #ffa500;
+    color: #e6640e;
     text-transform: uppercase;
     font-weight: 600;
     margin-bottom: 30px;

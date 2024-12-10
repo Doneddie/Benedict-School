@@ -1,0 +1,37 @@
+{% if events %}
+      <div class="event-list">
+        {% for event in events %}
+          <div class="event-item">
+            <h3>{{ event.title }}</h3>
+            <p><strong>Date:</strong> {{ event.date|date:"F j, Y, g:i a" }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p>{{ event.description }}</p>
+
+            {% if event.image %}
+              <img src="{{ event.image.url }}" alt="{{ event.title }} Image" class="event-image">
+            {% endif %}
+
+            {% if event.video %}
+              <video controls>
+                <source src="{{ event.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No events at the moment.</p>
+    {% endif %}
+  </div>
+
+  /* Style for the Welcome Section */
+.welcome-section {
+    padding: 40px;
+    background-color: #f9f9f9;  /* Light background for the whole section */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* Make the section fill the viewport height */
+    text-align: center;
+}

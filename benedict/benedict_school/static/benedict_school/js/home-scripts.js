@@ -20,7 +20,6 @@ function initMap() {
                     { "color": "#3498db" }
                 ]
             }
-            // Add more custom styles as needed
         ]
     });
 
@@ -48,3 +47,31 @@ function initMap() {
 
 // Initialize the map when the page loads
 window.addEventListener('load', initMap);
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const imagesContainer = document.getElementById("gallery-container");
+    const images = imagesContainer.querySelectorAll(".gallery-card");
+    let currentIndex = 0;
+
+    // Function to hide all images
+    function hideAllImages() {
+        images.forEach(image => {
+            image.style.display = "none";
+        });
+    }
+
+    // Function to show the next image
+    function showNextImage() {
+        hideAllImages();
+        images[currentIndex].style.display = "block";
+        currentIndex = (currentIndex + 1) % images.length; // Loop back to the first image when we reach the end
+    }
+
+    // Initially show the first image
+    showNextImage();
+
+    // Set interval to show the next image every 5 seconds
+    setInterval(showNextImage, 5000);  // Change images every 5 seconds (5000 milliseconds)
+});
+

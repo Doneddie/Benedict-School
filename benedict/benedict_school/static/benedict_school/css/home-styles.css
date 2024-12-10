@@ -77,6 +77,74 @@
     font-size: 1.2rem;
 }
 
+
+/* The main card for the principal message */
+.principal-message {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the card */
+    overflow: hidden;
+    width: 150%; /* You can adjust the width as per your needs */
+    max-width: 1200px; /* Maximum width */
+}
+
+/* The small card for the principal's photo */
+.principal-photo {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;  /* Ensures the image covers the box */
+    border-radius: 10px; /* Rounded corners for the image */
+    margin-right: 20px;  /* Space between the image and the text */
+}
+
+/* Content inside the message */
+.message-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Vertically center the content */
+    padding: 20px;
+    flex: 1;  /* Take up remaining space on the right */
+}
+
+/* The principal's name */
+.principal-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    text-align: right; /* Align the name to the right */
+}
+
+/* Title inside the message */
+h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ee4a0a; /* Greenish color for the title */
+    margin-bottom: 20px;
+}
+
+/* The paragraph (message) inside the card */
+p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #555;  /* Dark gray color for the text */
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .principal-message {
+        flex-direction: column;  /* Stack the image and content vertically on smaller screens */
+    }
+
+    .principal-photo {
+        margin-right: 0;
+        margin-bottom: 20px;  /* Add some space below the image */
+    }
+}
+
+
 /* Gallery Preview Section */
 .gallery-preview-section {
     padding: 30px 0;
@@ -108,7 +176,7 @@
 
 .gallery-card img {
     width: 100%;  /* Makes the image width fill the container */
-    height: 200px;  /* Adjust the height to a fixed value */
+    height: 300px;  /* Adjust the height to a fixed value */
     object-fit: cover;  /* Ensures the image covers the card area without distortion */
     display: block;
     border-radius: 8px;

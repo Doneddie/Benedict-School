@@ -32,7 +32,10 @@
 <!-- Welcome Message -->
 <section class="welcome-section">
     <div class="principal-message">
+        <!-- Principal's Photo -->
         <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo">
+
+        <!-- Principal's Message and Details -->
         <div class="message-content">
             <h2>Welcome to Our Family</h2>
             <p>{{ principal.message|default:"At Benedict Kindergarten and Primary School, we believe every child is unique and deserves a nurturing environment to grow, learn, and discover their potential. Our dedicated team of educators is committed to providing the best start in your child's educational journey." }}</p>
@@ -40,6 +43,8 @@
         </div>
     </div>
 </section>
+
+
 
 <!-- Gallery Preview Section -->
 <section class="gallery-preview-section">
@@ -64,6 +69,7 @@
         {% if events %}
             {% for event in events %}
             <div class="event-card">
+                <a href="{% url 'event-list' %}"></a>
                 <div class="event-date">{{ event.date|date:"M d" }}</div>
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
@@ -89,6 +95,7 @@
         {% if past_events %}
             {% for event in past_events %}
             <div class="event-card">
+                <a href="{% url 'event-list' %}"></a>
                 <div class="event-date">{{ event.date|date:"M d" }}</div>
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
@@ -165,6 +172,6 @@
 {% endblock %}
 
 {% block extra_head %}
-    <!--Custom JS for the map-->
+    <!--Custom JS -->
     <script src="{% static 'js/home-scripts.js' %}"></script>
 {% endblock %}
