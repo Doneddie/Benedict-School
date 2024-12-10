@@ -98,6 +98,7 @@
     overflow: hidden;
     background-color: #fff;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;  /* Ensures the card layout stays intact */
 }
 
 .gallery-card:hover {
@@ -106,8 +107,9 @@
 }
 
 .gallery-card img {
-    width: 100%;
-    height: auto;
+    width: 100%;  /* Makes the image width fill the container */
+    height: 200px;  /* Adjust the height to a fixed value */
+    object-fit: cover;  /* Ensures the image covers the card area without distortion */
     display: block;
     border-radius: 8px;
 }
