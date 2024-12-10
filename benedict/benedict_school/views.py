@@ -35,6 +35,9 @@ class HomeView(TemplateView):
         current_time = timezone.now()
         context["upcoming_events"] = Event.objects.filter(date__gte=timezone.now()).order_by("date")
         context["past_events"] = Event.objects.filter(date__lt=current_time).order_by("-date")  # Latest past events first
+
+        # Fetch the first 3 gallery images for the homepage
+        context["images"] = GalleryImage.objects.all()[:3]  # Get the first 3 images
         
         return context
 
