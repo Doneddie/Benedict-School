@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Your code here
+ 
 });
 
 function openModal(member) {

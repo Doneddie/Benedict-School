@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} ABOUT US {% endblock title %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/about_us.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
 {% block content %}
 <!-- About Us Section -->
 <section class="about-us">
@@ -71,11 +76,8 @@
 {% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/about.css' %}">
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/about.js' %}"></script>
+    <!--Custom JS -->
+    <script src="{% static 'js/about_us.js' %}"></script>
 {% endblock %}
 
  
