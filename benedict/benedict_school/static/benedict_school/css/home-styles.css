@@ -77,6 +77,21 @@
     font-size: 1.2rem;
 }
 
+@media screen and (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content .tagline {
+        font-size: 1.2rem;
+    }
+
+    .cta-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 
 /* The main card for the principal message */
 .principal-message {
@@ -188,3 +203,76 @@ p {
     font-size: 1.2rem;
 }
 
+.events-section {
+    padding: 50px 20px;
+}
+
+.events-carousel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.event-card {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1 1 200px;  /* Allow cards to grow or shrink */
+}
+
+@media screen and (max-width: 768px) {
+    .events-carousel {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-card {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.testimonials-section {
+    padding: 50px 20px;
+}
+
+.testimonials-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.testimonial-card {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .testimonials-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
