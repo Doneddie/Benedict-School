@@ -14,6 +14,7 @@
     padding: 20px;
     width:100%; 
     margin: 20px;
+    flex-direction: column; /* Helps to stack the content vertically */
 }
 
 .hero-overlay {
@@ -71,25 +72,11 @@
 .cta-button:hover {
     background-color: #fb923c;
     transform: translateY(-2px);
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .tour i, .contact i {
     font-size: 1.2rem;
-}
-
-@media screen and (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero-content .tagline {
-        font-size: 1.2rem;
-    }
-
-    .cta-container {
-        flex-direction: column;
-        gap: 10px;
-    }
 }
 
 
@@ -100,7 +87,7 @@
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the card */
     overflow: hidden;
-    width: 150%; /* You can adjust the width as per your needs */
+    width: 100%; /* You can adjust the width as per your needs */
     max-width: 1200px; /* Maximum width */
 }
 
@@ -135,7 +122,7 @@
 h2 {
     font-size: 2rem;
     font-weight: bold;
-    color: #ee4a0a; /* Greenish color for the title */
+    color: #ee4a0a; /* Orange color for the title */
     margin-bottom: 20px;
 }
 
@@ -145,18 +132,6 @@ p {
     line-height: 1.6;
     color: #555;  /* Dark gray color for the text */
     margin-bottom: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .principal-message {
-        flex-direction: column;  /* Stack the image and content vertically on smaller screens */
-    }
-
-    .principal-photo {
-        margin-right: 0;
-        margin-bottom: 20px;  /* Add some space below the image */
-    }
 }
 
 
@@ -191,7 +166,7 @@ p {
 
 .gallery-card img {
     width: 100%;  /* Makes the image width fill the container */
-    height: 300px;  /* Adjust the height to a fixed value */
+    height: auto;  /* Adjust the height to a fixed value */
     object-fit: cover;  /* Ensures the image covers the card area without distortion */
     display: block;
     border-radius: 8px;
@@ -220,18 +195,6 @@ p {
     flex: 1 1 200px;  /* Allow cards to grow or shrink */
 }
 
-@media screen and (max-width: 768px) {
-    .events-carousel {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .event-card {
-        width: 100%;
-        text-align: center;
-    }
-}
-
 .testimonials-section {
     padding: 50px 20px;
 }
@@ -255,9 +218,7 @@ p {
     }
 }
 
-*,
-*::before,
-*::after {
+html, body {
     box-sizing: border-box;
 }
 
@@ -266,13 +227,50 @@ html {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
 }
 
 @media screen and (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content .tagline {
+        font-size: 1.2rem;
+    }
+
+    .cta-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .principal-message {
+        flex-direction: column;
+    }
+
+    .principal-photo {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .events-carousel {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-card {
+        width: 100%;
+        text-align: center;
+    }
+
+    .testimonials-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
     html {
         font-size: 14px;
     }
 }
+
