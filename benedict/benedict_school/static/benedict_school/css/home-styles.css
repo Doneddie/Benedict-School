@@ -212,12 +212,6 @@ p {
     text-align: center;
 }
 
-@media screen and (max-width: 768px) {
-    .testimonials-container {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
 html, body {
     box-sizing: border-box;
 }
@@ -242,17 +236,31 @@ body {
     }
 
     .cta-container {
-        flex-direction: column;
-        gap: 5px;
+        flex-direction: row;  /* Ensure buttons are still in a row on mobile */
+        gap: 10px;  /* Adjust gap if necessary */
+        flex-wrap: wrap;  /* Allow buttons to wrap if there’s not enough space */
+    }
+
+    .cta-button {
+        max-width: 200px; /* Limit the maximum width of buttons */
+        width: auto; /* Allow the width to shrink or grow based on content */
     }
 
     .principal-message {
-        flex-direction: column;
+        flex-direction: column; /* Stack content and image on smaller screens */
+        width: 100%; /* Ensure the width is responsive */
+        padding: 10px; /* Add padding for mobile */
     }
 
     .principal-photo {
-        margin-right: 0;
-        margin-bottom: 20px;
+        width: 100%; /* Let the photo scale to 100% on mobile */
+        height: auto; /* Keep aspect ratio */
+        margin-right: 0; /* Remove margin on mobile */
+        margin-bottom: 20px; /* Add margin below the image for spacing */
+    }
+
+    .message-content {
+        padding: 15px; /* Adjust padding for mobile */
     }
 
     .events-carousel {
