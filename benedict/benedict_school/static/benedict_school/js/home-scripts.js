@@ -1,3 +1,12 @@
+// Select the navbar toggle button and the navbar container
+const navbarToggle = document.querySelector('.navbar-toggle');
+const navbar = document.querySelector('.navbar');
+
+// Add event listener to toggle the navbar visibility
+navbarToggle.addEventListener('click', () => {
+    navbar.classList.toggle('open');
+});
+
 function initMap() {
     const schoolLocation = {
         lat: 0.313575,  // actual latitude

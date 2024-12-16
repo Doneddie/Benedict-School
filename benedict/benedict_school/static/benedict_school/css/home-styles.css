@@ -166,7 +166,7 @@ p {
 
 .gallery-card img {
     width: 100%;  /* Makes the image width fill the container */
-    height: auto;  /* Adjust the height to a fixed value */
+    height: 300px;  /* Adjust the height to a fixed value */
     object-fit: cover;  /* Ensures the image covers the card area without distortion */
     display: block;
     border-radius: 8px;
