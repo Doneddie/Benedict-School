@@ -80,6 +80,12 @@
 }
 
 
+.welcome-section {
+    width: 100%; /* Full width of the viewport */
+    margin: 0;   /* Remove any margins */
+    padding: 0;  /* Remove any padding */
+}
+
 /* The main card for the principal message */
 .principal-message {
     display: flex;
@@ -88,7 +94,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the card */
     overflow: hidden;
     width: 100%; /* You can adjust the width as per your needs */
-    max-width: 1200px; /* Maximum width */
+    max-width: none; /* Maximum width */
 }
 
 /* The small card for the principal's photo */
@@ -214,6 +220,9 @@ p {
 
 html, body {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 html {
@@ -225,6 +234,8 @@ body {
     margin: 0;
     padding: 0;
 }
+
+
 
 @media screen and (max-width: 768px) {
     .hero-content h1 {
