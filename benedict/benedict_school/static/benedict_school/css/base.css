@@ -9,7 +9,7 @@
 
 /* Base Colors */
 :root {
-    --orange: #FFA500;
+    --orange: #f3a109;
     --white: #FFFFFF;
     --black: #000000;
     --lemon-green: #9FE2BF;
@@ -37,7 +37,7 @@ header {
 
 /* Navbar */
 .navbar {
-    background-color: var(--orange);
+    background-color: #e27d09;
     padding: 0.5rem;
     z-index: 1000;
     position: sticky;
@@ -59,13 +59,13 @@ header {
 
 .navbar ul li a {
     text-decoration: none;
-    color: black;
+    color: #333;
     font-weight: bold;
     transition: color 0.3s;
 }
 
 .navbar ul li a:hover {
-    color: var(--lemon-green);
+    color: #058821;;
 }
 
 /* Search Form */
