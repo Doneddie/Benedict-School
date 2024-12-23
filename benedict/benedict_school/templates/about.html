@@ -44,8 +44,14 @@
         <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#anthemContent" aria-expanded="false" aria-controls="anthemContent">
             Our School Anthem
         </button>
+        <!-- Collapsible content -->
         <div id="anthemContent" class="collapse">
-            <p>{{ about.anthem }}</p>
+            <div class="anthem-title">
+                <h3>{{ about.title }}</h3>
+            </div>
+            <div class="anthem-content">
+                {{ about.anthem|linebreaksbr }}
+            </div>
         </div>
     </div>
 
@@ -84,6 +90,11 @@
         <iframe src="https://calendar.google.com/calendar/embed?src=2a23d7b209642f08c686ea709dd811af8b1a89a49ef094144f74b61a11bcf6b7%40group.calendar.google.com&ctz=Africa%2FNairobi" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>        
     </div>
 </section>
+
+<!-- Bootstrap JS (Bootstrap 5) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
 {% endblock %}
 
 {% block extra_head %}

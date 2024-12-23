@@ -121,8 +121,8 @@ class Staff(models.Model):
 
 
 class About(models.Model):
-    description = models.TextField()
-    anthem = models.TextField()  # Field for storing the anthem text
+    title = models.CharField(max_length=255, default="Our School Anthem")
+    anthem = models.TextField(help_text="Write the anthem with each stanza separated by a new line.")  # Field for storing the anthem text
 
     def __str__(self):
         return "About Page Content"

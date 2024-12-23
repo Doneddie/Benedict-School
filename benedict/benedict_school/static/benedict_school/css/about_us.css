@@ -1,6 +1,9 @@
 /* Apply Roboto font */
 body {
     font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 /* Background Image for About Us Section */
@@ -9,7 +12,7 @@ body {
 }
 
 .about-header {
-    padding: 20px;
+    padding: 100px;
     background-image: url('{% static "images/about_us.jpg" %}');
     background-size: cover;
     background-position: center;
@@ -27,10 +30,14 @@ h1 {
 
 .card {
     margin: 20px 0;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1 1 200px;  /* Allow cards to grow or shrink */
 }
 
 .card-title {
-    color: #FFA500; /* Orange color for headings */
+    color: #e6640e; /* Orange color for headings */
     font-weight: 700;
 }
 
@@ -66,4 +73,93 @@ h1 {
     font-size: 1.2rem;
     color: black;
 }
+
+/* School Calendar Section */
+.school-calendar {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.school-calendar h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.calendar-container iframe {
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+    border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .about-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .team-member {
+        width: 45%;
+    }
+
+    .calendar-container iframe {
+        height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-header h1 {
+        font-size: 2rem;
+    }
+
+    .mission-vision h2,
+    .history-founding h2 {
+        font-size: 1.8rem;
+    }
+
+    .team-member {
+        width: 80%;
+        margin: 10px auto;
+    }
+
+    .team-photo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 10px;
+    }
+
+    .school-calendar h2 {
+        font-size: 1.5rem;
+    }
+
+    .calendar-container iframe {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .mission-vision h2,
+    .history-founding h2 {
+        font-size: 1.5rem;
+    }
+
+    .team-member {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .team-photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .calendar-container iframe {
+        height: 300px;
+    }
+}
+
 

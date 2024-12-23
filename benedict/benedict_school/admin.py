@@ -14,7 +14,11 @@ class EventAdmin(admin.ModelAdmin):
         }),
     )
 
-admin.site.register(About)
+# admin.site.register(About)
+@admin.register(About)
+class AboutAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title']
+    fields = ['title', 'anthem']  # Anthem is a single TextField
 
 admin.site.register(GalleryImage)
 
