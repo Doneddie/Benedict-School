@@ -2,74 +2,78 @@
 {% load static %}
 {% block title %} ABOUT US {% endblock title %}
 {% block stylesheets %}
-    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    {{ block.super }} <!-- This includes the CSS from the base.html -->
     <link rel="stylesheet" href="{% static 'benedict_school/css/about_us.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Add Google Fonts for Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 {% endblock %}
 {% block content %}
 <!-- About Us Section -->
 <section class="about-us">
     <div class="about-header">
-        <img src="{% static 'images/about_us.jpg' %}" alt="About Us" class="header-image">
         <h1>About Us</h1>
     </div>
 
     <!-- Our Mission & Vision -->
-    <div class="mission-vision">
-        <h2>Our Mission and Vision</h2>
-        <p>To contribute to the enhancement of education and morals through holistic education. Our values are rooted in competent, confident, and morally upright persons.</p>
-        <p>To be the best Early Childhood Development (ECD) center in the area and produce competent and confident God fearing persons.</p>
-        <h3>Slogan</h3>
-        <p>Heads not Tails. Duetronomy 28:13</p>
+    <div class="mission-vision card">
+        <div class="card-body">
+            <h2 class="card-title">Our Mission and Vision</h2>
+            <p class="card-text">To contribute to the enhancement of education and morals through holistic education. Our values are rooted in competent, confident, and morally upright persons.</p>
+            <p class="card-text">To be the best Early Childhood Development (ECD) center in the area and produce competent and confident God-fearing persons.</p>
+            <h3>Slogan</h3>
+            <p>Heads not Tails. Deuteronomy 28:13</p>
+        </div>
     </div>
 
     <!-- History & Founding -->
-    <div class="history-founding">
-        <h2>History and Founding</h2>
-        <p>Benedict Kindergarten and Primary School was founded in 2015 by a group of dedicated educators passionate about early childhood education. 
-            <br/>
-            Our vision bearer is Mr. Ssebowa Francis and the school started as a family project in memory of our late father Benedict Mukasa (RIP). 
-            <br/>
-            It was mainly built to give back to the community where our late father lived and to keep his legacy alive.
-            <br/> 
-            The school is mainly run my two directors, Julian Nalwoga Sewanyana and Rose Makumbi, the head of adminstration and director finance respectively.
-            <br/> 
-            Over the years, we've grown into a vibrant community committed to the holistic development of our children.</p>
+    <div class="history-founding card">
+        <div class="card-body">
+            <h2 class="card-title">History and Founding</h2>
+            <p class="card-text">Benedict Kindergarten and Primary School was founded in 2015 by a group of dedicated educators passionate about early childhood education. 
+                <br/> Our vision bearer is Mr. Ssebowa Francis and the school started as a family project in memory of our late father Benedict Mukasa (RIP). 
+                <br/> It was mainly built to give back to the community where our late father lived and to keep his legacy alive.
+                <br/> The school is mainly run by two directors, Julian Nalwoga Sewanyana and Rose Makumbi, the head of administration and director of finance respectively.
+                <br/> Over the years, we've grown into a vibrant community committed to the holistic development of our children.
+            </p>
+        </div>
     </div>
 
     <!-- Expandable Anthem Section -->
     <div>
-        <span class="toggle-button" onclick="toggleAnthem()">Our School Anthem</span>
-        <div id="anthemContent" class="anthem-content">
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#anthemContent" aria-expanded="false" aria-controls="anthemContent">
+            Our School Anthem
+        </button>
+        <div id="anthemContent" class="collapse">
             <p>{{ about.anthem }}</p>
         </div>
     </div>
 
     <!-- Team Section -->
-    <div class="team-section">
-        <h2>Meet Our Team</h2>
-        <div class="team-container">
-            {% for staff_member in staff_members %}
-            <div class="team-member">
-                <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
-                <h3>{{ staff_member.name }}</h3>
-                <p>{{ staff_member.bio }}</p>
+    <div class="team-section card">
+        <div class="card-body">
+            <h2 class="card-title">Meet Our Team</h2>
+            <div class="team-container">
+                {% for staff_member in staff_members %}
+                <div class="team-member">
+                    <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
+                    <h3>{{ staff_member.name }}</h3>
+                    <p>{{ staff_member.bio }}</p>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-    <div id="team-modal" class="modal" style="display:none;">
-        <div id="modal-content" class="modal-content"></div>
-    </div>
-    
 
     <!-- Accreditation & Achievements -->
-    <div class="accreditation-achievements">
-        <h2>Accreditation and Achievements</h2>
-        <ul>
-            <li>Accredited by the Ministry of Education and Sports</li>
-            <li>Member of the Schools Association</li>
-        </ul>
+    <div class="accreditation-achievements card">
+        <div class="card-body">
+            <h2 class="card-title">Accreditation and Achievements</h2>
+            <ul>
+                <li>Accredited by the Ministry of Education and Sports</li>
+                <li>Member of the Schools Association</li>
+            </ul>
+        </div>
     </div>
 </section>
 
@@ -80,12 +84,10 @@
         <iframe src="https://calendar.google.com/calendar/embed?src=2a23d7b209642f08c686ea709dd811af8b1a89a49ef094144f74b61a11bcf6b7%40group.calendar.google.com&ctz=Africa%2FNairobi" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>        
     </div>
 </section>
-
-
 {% endblock %}
 
 {% block extra_head %}
-    <!--Custom JS -->
+    <!-- Custom JS -->
     <script src="{% static 'js/about_us.js' %}"></script>
 {% endblock %}
 

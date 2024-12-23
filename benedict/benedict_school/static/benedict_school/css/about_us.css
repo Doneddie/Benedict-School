@@ -1,26 +1,42 @@
+/* Apply Roboto font */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Background Image for About Us Section */
 .about-us {
     padding: 20px;
-    font-family: Arial, sans-serif;
+    background-image: url('{% static "images/about_us.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    color: black;
 }
 
 .about-header {
     text-align: center;
+    color: white;
 }
 
-.header-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
+h1 {
+    font-size: 3rem;
+    color: #dbb509; /* Orange color for heading */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow for visibility on background */
 }
 
-.mission-vision, .history-founding, .accreditation-achievements {
+.card {
     margin: 20px 0;
 }
 
-.team-section {
-    margin: 40px 0;
+.card-title {
+    color: #FFA500; /* Orange color for headings */
+    font-weight: 700;
 }
 
+.card-text {
+    color: black;
+}
+
+/* Team Section Styling */
 .team-container {
     display: flex;
     flex-wrap: wrap;
@@ -30,7 +46,7 @@
 .team-member {
     margin: 10px;
     text-align: center;
-    width: 200px; /* Adjust as necessary */
+    width: 200px;
 }
 
 .team-photo {
@@ -39,47 +55,13 @@
     border-radius: 50%;
 }
 
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    position: relative;
-}
-
-.modal-content button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-.modal {
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.modal.show {
-    opacity: 1;
-}
-
-/* Styles for expandable section */
-.anthem-content {
-    display: none; /* Initially hidden */
+/* Dropdown for Anthem */
+.collapse {
     margin-top: 10px;
 }
-.toggle-button {
-    cursor: pointer;
-    color: #007bff;
-    text-decoration: underline;
+
+.collapse p {
+    font-size: 1.2rem;
+    color: black;
 }
+
