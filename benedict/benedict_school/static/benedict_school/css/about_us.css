@@ -5,22 +5,24 @@ body {
 
 /* Background Image for About Us Section */
 .about-us {
-    padding: 20px;
-    background-image: url('{% static "images/about_us.jpg" %}');
-    background-size: cover;
-    background-position: center;
     color: black;
 }
 
 .about-header {
+    padding: 20px;
+    background-image: url('{% static "images/about_us.jpg" %}');
+    background-size: cover;
+    background-position: center;
     text-align: center;
     color: white;
 }
 
 h1 {
-    font-size: 3rem;
-    color: #dbb509; /* Orange color for heading */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow for visibility on background */
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Shadow for readability */
 }
 
 .card {
