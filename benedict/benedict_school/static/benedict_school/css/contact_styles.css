@@ -9,12 +9,16 @@ body {
 
 h1 {
     font-weight: 700;
-    color: #f1b204;
+    color:  #e6640e;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Shadow for readability */
 }
 
 /* Navbar Styling */
 .navbar {
-    background-color: #191a1b;
+    background-color: #e6640e;
 }
 
 .navbar .navbar-brand {

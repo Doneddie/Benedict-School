@@ -9,7 +9,7 @@
 
 /* Base Colors */
 :root {
-    --orange: #f3a109;
+    --orange: #e6640e;
     --white: #FFFFFF;
     --black: #000000;
     --lemon-green: #9FE2BF;
@@ -18,7 +18,7 @@
 /* Body Styling */
 body {
     font-family: "Roboto", sans-serif;
-    color: var(--black);
+    color: var(--orange);
     background: linear-gradient(to bottom, #F0FFFF, #e8eaeb); 
     line-height: 1.6;
     margin: 0;
@@ -29,7 +29,7 @@ body {
 
 /* Header */
 header {
-    color: var(--black);
+    color: var(--orange);
     text-align: center;
     margin: 0;
     justify-content: space-between;
@@ -37,7 +37,7 @@ header {
 
 /* Navbar */
 .navbar {
-    background-color: #e27d09;
+    background-color: #e6640e;
     padding: 0.5rem;
     z-index: 1000;
     position: sticky;
@@ -59,7 +59,7 @@ header {
 
 .navbar ul li a {
     text-decoration: none;
-    color: #333;
+    color: #070101;
     font-weight: bold;
     transition: color 0.3s;
 }
