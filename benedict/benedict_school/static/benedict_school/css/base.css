@@ -12,7 +12,7 @@
     --orange: #e6640e;
     --white: #FFFFFF;
     --black: #000000;
-    --lemon-green: #9FE2BF;
+    --lemon-green: #15e60e;
 }
 
 /* Body Styling */
@@ -25,6 +25,7 @@ body {
     padding: 0;
     /* display: grid; */
     scroll-behavior: smooth;
+    padding-top: 50px; /* Adjust to give space for sticky navbar */
 }
 
 /* Header */
@@ -40,9 +41,10 @@ header {
     background-color: #e6640e;
     padding: 0.5rem;
     z-index: 1000;
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
-    transition: top 0.3s; /* Smooth transition for hiding */
+    transition: top 0.3s;
 }
 
 .navbar ul {
@@ -71,23 +73,28 @@ header {
 /* Search Form */
 .d-flex .form-control {
     flex: 1;
-    border: 2px solid var(--lemon-green);
+    border: 2px solid #15e60e;
     padding: 0.5rem;
 }
 
 .d-flex .btn {
-    background-color: var(--orange);
+    background-color:  #e6640e;
     color: var(--white);
-    border: 2px solid var(--orange);
+    border: 2px solid  #e6640e;
     font-weight: bold;
     transition: background-color 0.3s;
 }
 
 .d-flex .btn:hover {
-    background-color: var(--lemon-green);
+    background-color: #15e60e;
     color: var(--black);
-    border-color: var(--lemon-green);
+    border-color: #15e60e;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    color:  #e6640e;  /* Set the color of all headings to orange */
+}
+
 
 /* Main Content */
 main {
@@ -113,13 +120,13 @@ footer p {
 }
 
 footer a {
-    color: var(--lemon-green);
+    color:  #15e60e;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 footer a:hover {
-    color: var(--orange);
+    color:  #e6640e;
 }
 
 /* Navbar Adjustments for Mobile */
