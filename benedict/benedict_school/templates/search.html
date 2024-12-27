@@ -1,0 +1,44 @@
+<!-- search.html -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Search Results</title>
+    </head>
+    <body>
+        <h1>Search Results</h1>
+        {% if query %}
+        <p>Results for: "{{ query }}"</p>
+        {% else %}
+        <p>Please enter a search term.</p>
+        {% endif %}
+        
+        <h2>Children</h2>
+        <ul>
+            {% for child in results.children %}
+            <li>{{ child.name }}</li>
+            {% empty %}
+            <li>No children found.</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Staff</h2>
+        <ul>
+            {% for staff_member in results.staff %}
+            <li>{{ staff_member.first_name }} {{ staff_member.last_name }}</li>
+            {% empty %}
+            <li>No staff found.</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Events</h2>
+        <ul>
+            {% for event in results.events %}
+            <li>{{ event.title }}</li>
+            {% empty %}
+            <li>No events found.</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

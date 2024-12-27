@@ -85,40 +85,48 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Subject(models.Model):
+    name = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name
 
 class Staff(models.Model):
     # Personal information
     name = models.CharField(max_length=50, unique=True)
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
-    tel_no = models.CharField(max_length=15, default='')
-    class_name = models.CharField(max_length=50, default='Primary One')
+    tel_no = models.CharField(max_length=22, default='')
 
-    # Staff-related information
-    subjects_handled = models.CharField(
-        max_length=100,
+    # Role/Position (New field to differentiate staff types)
+    role = models.CharField(
+        max_length=50,
         choices=[
-            ("math", "Mathematics"),
-            ("science", "Science"),
-            ("english", "English"),
-            ("social_studies", "Social Studies"),
-            ("literacy_1A", "Literacy 1A"),
-            ("literacy_1B", "Literacy 1B"),
-            ("literacy", "Literacy"),
-            ("luganda", "Luganda"),
-            ("reading", "Reading"),
-            ("religious_education", "Religious Education"),
-            ("learning_area_1_5", "Learning Area 1-5"),
+            ("teacher", "Teacher"),
+            ("director", "Director"),
+            ("cleaner", "Cleaner"),
+            ("cook", "Cook"),
+            ("admin", "Admin Staff"),
+            ("other", "Other")
         ],
-        default="math",
+        default="teacher"
     )
 
-    years_of_experience = models.PositiveIntegerField()
+    # Teaching staff-related information (Visible only if role is "teacher")
+    class_name = models.CharField(max_length=50, default='Primary One', blank=True, null=True)
+    subjects_handled = models.ManyToManyField(Subject, blank=True)
+    years_of_experience = models.PositiveIntegerField(blank=True, null=True)
+
+    # Non-teaching staff-related information (Visible for non-teachers)
+    department = models.CharField(max_length=100, blank=True, null=True)
+    work_schedule = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.teacher_name} teaches {self.subjects_handled} in {self.class_name}"
-
+        if self.role == "teacher":
+            return f"{self.name} teaches {self.subjects_handled} in {self.class_name}"
+        else:
+            return f"{self.name} works as a {self.role} in the {self.department} department"
 
 class About(models.Model):
     title = models.CharField(max_length=255, default="Our School Anthem")

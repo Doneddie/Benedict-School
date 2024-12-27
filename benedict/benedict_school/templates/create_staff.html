@@ -1,27 +1,148 @@
 {% extends "admin_base.html" %}
-{% load static %}
 
 {% block content %}
-<div class="form-container">
-  <h1>Staff Details Form</h1>
-  <h2>Create New Staff Member</h2>
-  <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {% for field in form %}
-          <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {{ field }}
-              {% if field.help_text %}
-                  <small style="color: #999;">{{ field.help_text }}</small>
-              {% endif %}
-              {% for error in field.errors %}
-                  <div style="color: red;">{{ error }}</div>
-              {% endfor %}
-          </div>
-      {% endfor %}
-      <div class="form-group">
-          <button type="submit" class="btn btn-primary">Add Staff Member</button>
-      </div>
-  </form>
+<div class="container mt-5">
+    <!-- Page Title with Color -->
+    <h2 class="text-center text-primary mb-4">Staff Details Form</h2>
+    <h4 class="text-center text-warning mb-4">Create New Staff Member</h4>
+  
+    <!-- Form -->
+    <form method="post" class="bg-light p-4 rounded shadow-sm">
+        {% csrf_token %}
+        
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="id_name" class="form-label">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="text-danger">
+                    {% for error in form.name.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ID Number -->
+        <div class="mb-3">
+            <label for="id_ID_number" class="form-label">ID Number</label>
+            {{ form.ID_number }}
+            {% if form.ID_number.errors %}
+                <div class="text-danger">
+                    {% for error in form.ID_number.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="text-danger">
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Telephone Number -->
+        <div class="mb-3">
+            <label for="id_tel_no" class="form-label">Telephone Number</label>
+            {{ form.tel_no }}
+            {% if form.tel_no.errors %}
+                <div class="text-danger">
+                    {% for error in form.tel_no.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Class Name (Optional) -->
+        {% if form.class_name %}
+            <div class="mb-3">
+                <label for="id_class_name" class="form-label">Class Name</label>
+                {{ form.class_name }}
+                {% if form.class_name.errors %}
+                    <div class="text-danger">
+                        {% for error in form.class_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Subjects Handled (Optional) -->
+        {% if form.subjects_handled %}
+            <div class="mb-3">
+                <label for="id_subjects_handled" class="form-label">Subjects Handled</label>
+                {{ form.subjects_handled }}
+                {% if form.subjects_handled.errors %}
+                    <div class="text-danger">
+                        {% for error in form.subjects_handled.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Years of Experience (Optional) -->
+        {% if form.years_of_experience %}
+            <div class="mb-3">
+                <label for="id_years_of_experience" class="form-label">Years of Experience</label>
+                {{ form.years_of_experience }}
+                {% if form.years_of_experience.errors %}
+                    <div class="text-danger">
+                        {% for error in form.years_of_experience.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Department (Optional) -->
+        {% if form.department %}
+            <div class="mb-3">
+                <label for="id_department" class="form-label">Department</label>
+                {{ form.department }}
+                {% if form.department.errors %}
+                    <div class="text-danger">
+                        {% for error in form.department.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Work Schedule (Optional) -->
+        {% if form.work_schedule %}
+            <div class="mb-3">
+                <label for="id_work_schedule" class="form-label">Work Schedule</label>
+                {{ form.work_schedule }}
+                {% if form.work_schedule.errors %}
+                    <div class="text-danger">
+                        {% for error in form.work_schedule.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Submit Button -->
+        <div class="d-grid gap-2 mt-4">
+            <button type="submit" class="btn btn-lg btn-success">Create New Staff</button>
+        </div>
+    </form>
 </div>
+
 {% endblock %}
+

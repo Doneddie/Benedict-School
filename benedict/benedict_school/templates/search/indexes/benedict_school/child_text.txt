@@ -1,0 +1,3 @@
+{{ object.name }}
+{{ object.age }}
+{{object.study_class}}

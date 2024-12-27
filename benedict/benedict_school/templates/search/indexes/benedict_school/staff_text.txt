@@ -1,0 +1,2 @@
+{{ object.name }}  # Index the staff's name
+{{ object.position }}    # Index the staff's position or title

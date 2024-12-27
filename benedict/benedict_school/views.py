@@ -15,6 +15,7 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
+from django.db.models import Q
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
@@ -183,33 +184,26 @@ def contact_view(request):
 
 
 #search functions views
-
 def search_view(request):
     query = request.GET.get("q")  # Get the search query from the URL
     results = {
         "children": [],
         "staff": [],
-        "activities": [],
         "events": [],
+        "pages": [],  # For static pages like 'About', 'Admissions', etc.
     }
 
     if query:
-        results["children"] = Child.objects.filter(
-            name__icontains=query
-        )  # Searching in Child model
-        results["staff"] = Staff.objects.filter(
-            first_name__icontains=query
-        ) | Staff.objects.filter(
-            last_name__icontains=query
-        )  # Searching in Staff model
-        results["activities"] = Activity.objects.filter(
-            title__icontains=query
-        )  # Searching in Activity model
-        results["events"] = Event.objects.filter(
-            title__icontains=query
-        )  # Searching in Event model
+        # Search in models
+        results["children"] = Child.objects.filter(name__icontains=query)
+        results["staff"] = Staff.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        results["events"] = Event.objects.filter(title__icontains=query)
 
-    return render(request, "your_template.html", {"results": results, "query": query})
+        # Search in static content (e.g., pages)
+        results["pages"] = About.objects.filter(content__icontains=query)  # Adjust this for any other models or static content
+        results["pages"] = GalleryImage.objects.filter(cotent__icontains=query)
+
+    return render(request, "search.html", {"results": results, "query": query})
 
 def about_view(request):
     about_content = About.objects.first()  # Assuming a single entry for the "About" page

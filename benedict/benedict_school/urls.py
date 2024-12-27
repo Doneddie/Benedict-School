@@ -13,7 +13,8 @@ from .views import (
     PupilApplicationCreateView,
     EventListView,
     staff_create_view,
-    admin_dashboard
+    admin_dashboard,
+    search_view
 )
 
 

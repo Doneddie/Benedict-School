@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "storages",
     "widget_tweaks",
-    "rest_framework", 
+    "rest_framework",
+    "haystack",
 ]
 
 MIDDLEWARE = [
@@ -166,4 +167,10 @@ CSRF_TRUSTED_ORIGINS = [
 LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
 LOGOUT_REDIRECT_URL = '/'     # Redirect to login page after logout
 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
 

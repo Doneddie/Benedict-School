@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django import forms
-from .models import Parent, Child, PupilApplication, Staff, Event, Exit 
+from .models import Parent, Child, PupilApplication, Staff, Subject, Event, Exit 
 from datetime import date
 
 
@@ -21,29 +21,41 @@ class SearchForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Search...', 'class': 'form-control'})
     )
 
-
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = [
-            "name",
-            "ID_number",
-            "email",
-            "tel_no",
-            "class_name",
-            "subjects_handled",
-            "years_of_experience",
-        ]
-        widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control"}),
-            "ID_number": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
-            "tel_no": forms.TextInput(attrs={"class": "form-control"}),
-            "class_name": forms.TextInput(attrs={"class": "form-control"}),
-            "subjects_handled": forms.Select(attrs={"class": "form-control"}),
-            "years_of_experience": forms.NumberInput(attrs={"class": "form-control"}),
-        }
+        fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        role = self.instance.role if self.instance else None
+
+        # Show teaching fields only if the role is 'teacher'
+        if role != 'teacher':
+            self.fields['subjects_handled'].widget = forms.HiddenInput()
+            self.fields['years_of_experience'].widget = forms.HiddenInput()
+            self.fields['class_name'].widget = forms.HiddenInput()
+
+        # Show non-teaching fields only if the role is not 'teacher'
+        if role == 'teacher':
+            self.fields['department'].widget = forms.HiddenInput()
+            self.fields['work_schedule'].widget = forms.HiddenInput()
+
+        # Adjust widgets for the form fields
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['ID_number'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['tel_no'].widget.attrs.update({'class': 'form-control'})
+        self.fields['class_name'].widget.attrs.update({'class': 'form-control'})
+        
+        # If role is "teacher", allow selecting multiple subjects
+        if role == 'teacher':
+            self.fields['subjects_handled'].widget = forms.SelectMultiple(attrs={'class': 'form-control'})
+        
+        # Non-teaching staff related fields
+        self.fields['department'].widget.attrs.update({'class': 'form-control'})
+        self.fields['work_schedule'].widget.attrs.update({'class': 'form-control'})
+        self.fields['years_of_experience'].widget.attrs.update({'class': 'form-control'})
 
 class ParentForm(forms.ModelForm):
     class Meta:
