@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "storages",
     "widget_tweaks",
     "rest_framework",
-    "haystack",
+    # "haystack",
 ]
 
 MIDDLEWARE = [
