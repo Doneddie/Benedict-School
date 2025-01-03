@@ -18,19 +18,19 @@
 /* Body Styling */
 body {
     font-family: "Roboto", sans-serif;
-    color: var(--orange);
+    color: #000000;
     background: linear-gradient(to bottom, #F0FFFF, #e8eaeb); 
     line-height: 1.6;
     margin: 0;
     padding: 0;
     /* display: grid; */
     scroll-behavior: smooth;
-    padding-top: 50px; /* Adjust to give space for sticky navbar */
+    
 }
 
 /* Header */
 header {
-    color: var(--orange);
+    color: #e6640e;
     text-align: center;
     margin: 0;
     justify-content: space-between;
@@ -41,7 +41,6 @@ header {
     background-color: #e6640e;
     padding: 0.5rem;
     z-index: 1000;
-    position: -webkit-sticky;
     position: sticky;
     top: 0;
     transition: top 0.3s;
@@ -130,10 +129,6 @@ footer a:hover {
 }
 
 /* Navbar Adjustments for Mobile */
-.d-flex {
-    flex-direction: column;
-}
-
 .d-flex .btn {
     width: 100%;
     margin-top: 0.5rem;
