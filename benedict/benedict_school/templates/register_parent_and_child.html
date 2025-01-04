@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap5 %}
 
 {% block content %}
 <body>
@@ -19,13 +20,15 @@
             <h2>Child Information</h2>
             <div class="form-group">
                 {{ child_form.as_p }}
-                <small class="date-format">Date format: YYYY-MM-DD</small> <!-- Date format reminder -->
+                <small class="text-muted">Date format: YYYY-MM-DD</small> <!-- Date format reminder -->
+
             </div>
 
             <!-- Hidden input for child_id -->
             <input type="hidden" name="child_id" value="{{ child.id }}">
 
-            <button type="submit" class="btn-submit">Register</button>
+            <button type="submit" class="btn btn-primary">Register</button>
+
         </div>
     </form>
 

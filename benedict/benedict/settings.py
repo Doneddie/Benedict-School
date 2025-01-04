@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "benedict_school",
-    "bootstrap4",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     "storages",
     "widget_tweaks",
     "rest_framework",
+    'bootstrap5',
     # "haystack",
 ]
 

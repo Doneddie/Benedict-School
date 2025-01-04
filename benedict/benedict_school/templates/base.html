@@ -1,9 +1,10 @@
 {% load static %}
-{% load bootstrap4 %}
+{% load bootstrap5 %}
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A modern God-fearing kindergarten and primary school that focuses on raising disciplined, gifted, and brilliant children for the next generation.">
@@ -11,6 +12,7 @@
     <meta property="og:image" content="{% static 'benedict_school/images/logo.png' %}">
     <meta name="keywords" content="kindergarten, primary school, modern school, generational kids, modern approach, new curriculum, co-curricular activities">
     <title>{% block title %}BENEDICT KINDERGARTEN AND PRIMARY SCHOOL{% endblock title %}</title>
+
     {% block stylesheets %}
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -20,108 +22,104 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- AOS (Animate On Scroll) -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'benedict_school/css/base.css' %}">
     {% endblock %}
-  </head>
-  <body >
+</head>
+
+<body>
     <header>
-      <nav class="navbar bg-body-tertiary container-fluid" id="navbar1">
-        <div class="container-fluid">
-          <a class="navbar-brand display-6" href="{% url 'home' %}">
-            <img src="{% static 'images/benedictlogo.png' %}" alt="school logo" href="{% url 'home' %}">
-            Benedict Kindergarten & Primary School</a>
-          <a href="/search" class="d-inline d-lg-none text-decoration-none" aria-label="Search">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" ms-auto>
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-          </a>
-          <form class="d-none d-lg-flex" role="search" action="/search" name="q">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </nav>
+        <nav class="navbar bg-body-tertiary container-fluid" id="navbar1">
+            <div class="container-fluid">
+                <a class="navbar-brand display-6" href="{% url 'home' %}">
+                    <img src="{% static 'images/benedictlogo.png' %}" alt="school logo">
+                    Benedict Kindergarten & Primary School
+                </a>
+                <a href="/search" class="d-inline d-lg-none text-decoration-none" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </a>
+                <form class="d-none d-lg-flex" role="search" action="/search" name="q">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
     </header>
+
     <div id="mainNavbar">
-      <nav class="navbar navbar-expand-md navbar-dark  sticky-top justify-content-center" id="mainNavbar">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbarContent"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mainNavbarContent">
-            <ul class="navbar-nav m-auto" >
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'event-list' %}">Events</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'admissions' %}">Admissions</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'gallery' %}">Our Gallery</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+        <nav class="navbar navbar-expand-md navbar-dark sticky-top justify-content-center">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbarContent"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbarContent">
+                    <ul class="navbar-nav m-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'event-list' %}">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admissions' %}">Admissions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'gallery' %}">Our Gallery</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
-    
 
     <main class="container my-4">
-      {% block content %}
-      <!-- Default content will go here -->
-      {% endblock %}
+        {% block content %}
+        <!-- Default content will go here -->
+        {% endblock %}
     </main>
 
-    <footer class="bg-dark text-white py-4">
-      <div>
-        <ul>
-          <li class="nav-item"><a class="nav-link" href="{% url 'admin-login' %}">Admin Login</a></li>
-        </ul>
+    <!-- Footer Section -->
+    <footer class="mt-auto">
+      <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
+      <p>
+        <a class="text-white" href="{% url 'privacy_policy' %}">Privacy and Child Protection Policy</a> |
+        <a class="text-white" href="{% url 'contact' %}">Contact Us</a>
+      </p>
+
+      <!-- Social Media Icons -->
+      <div class="social-media mt-3">
+          <a href="https://www.facebook.com/BenedictkindergartenBulungakikaaya" target="_blank" class="social-icon">
+              <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://twitter.com" target="_blank" class="social-icon">
+              <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" class="social-icon">
+              <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://linkedin.com" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in"></i>
+          </a>
       </div>
-      <div class="container text-center">
-        <p>&copy; 2024 Benedict Kindergarten and Primary School. All rights reserved.</p>
-        <p>
-          <a class="text-white" href="{% url 'privacy_policy' %}">Privacy and Child Protection Policy</a> |
-          <a class="text-white" href="{% url 'contact' %}">Contact Us</a>
-        </p>
-        <p>Follow us: 
-          <a class="text-white" href="https://www.facebook.com/BenedictkindergartenBulungakikaaya" target="_blank">Facebook</a> | 
-          <a class="text-white" href="https://instagram.com/[schoolname]" target="_blank">Instagram</a>
-        </p>
-      </div>
+      <a class="text-white" href="{% url 'admin-login' %}">Admin Login</a>
+
     </footer>
 
-    <!-- Add Bootstrap's CSS and JS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
-
-    <!-- Bootstrap Bundle (includes Popper.js) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Include Bootstrap JS and dependencies from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <noscript>
-      <style>
-        /* Optional CSS for users who have JavaScript disabled */
-        body {
-          display: none;
-        }
-      </style>
-      <p>Your browser does not support JavaScript or it is disabled. Please enable JavaScript for the best experience.</p>
-    </noscript>
-
-  </body>
+</body>
 
 </html>
