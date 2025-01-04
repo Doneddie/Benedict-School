@@ -28,13 +28,10 @@ urlpatterns = [
     path("contact_views/", views.contact_view, name="contact"),
     path("search/", views.search_view, name="search"),
     path("contactus/", contact_view, name="contact"),
-    path('staff/new/', staff_create_view, name='staff_create'),
     path('register/', views.ParentCreateChildCreateView.as_view(), name='register_parent_and_child'), # Register new parent and child
     path('school-tour/', views.school_tour, name='school_tour'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('staff/', views.staff_list, name='staff-list'),
-    path('staff/<int:staff_id>/delete/', views.delete_staff, name='delete-staff'),
     path('parent/', views.parent_list, name='parent-list'),
     path('parent/<int:pk>/delete/', ParentDeleteView.as_view(), name='delete-parent'),
     path('child/', views.child_list, name='child-list'),
@@ -42,6 +39,11 @@ urlpatterns = [
     path('applications/', views.application_list, name='application-list'),
     path('api/childrenData/', views.children_data, name='children_data'),  # The API endpoint for fetching data
     path('gallery/', views.gallery, name='gallery'),
+    path('staff/', views.StaffListView.as_view(), name='staff_list'),
+    path('staff/create/', views.staff_create, name='staff_create'),
+    path('staff/<int:pk>/', views.StaffDetailView.as_view(), name='staff_detail'),
+    path('staff/<int:pk>/update/', views.StaffUpdateView.as_view(), name='staff_update'),
+    path('staff/<int:pk>/delete/', views.StaffDeleteView.as_view(), name='staff_delete'),
 
     # Pupil Application URLs
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",
