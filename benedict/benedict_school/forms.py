@@ -3,6 +3,9 @@ from django.core.validators import EmailValidator
 from django import forms
 from .models import Parent, Child, PupilApplication, Staff, Subject, Event, Exit 
 from datetime import date
+from crispy_forms.layout import Layout, Row, Column, Submit, Div
+from crispy_forms.helper import FormHelper
+from django.utils.translation import gettext_lazy as _
 
 
 class LoginForm(forms.Form):
@@ -23,45 +26,195 @@ class SearchForm(forms.Form):
 
 
 class StaffForm(forms.ModelForm):
+    """Form for creating and updating staff members"""
+    
+    # Additional form fields (if needed)
+    confirm_email = forms.EmailField(
+        help_text=_("Please confirm the email address")
+    )
+    
     class Meta:
         model = Staff
-        fields = ['name', 'sex', 'ID_number', 'email', 'tel_no', 'photo', 'role', 
-                  'class_name', 'subjects_handled', 'years_of_experience', 
-                  'department', 'work_schedule']
+        fields = [
+            # Personal Information
+            'name', 'sex', 'date_of_birth', 'ID_number', 'email', 
+            'tel_no', 'photo', 'address',
+            
+            # Emergency Contact
+            'emergency_contact_name', 'emergency_contact_relationship', 
+            'emergency_contact_phone',
+            
+            # Employment Information
+            'role', 'employee_id', 'status',
+            
+            # Qualification Information
+            'qualification', 'certificates', 'years_of_experience',
+            
+            # Teaching Staff Information
+            'class_name', 'subjects_handled',
+            
+            # Non-teaching Staff Information
+            'department', 'work_schedule',
+            
+            # Salary Information
+            'salary', 'bank_account_name', 'bank_account_number', 'bank_name'
+        ]
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'qualification': forms.Textarea(attrs={'rows': 3}),
+            'address': forms.Textarea(attrs={'rows': 3}),
+            'work_schedule': forms.TextInput(attrs={'placeholder': 'e.g., Monday-Friday 8:00 AM - 4:00 PM'}),
+        }
 
-    subjects_handled = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), required=False)
-    class_name = forms.CharField(max_length=50, required=False)
-    years_of_experience = forms.IntegerField(required=False)
-    department = forms.CharField(max_length=100, required=False)
-    work_schedule = forms.CharField(max_length=100, required=False)
-
-    # Hide teaching staff-related fields initially
     def __init__(self, *args, **kwargs):
-        super(StaffForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-9'
         
-        # Hide teaching fields by default
-        self.fields['class_name'].widget.attrs['class'] = 'd-none'
-        self.fields['subjects_handled'].widget.attrs['class'] = 'd-none'
-        self.fields['years_of_experience'].widget.attrs['class'] = 'd-none'
+        # Dynamic form handling based on role
+        if 'role' in self.data:
+            self.show_fields_for_role(self.data['role'])
+        elif self.instance.pk:
+            self.show_fields_for_role(self.instance.role)
+        
+        self.helper.layout = Layout(
+            Div(
+                Row(
+                    Column('role', css_class='form-group col-md-6 mb-0'),
+                    Column('status', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                css_class='mb-3'
+            ),
+            Div(
+                _("Personal Information"),
+                Row(
+                    Column('name', css_class='form-group col-md-6 mb-0'),
+                    Column('sex', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('date_of_birth', css_class='form-group col-md-6 mb-0'),
+                    Column('ID_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('email', css_class='form-group col-md-6 mb-0'),
+                    Column('confirm_email', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('tel_no', css_class='form-group col-md-6 mb-0'),
+                    Column('employee_id', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                'photo',
+                'address',
+                css_class='mb-3'
+            ),
+            Div(
+                _("Emergency Contact"),
+                Row(
+                    Column('emergency_contact_name', css_class='form-group col-md-6 mb-0'),
+                    Column('emergency_contact_relationship', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                'emergency_contact_phone',
+                css_class='mb-3'
+            ),
+            Div(
+                _("Qualifications"),
+                'qualification',
+                'certificates',
+                'years_of_experience',
+                css_class='mb-3'
+            ),
+            Div(
+                _("Teaching Information"),
+                Row(
+                    Column('class_name', css_class='form-group col-md-6 mb-0'),
+                    Column('subjects_handled', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                css_class='mb-3 teaching-fields'
+            ),
+            Div(
+                _("Non-Teaching Information"),
+                Row(
+                    Column('department', css_class='form-group col-md-6 mb-0'),
+                    Column('work_schedule', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                css_class='mb-3 non-teaching-fields'
+            ),
+            Div(
+                _("Salary Information"),
+                Row(
+                    Column('salary', css_class='form-group col-md-6 mb-0'),
+                    Column('bank_name', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('bank_account_name', css_class='form-group col-md-6 mb-0'),
+                    Column('bank_account_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                css_class='mb-3'
+            ),
+            Submit('submit', _('Save Staff Member'), css_class='btn btn-primary')
+        )
 
-        # Hide non-teaching staff fields by default
-        self.fields['department'].widget.attrs['class'] = 'd-none'
-        self.fields['work_schedule'].widget.attrs['class'] = 'd-none'
+    def show_fields_for_role(self, role):
+        """Show/hide fields based on staff role"""
+        teaching_roles = ["teacher", "director"]
+        is_teaching = role in teaching_roles
+        
+        # Teaching staff fields
+        for field in ['class_name', 'subjects_handled']:
+            if field in self.fields:
+                self.fields[field].required = is_teaching
+                if not is_teaching:
+                    self.fields[field].widget = forms.HiddenInput()
+        
+        # Non-teaching staff fields
+        for field in ['department', 'work_schedule']:
+            if field in self.fields:
+                self.fields[field].required = not is_teaching
+                if is_teaching:
+                    self.fields[field].widget = forms.HiddenInput()
 
-    # Clean method to ensure dynamic display of fields based on role
     def clean(self):
+        """
+        Custom form validation
+        """
         cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        confirm_email = cleaned_data.get('confirm_email')
         role = cleaned_data.get('role')
-
-        if role == 'teacher':
-            self.fields['class_name'].widget.attrs['class'] = 'form-control'
-            self.fields['subjects_handled'].widget.attrs['class'] = 'form-control'
-            self.fields['years_of_experience'].widget.attrs['class'] = 'form-control'
-        elif role != 'teacher':  # For non-teaching staff
-            self.fields['department'].widget.attrs['class'] = 'form-control'
-            self.fields['work_schedule'].widget.attrs['class'] = 'form-control'
-
+        
+        # Email confirmation validation
+        if email and confirm_email and email != confirm_email:
+            raise ValidationError(_("Email addresses must match."))
+        
+        # Role-specific validation
+        if role in ["teacher", "director"]:
+            if not cleaned_data.get('class_name'):
+                raise ValidationError(_("Teaching staff must be assigned to a class."))
+            if not cleaned_data.get('subjects_handled'):
+                raise ValidationError(_("Teaching staff must have at least one subject assigned."))
+        else:
+            if not cleaned_data.get('department'):
+                raise ValidationError(_("Non-teaching staff must be assigned to a department."))
+        
         return cleaned_data
+
+    class Media:
+        js = (
+            'js/staff_form.js',  # You'll need to create this JavaScript file
+        )
 
 class ParentForm(forms.ModelForm):
     class Meta:

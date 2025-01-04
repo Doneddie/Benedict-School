@@ -1,0 +1,24 @@
+{% extends "base_staff.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block staff_content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>{% trans "Delete Staff Member" %}</h3>
+                <p>{% trans "Are you sure you want to delete" %} {{ object.name }}?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">{% trans "Confirm Delete" %}</button>
+                    <a href="{% url 'staff_detail' pk=object.pk %}" class="btn btn-secondary">
+                        {% trans "Cancel" %}
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

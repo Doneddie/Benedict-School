@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 {% block stylesheets %}
     {{ block.super }}  <!-- This includes the CSS from the base.html -->
     <link rel="stylesheet" href="{% static 'benedict_school/css/gallery.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 {% endblock %}
+
+{% block title %} OUR GALLERY {% endblock title %}
 
 {% block content %}
 <div class="gallery-container">

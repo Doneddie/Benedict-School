@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "storages",
     "widget_tweaks",
     "rest_framework",
-    'bootstrap5',
+    'django_bootstrap5',
+    'crispy_bootstrap5',
     # "haystack",
 ]
 
@@ -174,3 +175,5 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

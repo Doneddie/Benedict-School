@@ -241,27 +241,53 @@ def admin_dashboard(request):
 @user_passes_test(is_admin, login_url='/admin-login/')
 def staff_create_view(request):
     if request.method == 'POST':
-        form = StaffForm(request.POST)
+        form = StaffForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('staff-list')  # Redirect to a list of staff members after creation
+            staff = form.save()
+            messages.success(request, 'Staff member created successfully.')
+            return redirect('staff_detail', pk=staff.pk)
     else:
         form = StaffForm()
-    return render(request, 'create_staff.html', {'form': form})
+    
+    return render(request, 'staff_form.html', {
+        'form': form,
+        'title': 'Add New Staff Member',
+        'button_text': 'Create Staff Member'
+    })
 # Staff list
 @user_passes_test(is_admin, login_url='/admin-login/')
-def staff_list(request):
-    staff_members = Staff.objects.all()
-    context = {
-        'staff_members': staff_members
-    }
-    return render(request, 'staff_list.html', context)
+class StaffListView:
+    model = Staff
+    template_name = 'staff_list.html'
+    context_object_name = 'staff_members'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Staff.objects.all()
+        # Filter by role if specified
+        role = self.request.GET.get('role')
+        if role:
+            queryset = queryset.filter(role=role)
+        # Search functionality
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+        return queryset.order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['roles'] = Staff.ROLE_CHOICES
+        return context
 # Delete staff
 @user_passes_test(is_admin, login_url='/admin-login/')
-def delete_staff(request, staff_id):
-    staff_member = get_object_or_404(Staff, id=staff_id)
-    staff_member.delete()
-    return redirect('staff-list')
+class StaffDeleteView:
+    model = Staff
+    template_name = 'staff/staff_confirm_delete.html'
+    success_url = reverse_lazy('staff_list')
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Staff member deleted successfully.')
+        return super().delete(request, *args, **kwargs)
 
 # Parent views
 @user_passes_test(is_admin, login_url='/admin-login/')

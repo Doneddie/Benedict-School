@@ -1,144 +1,87 @@
-{% extends "admin_base.html" %}
+{% extends "base_staff.html" %}
+{% load i18n %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 
-{% block content %}
-  <h2>Staff List</h2>
+{% block staff_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{% trans "Staff Members" %}</h1>
+    <a href="{% url 'staff_create' %}" class="btn btn-primary">
+        {% trans "Add New Staff Member" %}
+    </a>
+</div>
 
-  <table class="staff-table">
-      <thead>
-          <tr>
-              <th>Name</th>
-              <th>ID Number</th>
-              <th>Email</th>
-              <th>Tel No</th>
-              <th>Class Name</th>
-              <th>Subjects Handled</th>
-              <th>Years of Experience</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for staff in staff_members %}
-          <tr>
-              <td>{{ staff.name }}</td>
-              <td>{{ staff.ID_number }}</td>
-              <td>{{ staff.email }}</td>
-              <td>{{ staff.tel_no }}</td>
-              <td>{{ staff.class_name }}</td>
-              <td>{{ staff.subjects_handled }}</td>
-              <td>{{ staff.years_of_experience }}</td>
-              <td class="action-buttons">
-                  <a href="{% url 'delete-staff' staff.id %}" class="btn-delete">Delete</a>
-                  <!-- Add other actions like Edit if needed -->
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" 
+                       placeholder="Search by name..." value="{{ request.GET.search }}">
+            </div>
+            <div class="col-md-4">
+                <select name="role" class="form-select">
+                    <option value="">All Roles</option>
+                    {% for role_value, role_name in roles %}
+                    <option value="{{ role_value }}" 
+                            {% if request.GET.role == role_value %}selected{% endif %}>
+                        {{ role_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-  <a href="{% url 'staff_create' %}" class="btn-add">Add New Staff Member</a>
-  
-  <style>
-      /* Basic Reset */
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
-      
-      body {
-          font-family: Arial, sans-serif;
-          padding: 20px;
-      }
+<div class="row">
+    {% for staff_member in staff_members %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            {% if staff_member.photo %}
+            <img src="{{ staff_member.photo.url }}" class="card-img-top" alt="{{ staff_member.name }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ staff_member.name }}</h5>
+                <p class="card-text">
+                    <strong>Role:</strong> {{ staff_member.get_role_display }}<br>
+                    <strong>Status:</strong> {{ staff_member.get_status_display }}
+                </p>
+                <a href="{% url 'staff_detail' pk=staff_member.pk %}" 
+                   class="btn btn-primary btn-sm">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No staff members found.</div>
+    </div>
+    {% endfor %}
+</div>
 
-      h2 {
-          text-align: center;
-          margin-bottom: 20px;
-      }
-
-      /* Table Styles */
-      .staff-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-      }
-
-      .staff-table th, .staff-table td {
-          padding: 12px;
-          text-align: left;
-          border-bottom: 1px solid #ddd;
-      }
-
-      .staff-table th {
-          background-color: #f2f2f2;
-      }
-
-      /* Responsive Table: Stack on small screens */
-      @media (max-width: 768px) {
-          .staff-table thead {
-              display: none;
-          }
-
-          .staff-table, .staff-table tbody, .staff-table tr, .staff-table td {
-              display: block;
-              width: 100%;
-          }
-
-          .staff-table tr {
-              margin-bottom: 10px;
-          }
-
-          .staff-table td {
-              position: relative;
-              padding-left: 50%;
-              text-align: right;
-          }
-
-          .staff-table td::before {
-              content: attr(data-label);
-              position: absolute;
-              left: 10px;
-              font-weight: bold;
-          }
-      }
-
-      /* Button Styles */
-      .btn-add, .btn-delete {
-          display: inline-block;
-          padding: 10px 20px;
-          margin: 5px;
-          border-radius: 5px;
-          text-decoration: none;
-          text-align: center;
-      }
-
-      .btn-add {
-          background-color: #ff9800;
-          color: white;
-          font-weight: bold;
-      }
-
-      .btn-delete {
-          background-color: #f44336;
-          color: white;
-          font-weight: bold;
-      }
-
-      /* Hover Effects */
-      .btn-add:hover {
-          background-color: #e68900;
-      }
-
-      .btn-delete:hover {
-          background-color: #d32f2f;
-      }
-
-      /* Actions Column */
-      .action-buttons {
-          display: flex;
-          gap: 10px;
-      }
-  </style>
+{% if is_paginated %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
 {% endblock %}
-
