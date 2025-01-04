@@ -22,6 +22,7 @@ class Child(models.Model):
     )
     name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
+    sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
     study_class = models.CharField(
         max_length=20, 
         choices=[
@@ -37,16 +38,6 @@ class Child(models.Model):
     )
 
     profile_image = models.ImageField(upload_to="child_images/", null=True, blank=True)
-    application_status = models.CharField(
-        max_length=20,
-        choices=[
-            ("pending", "Pending"),
-            ("accepted", "Accepted"),
-            ("rejected", "Rejected"),
-            ("left", "Left"),
-        ],
-        default="pending",
-    )
 
     def __str__(self):
         return self.name
@@ -92,12 +83,14 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
-class Staff(models.Model):
+class Staff(models.Model): 
     # Personal information
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=False)
+    sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
     tel_no = models.CharField(max_length=22, default='')
+    photo = models.ImageField(upload_to='staff_photos/', null=True, blank=True)
 
     # Role/Position (New field to differentiate staff types)
     role = models.CharField(
@@ -110,7 +103,7 @@ class Staff(models.Model):
             ("admin", "Admin Staff"),
             ("other", "Other")
         ],
-        default="teacher"
+        default="teacher",
     )
 
     # Teaching staff-related information (Visible only if role is "teacher")
@@ -124,9 +117,13 @@ class Staff(models.Model):
 
     def __str__(self):
         if self.role == "teacher":
-            return f"{self.name} teaches {self.subjects_handled} in {self.class_name}"
+            # Convert subjects to a list of their names
+            subjects = ', '.join([subject.name for subject in self.subjects_handled.all()]) if self.subjects_handled.exists() else 'No subjects assigned'
+            return f"{self.name} teaches {subjects} in {self.class_name}"
         else:
-            return f"{self.name} works as a {self.role} in the {self.department} department"
+            return f"{self.name} works as a {self.role} in the {self.department or 'Not assigned'} department"
+
+
 
 class About(models.Model):
     title = models.CharField(max_length=255, default="Our School Anthem")

@@ -252,7 +252,10 @@ def staff_create_view(request):
 @user_passes_test(is_admin, login_url='/admin-login/')
 def staff_list(request):
     staff_members = Staff.objects.all()
-    return render(request, 'staff_list.html', {'staff_members': staff_members})
+    context = {
+        'staff_members': staff_members
+    }
+    return render(request, 'staff_list.html', context)
 # Delete staff
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_staff(request, staff_id):

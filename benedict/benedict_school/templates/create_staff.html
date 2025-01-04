@@ -6,138 +6,163 @@
     <!-- Page Title with Color -->
     <h2 class="text-center text-primary mb-4">Staff Details Form</h2>
     <h4 class="text-center text-warning mb-4">Create New Staff Member</h4>
-  
-    <!-- Form -->
-    <form method="post" class="bg-light p-4 rounded shadow-sm">
+    
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form.as_p }}
+
+        <style>
+            /* Basic Reset */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                padding: 20px;
+            }
+    
+            h1 {
+                text-align: center;
+                margin-bottom: 40px;
+                color: #4CAF50;
+            }
+    
+            h2 {
+                color: #333;
+                margin-top: 30px;
+                font-size: 1.5em;
+            }
+    
+            .form-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+    
+            .form-group {
+                margin-bottom: 20px;
+            }
+    
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 1em;
+            }
+    
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #4CAF50;
+            }
+    
+            .form-group .date-format {
+                font-size: 0.9em;
+                color: #888;
+            }
+    
+            .btn-submit {
+                padding: 12px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 1.2em;
+                cursor: pointer;
+                width: 100%;
+            }
+    
+            .btn-submit:hover {
+                background-color: #45a049;
+            }
+    
+            /* Error Message Styling */
+            .error-message {
+                color: #f44336;
+                background-color: #fdecea;
+                border-left: 4px solid #f44336;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+    
+            .error-message ul {
+                list-style-type: none;
+            }
+    
+            .error-message ul li {
+                padding-left: 10px;
+            }
+    
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .form-container {
+                    padding: 10px;
+                }
+    
+                .form-group input,
+                .form-group select,
+                .form-group textarea {
+                    font-size: 0.9em;
+                    padding: 10px;
+                }
+    
+                .btn-submit {
+                    font-size: 1.1em;
+                }
+    
+                h2 {
+                    font-size: 1.3em;
+                }
+            }
+        </style>
         
-        <!-- Name -->
-        <div class="mb-3">
-            <label for="id_name" class="form-label">Name</label>
-            {{ form.name }}
-            {% if form.name.errors %}
-                <div class="text-danger">
-                    {% for error in form.name.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- ID Number -->
-        <div class="mb-3">
-            <label for="id_ID_number" class="form-label">ID Number</label>
-            {{ form.ID_number }}
-            {% if form.ID_number.errors %}
-                <div class="text-danger">
-                    {% for error in form.ID_number.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Email -->
-        <div class="mb-3">
-            <label for="id_email" class="form-label">Email</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="text-danger">
-                    {% for error in form.email.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Telephone Number -->
-        <div class="mb-3">
-            <label for="id_tel_no" class="form-label">Telephone Number</label>
-            {{ form.tel_no }}
-            {% if form.tel_no.errors %}
-                <div class="text-danger">
-                    {% for error in form.tel_no.errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Class Name (Optional) -->
-        {% if form.class_name %}
-            <div class="mb-3">
-                <label for="id_class_name" class="form-label">Class Name</label>
-                {{ form.class_name }}
-                {% if form.class_name.errors %}
-                    <div class="text-danger">
-                        {% for error in form.class_name.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <!-- Subjects Handled (Optional) -->
-        {% if form.subjects_handled %}
-            <div class="mb-3">
-                <label for="id_subjects_handled" class="form-label">Subjects Handled</label>
-                {{ form.subjects_handled }}
-                {% if form.subjects_handled.errors %}
-                    <div class="text-danger">
-                        {% for error in form.subjects_handled.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <!-- Years of Experience (Optional) -->
-        {% if form.years_of_experience %}
-            <div class="mb-3">
-                <label for="id_years_of_experience" class="form-label">Years of Experience</label>
-                {{ form.years_of_experience }}
-                {% if form.years_of_experience.errors %}
-                    <div class="text-danger">
-                        {% for error in form.years_of_experience.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <!-- Department (Optional) -->
-        {% if form.department %}
-            <div class="mb-3">
-                <label for="id_department" class="form-label">Department</label>
-                {{ form.department }}
-                {% if form.department.errors %}
-                    <div class="text-danger">
-                        {% for error in form.department.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <!-- Work Schedule (Optional) -->
-        {% if form.work_schedule %}
-            <div class="mb-3">
-                <label for="id_work_schedule" class="form-label">Work Schedule</label>
-                {{ form.work_schedule }}
-                {% if form.work_schedule.errors %}
-                    <div class="text-danger">
-                        {% for error in form.work_schedule.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
+        <script type="text/javascript">
+            // On page load, hide/show relevant fields based on the role
+            document.addEventListener('DOMContentLoaded', function() {
+                const roleField = document.getElementById('id_role');
+                const classNameField = document.getElementById('id_class_name').closest('.form-group');
+                const subjectsField = document.getElementById('id_subjects_handled').closest('.form-group');
+                const yearsField = document.getElementById('id_years_of_experience').closest('.form-group');
+                const departmentField = document.getElementById('id_department').closest('.form-group');
+                const workScheduleField = document.getElementById('id_work_schedule').closest('.form-group');
+                
+                function toggleFields() {
+                    if (roleField.value === 'teacher') {
+                        classNameField.style.display = 'block';
+                        subjectsField.style.display = 'block';
+                        yearsField.style.display = 'block';
+                        departmentField.style.display = 'none';
+                        workScheduleField.style.display = 'none';
+                    } else {
+                        classNameField.style.display = 'none';
+                        subjectsField.style.display = 'none';
+                        yearsField.style.display = 'none';
+                        departmentField.style.display = 'block';
+                        workScheduleField.style.display = 'block';
+                    }
+                }
+                
+                // Initial check based on the role value when the form is loaded
+                toggleFields();
+                
+                // Add an event listener for the change event of the role field
+                roleField.addEventListener('change', toggleFields);
+            });
+        </script>
+        
         <!-- Submit Button -->
         <div class="d-grid gap-2 mt-4">
             <button type="submit" class="btn btn-lg btn-success">Create New Staff</button>

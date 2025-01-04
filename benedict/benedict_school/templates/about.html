@@ -65,15 +65,21 @@
             <h2 class="card-title">Meet Our Team</h2>
             <div class="team-container">
                 {% for staff_member in staff_members %}
-                <div class="team-member">
-                    <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
-                    <h3>{{ staff_member.name }}</h3>
-                    <p>{{ staff_member.bio }}</p>
-                </div>
+                    {% if staff_member.role == "admin" or staff_member.role == "teacher" %}
+                        <div class="team-member">
+                            {% if staff_member.photo %}
+                                <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
+                            {% else %}
+                                <img src="{% static 'images/default-photo.jpg' %}" alt="Default Photo" class="team-photo">
+                            {% endif %}
+                            <h3>{{ staff_member.name }}</h3>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
+    
 
     <!-- Accreditation & Achievements -->
     <div class="accreditation-achievements card">

@@ -21,41 +21,47 @@ class SearchForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Search...', 'class': 'form-control'})
     )
 
+
 class StaffForm(forms.ModelForm):
     class Meta:
         model = Staff
-        fields = '__all__'
+        fields = ['name', 'sex', 'ID_number', 'email', 'tel_no', 'photo', 'role', 
+                  'class_name', 'subjects_handled', 'years_of_experience', 
+                  'department', 'work_schedule']
 
+    subjects_handled = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), required=False)
+    class_name = forms.CharField(max_length=50, required=False)
+    years_of_experience = forms.IntegerField(required=False)
+    department = forms.CharField(max_length=100, required=False)
+    work_schedule = forms.CharField(max_length=100, required=False)
+
+    # Hide teaching staff-related fields initially
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        role = self.instance.role if self.instance else None
-
-        # Show teaching fields only if the role is 'teacher'
-        if role != 'teacher':
-            self.fields['subjects_handled'].widget = forms.HiddenInput()
-            self.fields['years_of_experience'].widget = forms.HiddenInput()
-            self.fields['class_name'].widget = forms.HiddenInput()
-
-        # Show non-teaching fields only if the role is not 'teacher'
-        if role == 'teacher':
-            self.fields['department'].widget = forms.HiddenInput()
-            self.fields['work_schedule'].widget = forms.HiddenInput()
-
-        # Adjust widgets for the form fields
-        self.fields['name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['ID_number'].widget.attrs.update({'class': 'form-control'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['tel_no'].widget.attrs.update({'class': 'form-control'})
-        self.fields['class_name'].widget.attrs.update({'class': 'form-control'})
+        super(StaffForm, self).__init__(*args, **kwargs)
         
-        # If role is "teacher", allow selecting multiple subjects
+        # Hide teaching fields by default
+        self.fields['class_name'].widget.attrs['class'] = 'd-none'
+        self.fields['subjects_handled'].widget.attrs['class'] = 'd-none'
+        self.fields['years_of_experience'].widget.attrs['class'] = 'd-none'
+
+        # Hide non-teaching staff fields by default
+        self.fields['department'].widget.attrs['class'] = 'd-none'
+        self.fields['work_schedule'].widget.attrs['class'] = 'd-none'
+
+    # Clean method to ensure dynamic display of fields based on role
+    def clean(self):
+        cleaned_data = super().clean()
+        role = cleaned_data.get('role')
+
         if role == 'teacher':
-            self.fields['subjects_handled'].widget = forms.SelectMultiple(attrs={'class': 'form-control'})
-        
-        # Non-teaching staff related fields
-        self.fields['department'].widget.attrs.update({'class': 'form-control'})
-        self.fields['work_schedule'].widget.attrs.update({'class': 'form-control'})
-        self.fields['years_of_experience'].widget.attrs.update({'class': 'form-control'})
+            self.fields['class_name'].widget.attrs['class'] = 'form-control'
+            self.fields['subjects_handled'].widget.attrs['class'] = 'form-control'
+            self.fields['years_of_experience'].widget.attrs['class'] = 'form-control'
+        elif role != 'teacher':  # For non-teaching staff
+            self.fields['department'].widget.attrs['class'] = 'form-control'
+            self.fields['work_schedule'].widget.attrs['class'] = 'form-control'
+
+        return cleaned_data
 
 class ParentForm(forms.ModelForm):
     class Meta:
@@ -94,7 +100,7 @@ class ParentForm(forms.ModelForm):
 class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
-        fields = ['name', 'date_of_birth', 'study_class', 'profile_image', 'application_status']
+        fields = ['name', 'date_of_birth', 'sex', 'study_class', 'profile_image']
         date_of_birth = forms.DateField(
         widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
     )

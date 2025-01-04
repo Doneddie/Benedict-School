@@ -128,6 +128,33 @@ footer a:hover {
     color:  #e6640e;
 }
 
+.footer-link {
+    color: #ddd;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #e6640e;
+}
+
+.social-icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    background-color: #0a0101;
+    border-radius: 50%;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #007bff;
+}
+
 /* Navbar Adjustments for Mobile */
 .d-flex .btn {
     width: 100%;
