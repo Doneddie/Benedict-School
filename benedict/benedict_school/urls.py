@@ -14,7 +14,8 @@ from .views import (
     EventListView,
     staff_create_view,
     admin_dashboard,
-    search_view
+    search_view,
+    StaffListView
 )
 
 

@@ -256,7 +256,7 @@ def staff_create_view(request):
     })
 # Staff list
 @user_passes_test(is_admin, login_url='/admin-login/')
-class StaffListView:
+class StaffListView(ListView):
     model = Staff
     template_name = 'staff_list.html'
     context_object_name = 'staff_members'
@@ -282,7 +282,7 @@ class StaffListView:
 @user_passes_test(is_admin, login_url='/admin-login/')
 class StaffDeleteView:
     model = Staff
-    template_name = 'staff/staff_confirm_delete.html'
+    template_name = 'staff_confirm_delete.html'
     success_url = reverse_lazy('staff_list')
     
     def delete(self, request, *args, **kwargs):
