@@ -15,7 +15,8 @@ from .views import (
     staff_create_view,
     admin_dashboard,
     search_view,
-    StaffListView
+    staff_list,
+    staff_delete,
 )
 
 
@@ -40,16 +41,10 @@ urlpatterns = [
     path('applications/', views.application_list, name='application-list'),
     path('api/childrenData/', views.children_data, name='children_data'),  # The API endpoint for fetching data
     path('gallery/', views.gallery, name='gallery'),
-    path('staff/', views.StaffListView.as_view(), name='staff_list'),
-    path('staff/create/', views.staff_create, name='staff_create'),
-    path('staff/<int:pk>/', views.StaffDetailView.as_view(), name='staff_detail'),
-    path('staff/<int:pk>/update/', views.StaffUpdateView.as_view(), name='staff_update'),
-    path('staff/<int:pk>/delete/', views.StaffDeleteView.as_view(), name='staff_delete'),
-
-    # Pupil Application URLs
+    path('staff/', views.staff_list, name='staff_list'),
+    path('staff/create/', views.staff_create_view, name='staff_create'),
+    path('staff/<int:pk>/delete/', views.staff_delete, name='staff_delete'),
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",
     ),  # Create a pupil application
-
-    # ---------- Event URLs ----------
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
 ]

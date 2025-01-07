@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 class Parent(models.Model): 
@@ -158,7 +159,7 @@ class Staff(models.Model):
         default="male",
         help_text=_("Gender of the staff member")
     )
-    date_of_birth = models.DateField(
+    date_of_birth = models.DateField(default=timezone.now,
         help_text=_("Date of birth of the staff member")
     )
     ID_number = models.CharField(
@@ -182,21 +183,21 @@ class Staff(models.Model):
         blank=True,
         help_text=_("Staff member's photograph")
     )
-    address = models.TextField(
+    address = models.TextField(default='No Address',
         help_text=_("Physical address of residence")
     )
 
     # Emergency Contact
     emergency_contact_name = models.CharField(
-        max_length=100,
+        max_length=100, default='',
         help_text=_("Name of emergency contact person")
     )
     emergency_contact_relationship = models.CharField(
-        max_length=50,
+        max_length=50, default='',
         help_text=_("Relationship with emergency contact person")
     )
     emergency_contact_phone = models.CharField(
-        max_length=22,
+        max_length=22, default='',
         validators=[phone_validator],
         help_text=_("Emergency contact phone number")
     )
@@ -224,12 +225,12 @@ class Staff(models.Model):
     )
     employee_id = models.CharField(
         max_length=20,
-        unique=True,
+        unique=True, default='',
         help_text=_("School-issued employee ID")
     )
 
     # Qualification Information
-    qualification = models.TextField(
+    qualification = models.TextField( default='',
         help_text=_("Academic and professional qualifications")
     )
     certificates = models.FileField(
@@ -282,15 +283,15 @@ class Staff(models.Model):
         help_text=_("Monthly salary amount")
     )
     bank_account_name = models.CharField(
-        max_length=100,
+        max_length=100, default='',
         help_text=_("Name as it appears on bank account")
     )
     bank_account_number = models.CharField(
-        max_length=50,
+        max_length=50, default='',
         help_text=_("Bank account number for salary payment")
     )
     bank_name = models.CharField(
-        max_length=100,
+        max_length=100, default='',
         help_text=_("Name of the bank")
     )
 

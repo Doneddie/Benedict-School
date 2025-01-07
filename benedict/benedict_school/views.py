@@ -14,7 +14,7 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
+from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage, Subject
 from django.db.models import Q
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
 from django.contrib.auth.forms import UserCreationForm
@@ -25,6 +25,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse
 from django.db.models import Count
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -245,7 +247,7 @@ def staff_create_view(request):
         if form.is_valid():
             staff = form.save()
             messages.success(request, 'Staff member created successfully.')
-            return redirect('staff_detail', pk=staff.pk)
+            return redirect('staff_list', pk=staff.pk)
     else:
         form = StaffForm()
     
@@ -256,38 +258,48 @@ def staff_create_view(request):
     })
 # Staff list
 @user_passes_test(is_admin, login_url='/admin-login/')
-class StaffListView(ListView):
-    model = Staff
-    template_name = 'staff_list.html'
-    context_object_name = 'staff_members'
-    paginate_by = 10
+def staff_list(request):
+    # Get role and search parameters from GET request
+    role = request.GET.get('role')
+    search = request.GET.get('search')
 
-    def get_queryset(self):
-        queryset = Staff.objects.all()
-        # Filter by role if specified
-        role = self.request.GET.get('role')
-        if role:
-            queryset = queryset.filter(role=role)
-        # Search functionality
-        search = self.request.GET.get('search')
-        if search:
-            queryset = queryset.filter(name__icontains=search)
-        return queryset.order_by('name')
+    # Get the queryset
+    queryset = Staff.objects.all()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['roles'] = Staff.ROLE_CHOICES
-        return context
+    # Apply filters based on GET parameters
+    if role:
+        queryset = queryset.filter(role=role)
+    if search:
+        queryset = queryset.filter(name__icontains=search)
+
+    # Pagination logic
+    paginator = Paginator(queryset.order_by('name'), 10)  # 10 staff members per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Context data to pass to the template
+    context = {
+        'staff_members': page_obj,
+        'roles': Staff.ROLE_CHOICES,
+        'search': search,
+        'role': role
+    }
+
+    return render(request, 'staff_list.html', context)
 # Delete staff
 @user_passes_test(is_admin, login_url='/admin-login/')
-class StaffDeleteView:
-    model = Staff
-    template_name = 'staff_confirm_delete.html'
-    success_url = reverse_lazy('staff_list')
+def staff_delete(request, pk):
+    # Get the staff member by primary key (pk)
+    staff_member = get_object_or_404(Staff, pk=pk)
     
-    def delete(self, request, *args, **kwargs):
+    # If the request method is POST, handle the deletion
+    if request.method == 'POST':
+        staff_member.delete()  # Delete the staff member
         messages.success(request, 'Staff member deleted successfully.')
-        return super().delete(request, *args, **kwargs)
+        return redirect(reverse('staff_list'))  # Redirect to the staff list view
+    
+    # If GET request, display the confirmation page
+    return render(request, 'staff_confirm_delete.html', {'staff_member': staff_member})
 
 # Parent views
 @user_passes_test(is_admin, login_url='/admin-login/')
