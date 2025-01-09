@@ -1,0 +1,201 @@
+/* General Reset */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Colors */
+:root {
+    --orange: #FFA500;
+    --white: #FFFFFF;
+    --black: #000000;
+    --lemon-green: #9FE2BF;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    color: var(--black);
+    background-color: var(--white);
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: var(--lemon-green);
+    color: var(--black);
+    text-align: center;
+    padding: 1rem;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--orange);
+    padding: 0.5rem;
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: var(--white);
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: var(--lemon-green);
+}
+
+/* Search Bar (below navbar, full width) */
+.navbar + .d-flex {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--white);
+    border-top: 2px solid var(--lemon-green);
+    border-bottom: 2px solid var(--lemon-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.d-flex .form-control {
+    flex: 1;
+    border: 2px solid var(--lemon-green);
+    padding: 0.5rem;
+}
+
+.d-flex .btn {
+    background-color: var(--orange);
+    color: var(--white);
+    border: 2px solid var(--orange);
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.d-flex .btn:hover {
+    background-color: var(--lemon-green);
+    color: var(--black);
+    border-color: var(--lemon-green);
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+    text-align: center;
+    color: var(--black);
+}
+
+/* Sidebar */
+aside {
+    background-color: var(--lemon-green);
+    padding: 1rem;
+    color: var(--black);
+    text-align: center;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+    background-color: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+footer p {
+    margin: 0.5rem 0;
+}
+
+footer a {
+    color: var(--lemon-green);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: var(--orange);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .navbar ul {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar ul li {
+        margin: 10px 0;
+    }
+
+    .d-flex {
+        flex-direction: column;
+    }
+
+    .d-flex .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    main, aside, footer {
+        padding: 1rem;
+    }
+}
+
+/* Navbar (sticky and styled) */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure navbar stays on top */
+    background-color: var(--orange);
+    padding: 0.5rem;
+    transition: top 0.3s; /* Smooth transition for hiding */
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: var(--white);
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: var(--lemon-green);
+}

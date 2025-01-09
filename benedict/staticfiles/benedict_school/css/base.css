@@ -1,0 +1,177 @@
+/* General Reset */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Colors */
+:root {
+    --orange: #e6640e;
+    --white: #FFFFFF;
+    --black: #000000;
+    --lemon-green: #15e60e;
+}
+
+/* Body Styling */
+body {
+    font-family: "Roboto", sans-serif;
+    color: #000000;
+    background: linear-gradient(to bottom, #F0FFFF, #e8eaeb); 
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    /* display: grid; */
+    scroll-behavior: smooth;
+    
+}
+
+/* Header */
+header {
+    color: #e6640e;
+    text-align: center;
+    margin: 0;
+    justify-content: space-between;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #e6640e;
+    padding: 0.5rem;
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+    transition: top 0.3s;
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #070101;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: #058821;;
+}
+
+/* Search Form */
+.d-flex .form-control {
+    flex: 1;
+    border: 2px solid #15e60e;
+    padding: 0.5rem;
+}
+
+.d-flex .btn {
+    background-color:  #e6640e;
+    color: var(--white);
+    border: 2px solid  #e6640e;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.d-flex .btn:hover {
+    background-color: #15e60e;
+    color: var(--black);
+    border-color: #15e60e;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color:  #e6640e;  /* Set the color of all headings to orange */
+}
+
+
+/* Main Content */
+main {
+    padding: 2rem;
+    text-align: center;
+    color: var(--black);
+}
+
+
+/* Footer */
+footer {
+    background-color: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+footer p {
+    margin: 0.5rem 0;
+    text-decoration: none;
+}
+
+footer a {
+    color:  #15e60e;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color:  #e6640e;
+}
+
+.footer-link {
+    color: #ddd;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #e6640e;
+}
+
+.social-icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    background-color: #0a0101;
+    border-radius: 50%;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #007bff;
+}
+
+/* Navbar Adjustments for Mobile */
+.d-flex .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+main, aside, footer {
+    padding: 1rem;
+}
+
+/* Navbar (Sticky and Styled) */
+#navbar1 {
+    justify-content: space-between;
+}
+
+header nav div a img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
