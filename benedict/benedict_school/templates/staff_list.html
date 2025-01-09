@@ -75,7 +75,6 @@
                         <th>Photo</th>
                         <th>Name</th>
                         <th>Role</th>
-                        <th>Status</th>
                         <th>Department/Class</th>
                         <th>Actions</th>
                     </tr>
@@ -98,15 +97,6 @@
                         </td>
                         <td>{{ staff_member.name }}</td>
                         <td>{{ staff_member.get_role_display }}</td>
-                        <td>
-                            <span class="badge {% if staff_member.status == 'active' %}bg-success
-                                           {% elif staff_member.status == 'inactive' %}bg-secondary
-                                           {% elif staff_member.status == 'on_leave' %}bg-warning
-                                           {% elif staff_member.status == 'suspended' %}bg-danger
-                                           {% endif %}">
-                                {{ staff_member.get_status_display }}
-                            </span>
-                        </td>
                         <td>
                             {% if staff_member.is_teaching_staff %}
                                 {{ staff_member.get_class_name_display }}
