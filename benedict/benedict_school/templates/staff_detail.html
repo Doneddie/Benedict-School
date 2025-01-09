@@ -1,0 +1,134 @@
+{% extends "base_staff.html" %}
+{% load i18n %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}{{ staff_member.name }} - Staff Details{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- Staff Header Section -->
+        <div class="p-6 border-b">
+            <div class="flex items-center">
+                {% if staff_member.photo %}
+                    <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" 
+                         class="w-32 h-32 rounded-full object-cover mr-6">
+                {% else %}
+                    <div class="w-32 h-32 rounded-full bg-gray-200 mr-6 flex items-center justify-center">
+                        <span class="text-gray-500 text-4xl">{{ staff_member.name|make_list|first }}</span>
+                    </div>
+                {% endif %}
+                <div>
+                    <h1 class="text-2xl font-bold">{{ staff_member.name }}</h1>
+                    <p class="text-gray-600">{{ staff_member.full_position }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p><strong>ID Number:</strong> {{ staff_member.ID_number }}</p>
+                    <p><strong>Gender:</strong> {{ staff_member.sex|title }}</p>
+                    <p><strong>Age:</strong> {{ age }} years</p>
+                    <p><strong>Employee ID:</strong> {{ staff_member.employee_id }}</p>
+                </div>
+                <div>
+                    <p><strong>Date Hired:</strong> {{ staff_member.date_hired|date:"F d, Y" }}</p>
+                    <p><strong>Years of Experience:</strong> {{ staff_member.years_of_experience }} years</p>
+                    <p><strong>Last Updated:</strong> {{ staff_member.last_updated|date:"F d, Y H:i" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold mb-4">Contact Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p><strong>Email:</strong> {{ contact_info.email }}</p>
+                    <p><strong>Phone:</strong> {{ contact_info.phone }}</p>
+                    <p><strong>Address:</strong> {{ contact_info.address }}</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Emergency Contact</h3>
+                    <p><strong>Name:</strong> {{ contact_info.emergency_contact.name }}</p>
+                    <p><strong>Relationship:</strong> {{ contact_info.emergency_contact.relationship }}</p>
+                    <p><strong>Phone:</strong> {{ contact_info.emergency_contact.phone }}</p>
+                </div>
+            </div>
+        </div>
+
+        {% if staff_member.is_teaching_staff %}
+        <!-- Teaching Information -->
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold mb-4">Teaching Information</h2>
+            <p><strong>Class:</strong> {{ staff_member.class_name|title }}</p>
+            <div class="mt-4">
+                <h3 class="font-semibold mb-2">Subjects Handled</h3>
+                {% if subjects %}
+                    <div class="flex flex-wrap gap-2">
+                        {% for subject in subjects %}
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                                {{ subject.name }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-500">No subjects assigned</p>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <!-- Department Information -->
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold mb-4">Department Information</h2>
+            <p><strong>Department:</strong> {{ staff_member.department|title }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Qualifications -->
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-semibold mb-4">Qualifications</h2>
+            <div class="prose max-w-none">
+                {{ staff_member.qualification|linebreaks }}
+            </div>
+            {% if staff_member.certificates %}
+                <div class="mt-4">
+                    <a href="{{ staff_member.certificates.url }}" 
+                       class="text-blue-600 hover:text-blue-800" 
+                       target="_blank">
+                        View Certificates
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Bank Information -->
+        <div class="p-6">
+            <h2 class="text-xl font-semibold mb-4">Bank Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p><strong>Bank Name:</strong> {{ staff_member.bank_name }}</p>
+                    <p><strong>Account Name:</strong> {{ staff_member.bank_account_name }}</p>
+                    <p><strong>Account Number:</strong> {{ staff_member.bank_account_number }}</p>
+                </div>
+                {% if request.user.is_superuser %}
+                <div>
+                    <p><strong>Salary:</strong> 
+                        {% if staff_member.salary %}
+                            ${{ staff_member.salary|floatformat:2 }}
+                        {% else %}
+                            Not specified
+                        {% endif %}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

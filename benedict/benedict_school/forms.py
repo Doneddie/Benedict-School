@@ -45,7 +45,7 @@ class StaffForm(forms.ModelForm):
             'emergency_contact_phone',
             
             # Employment Information
-            'role', 'employee_id', 'status',
+            'role', 'employee_id',
             
             # Qualification Information
             'qualification', 'certificates', 'years_of_experience',
@@ -54,7 +54,7 @@ class StaffForm(forms.ModelForm):
             'class_name', 'subjects_handled',
             
             # Non-teaching Staff Information
-            'department', 'work_schedule',
+            'department', 
             
             # Salary Information
             'salary', 'bank_account_name', 'bank_account_number', 'bank_name'
@@ -63,7 +63,6 @@ class StaffForm(forms.ModelForm):
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
             'qualification': forms.Textarea(attrs={'rows': 3}),
             'address': forms.Textarea(attrs={'rows': 3}),
-            'work_schedule': forms.TextInput(attrs={'placeholder': 'e.g., Monday-Friday 8:00 AM - 4:00 PM'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -84,7 +83,6 @@ class StaffForm(forms.ModelForm):
             Div(
                 Row(
                     Column('role', css_class='form-group col-md-6 mb-0'),
-                    Column('status', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 css_class='mb-3'
@@ -103,7 +101,6 @@ class StaffForm(forms.ModelForm):
                 ),
                 Row(
                     Column('email', css_class='form-group col-md-6 mb-0'),
-                    Column('confirm_email', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 Row(
@@ -145,7 +142,6 @@ class StaffForm(forms.ModelForm):
                 _("Non-Teaching Information"),
                 Row(
                     Column('department', css_class='form-group col-md-6 mb-0'),
-                    Column('work_schedule', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 css_class='mb-3 non-teaching-fields'
@@ -180,7 +176,7 @@ class StaffForm(forms.ModelForm):
                     self.fields[field].widget = forms.HiddenInput()
         
         # Non-teaching staff fields
-        for field in ['department', 'work_schedule']:
+        for field in ['department']:
             if field in self.fields:
                 self.fields[field].required = not is_teaching
                 if is_teaching:
@@ -192,15 +188,10 @@ class StaffForm(forms.ModelForm):
         """
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
-        confirm_email = cleaned_data.get('confirm_email')
         role = cleaned_data.get('role')
         
-        # Email confirmation validation
-        if email and confirm_email and email != confirm_email:
-            raise ValidationError(_("Email addresses must match."))
-        
         # Role-specific validation
-        if role in ["teacher", "director"]:
+        if role in ["teacher"]:
             if not cleaned_data.get('class_name'):
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
             if not cleaned_data.get('subjects_handled'):
@@ -265,6 +256,39 @@ class ChildForm(forms.ModelForm):
             raise ValidationError("Date of birth cannot be in the future.")
         
         return date_of_birth
+
+class ChildFilterForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Search by name...'
+        })
+    )
+    
+    sex = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All')] + Child.sex.field.choices,  # Include blank option for "All"
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    study_class = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All')] + Child.study_class.field.choices,  # Include blank option for "All"
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    age_range = forms.ChoiceField(
+        required=False,
+        choices=[
+            ('', 'All Ages'),
+            ('0-3', '0-3 years'),
+            ('4-6', '4-6 years'),
+            ('7-9', '7-9 years'),
+            ('10+', '10+ years')
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
 
 class PupilApplicationForm(forms.ModelForm):
     class Meta:

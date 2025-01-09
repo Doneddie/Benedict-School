@@ -1,153 +1,132 @@
 {% extends "admin_base.html" %}
+{% load custom_filters %}
 {% load static %}
 
+
 {% block content %}
-  <h2>Child List</h2>
+<div class="container py-4">
+    <h1 class="mb-4">Children List</h1>
 
-  <table class="child-table">
-      <thead>
-          <tr>
-              <th>Profile Image</th>
-              <th>Name</th>
-              <th>Date of Birth</th>
-              <th>Study Class</th>
-              <th>Application Status</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for child in children %}
-          <tr>
-              <td>
-                  {% if child.profile_image %}
-                  <img src="{{ child.profile_image.url }}" alt="{{ child.name }}'s profile image" width="50" height="50">
-                  {% else %}
-                  <span>No Image</span>
-                  {% endif %}
-              </td>
-              <td>{{ child.name }}</td>
-              <td>{{ child.date_of_birth }}</td>
-              <td>{{ child.study_class }}</td>
-              <td>{{ child.application_status }}</td>
-              <td class="action-buttons">
-                  <a href="{% url 'delete-child' child.id %}" class="btn-delete">Delete</a>
-                  <!-- Add more actions like Edit here -->
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+    <!-- Filter Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    {{ filter_form.search }}
+                </div>
+                <div class="col-md-2">
+                    {{ filter_form.sex }}
+                </div>
+                <div class="col-md-3">
+                    {{ filter_form.study_class }}
+                </div>
+                <div class="col-md-2">
+                    {{ filter_form.age_range }}
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    {% if request.GET %}
+                        <a href="{% url 'child-list' %}" class="btn btn-secondary w-100 mt-2">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
 
-  <style>
-      /* Basic Reset */
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
+    <!-- Children Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Class</th>
+                            <th>Parent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        <tr>
+                            <td>
+                                {% if child.profile_image %}
+                                    <img src="{{ child.profile_image.url }}" 
+                                         alt="{{ child.name }}" 
+                                         class="rounded-circle"
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center"
+                                         style="width: 40px; height: 40px;">
+                                        <i class="bi bi-person text-white"></i>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ child.name }}</td>
+                            <td>
+                                {% with age=child.date_of_birth|timesince %}
+                                    {{ age|get_first_age }}
+                                {% endwith %}
+                            </td>
+                            <td>{{ child.get_sex_display }}</td>
+                            <td>{{ child.get_study_class_display }}</td>
+                            <td>{{ child.parent.name }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'delete-child' child.pk %}" 
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash">Delete</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <div class="alert alert-info mb-0">
+                                    No children found matching the search criteria.
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-      body {
-          font-family: Arial, sans-serif;
-          padding: 20px;
-      }
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
 
-      h2 {
-          text-align: center;
-          margin-bottom: 20px;
-      }
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
 
-      /* Table Styles */
-      .child-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-      }
-
-      .child-table th, .child-table td {
-          padding: 12px;
-          text-align: left;
-          border-bottom: 1px solid #ddd;
-      }
-
-      .child-table th {
-          background-color: #f2f2f2;
-      }
-
-      /* Profile Image Styling */
-      .child-table img {
-          border-radius: 50%;
-      }
-
-      /* Responsive Table: Stack on small screens */
-      @media (max-width: 768px) {
-          .child-table thead {
-              display: none;
-          }
-
-          .child-table, .child-table tbody, .child-table tr, .child-table td {
-              display: block;
-              width: 100%;
-          }
-
-          .child-table tr {
-              margin-bottom: 10px;
-          }
-
-          .child-table td {
-              position: relative;
-              padding-left: 50%;
-              text-align: right;
-          }
-
-          .child-table td::before {
-              content: attr(data-label);
-              position: absolute;
-              left: 10px;
-              font-weight: bold;
-          }
-
-          .child-table img {
-              width: 40px;
-              height: 40px;
-          }
-      }
-
-      /* Button Styles */
-      .btn-delete {
-          display: inline-block;
-          padding: 8px 16px;
-          margin: 5px;
-          border-radius: 5px;
-          text-decoration: none;
-          text-align: center;
-          background-color: #f44336;
-          color: white;
-          font-weight: bold;
-      }
-
-      /* Hover Effects */
-      .btn-delete:hover {
-          background-color: #d32f2f;
-      }
-
-      /* Actions Column */
-      .action-buttons {
-          display: flex;
-          gap: 10px;
-      }
-  </style>
-
-<script>
-    // JavaScript can be added if you need more interactive features (e.g., confirmation before delete)
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            if (!confirm('Are you sure you want to delete this parent?')) {
-                e.preventDefault();
-            }
-        });
-    });
-</script>
-
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
 {% endblock %}
-

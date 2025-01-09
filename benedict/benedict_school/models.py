@@ -84,8 +84,16 @@ class Event(models.Model):
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        ordering = ['name']
+        verbose_name = _("Subject")
+        verbose_name_plural = _("Subjects")
+
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.code})"
+
+    def get_teachers(self):
+        return self.staff_set.filter(role='teacher')
 
 class Staff(models.Model):
     """
@@ -106,15 +114,6 @@ class Staff(models.Model):
         ("other", "Other")
     ]
 
-    # Status Choices
-    STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-        ('on_leave', 'On Leave'),
-        ('suspended', 'Suspended'),
-        ('terminated', 'Terminated')
-    ]
-
     # Class Choices
     CLASS_CHOICES = [
         ('nursery', 'Nursery'),
@@ -129,7 +128,6 @@ class Staff(models.Model):
     # Department Choices
     DEPARTMENT_CHOICES = [
         ('administration', 'Administration'),
-        ('Studies', 'Studies'),
         ('kitchen', 'Kitchen'),
         ('security', 'Security'),
         ('medical', 'Medical'),
@@ -183,7 +181,7 @@ class Staff(models.Model):
         blank=True,
         help_text=_("Staff member's photograph")
     )
-    address = models.TextField(default='No Address',
+    address = models.TextField(default='',
         help_text=_("Physical address of residence")
     )
 
@@ -216,12 +214,6 @@ class Staff(models.Model):
     last_updated = models.DateTimeField(
         auto_now=True,
         help_text=_("Last update timestamp")
-    )
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='active',
-        help_text=_("Current employment status")
     )
     employee_id = models.CharField(
         max_length=20,
@@ -267,12 +259,6 @@ class Staff(models.Model):
         null=True,
         help_text=_("Department for non-teaching staff")
     )
-    work_schedule = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        help_text=_("Working hours/shift information")
-    )
 
     # Salary Information
     salary = models.DecimalField(
@@ -304,7 +290,7 @@ class Staff(models.Model):
     @property
     def is_teaching_staff(self):
         """Check if staff member is in a teaching role"""
-        return self.role in ["teacher", "director"]
+        return self.role in ["teacher"]
 
     @property
     def full_position(self):
@@ -364,15 +350,13 @@ class Staff(models.Model):
         self.subjects_handled.remove(subject)
 
     def __str__(self):
-        """String representation of the staff member"""
+        """String representation of the staff member."""
         if self.is_teaching_staff:
             subjects = ', '.join(
-                [subject.name for subject in self.subjects_handled.all()]
-            ) or 'No subjects assigned'
-            return f"{self.name} - {self.role} ({subjects} in {self.class_name})"
-        return f"{self.name} - {self.role} ({self.department})"
-
-
+                [subject.name for subject in self.subjects_handled.all()] or ['No subjects assigned']
+            )
+            return f"{self.name} - {self.role} ({subjects} in {self.class_name or 'No class assigned'})"
+            return f"{self.name} - {self.role} ({self.department or 'No department assigned'})"
 
 class About(models.Model):
     title = models.CharField(max_length=255, default="Our School Anthem")

@@ -16,10 +16,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage, Subject
 from django.db.models import Q
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm
+from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm, ChildFilterForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone
+from datetime import datetime
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
@@ -27,6 +28,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -256,36 +258,81 @@ def staff_create_view(request):
         'title': 'Add New Staff Member',
         'button_text': 'Create Staff Member'
     })
+    
 # Staff list
 @user_passes_test(is_admin, login_url='/admin-login/')
 def staff_list(request):
-    # Get role and search parameters from GET request
-    role = request.GET.get('role')
-    search = request.GET.get('search')
-
-    # Get the queryset
     queryset = Staff.objects.all()
-
-    # Apply filters based on GET parameters
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        queryset = queryset.filter(
+            Q(name__icontains=search_query)
+        )
+    
+    # Filters
+    role = request.GET.get('role')
     if role:
         queryset = queryset.filter(role=role)
-    if search:
-        queryset = queryset.filter(name__icontains=search)
-
-    # Pagination logic
-    paginator = Paginator(queryset.order_by('name'), 10)  # 10 staff members per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Context data to pass to the template
+    
+    # Pagination
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page')
+    staff_members = paginator.get_page(page)
+    
     context = {
-        'staff_members': page_obj,
+        'staff_members': staff_members,
         'roles': Staff.ROLE_CHOICES,
-        'search': search,
-        'role': role
     }
-
+    
     return render(request, 'staff_list.html', context)
+
+@property
+def title(self):
+    return f"Staff List - {timezone.now().strftime('%Y-%m-%d')}"
+
+@user_passes_test(is_admin, login_url='/admin-login')
+def staff_detail(request, pk):
+    """
+    View function for displaying detailed information about a specific staff member.
+    
+    Args:
+        request: HttpRequest object
+        pk: Primary key of the staff member
+        
+    Returns:
+        Rendered staff detail template with staff member's information
+    """
+    # Get the staff member or return 404
+    staff_member = get_object_or_404(Staff, pk=pk)
+    
+    # Get all subjects for teaching staff
+    subjects = None
+    if staff_member.is_teaching_staff:
+        subjects = staff_member.subjects_handled.all()
+    
+    # Get contact information
+    contact_info = staff_member.get_contact_info()
+    
+    # Calculate age from date_of_birth
+    age = None
+    if staff_member.date_of_birth:
+        today = timezone.now().date()
+        age = today.year - staff_member.date_of_birth.year - (
+            (today.month, today.day) < 
+            (staff_member.date_of_birth.month, staff_member.date_of_birth.day)
+        )
+    
+    context = {
+        'staff_member': staff_member,
+        'subjects': subjects,
+        'contact_info': contact_info,
+        'age': age,
+    }
+    
+    return render(request, 'staff_detail.html', context)
+
 # Delete staff
 @user_passes_test(is_admin, login_url='/admin-login/')
 def staff_delete(request, pk):
@@ -317,8 +364,62 @@ def delete_parent(request, parent_id):
 
 @user_passes_test(is_admin, login_url='/admin-login/')
 def child_list(request):
-    children = Child.objects.all()
-    return render(request, 'child_list.html', {'children': children})
+    # Instantiate the filter form and populate it with GET data
+    form = ChildFilterForm(request.GET)
+    
+    # Start with the full queryset of Child objects
+    queryset = Child.objects.all()
+
+    # Apply filters if the form is valid
+    if form.is_valid():
+        # Search filter
+        search_query = form.cleaned_data.get('search')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+
+        # Sex filter
+        sex = form.cleaned_data.get('sex')
+        if sex:
+            queryset = queryset.filter(sex=sex)
+
+        # Class filter
+        study_class = form.cleaned_data.get('study_class')
+        if study_class:
+            queryset = queryset.filter(study_class=study_class)
+
+        # Age filter
+        age_range = form.cleaned_data.get('age_range')
+        if age_range:
+            today = datetime.now().date()
+            if age_range == '0-3':
+                max_date = today.replace(year=today.year - 0)
+                min_date = today.replace(year=today.year - 3)
+                queryset = queryset.filter(date_of_birth__range=[min_date, max_date])
+            elif age_range == '4-6':
+                max_date = today.replace(year=today.year - 4)
+                min_date = today.replace(year=today.year - 6)
+                queryset = queryset.filter(date_of_birth__range=[min_date, max_date])
+            elif age_range == '7-9':
+                max_date = today.replace(year=today.year - 7)
+                min_date = today.replace(year=today.year - 9)
+                queryset = queryset.filter(date_of_birth__range=[min_date, max_date])
+            elif age_range == '10+':
+                max_date = today.replace(year=today.year - 10)
+                queryset = queryset.filter(date_of_birth__lte=max_date)
+
+    # Pagination
+    paginator = Paginator(queryset, 10)  # Paginate by 10
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Context for the template
+    context = {
+        'filter_form': form,
+        'children': page_obj,
+    }
+
+    # Render the child list template with the form and the paginated queryset
+    return render(request, 'child_list.html', context)
 
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_child(request, child_id):
