@@ -354,6 +354,15 @@ def parent_list(request):
     parents = Parent.objects.all()
     return render(request, 'parent_list.html', {'parents': parents})
 
+    # Pagination
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page')
+    staff_members = paginator.get_page(page)
+
+    @property
+    def title(self):
+        return f"Parent List - {timezone.now().strftime('%Y-%m-%d')}"
+
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_parent(request, parent_id):
     parent = get_object_or_404(Parent, id=parent_id)
@@ -421,6 +430,10 @@ def child_list(request):
     # Render the child list template with the form and the paginated queryset
     return render(request, 'child_list.html', context)
 
+    @property
+    def title(self):
+        return f"Child List - {timezone.now().strftime('%Y-%m-%d')}"
+
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_child(request, child_id):
     child = get_object_or_404(Child, id=child_id)
@@ -432,6 +445,13 @@ def delete_child(request, child_id):
 def application_list(request):
     applications = PupilApplication.objects.select_related('child').all()
     return render(request, 'application_list.html', {'applications': applications})
+
+    # Pagination
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page')
+    staff_members = paginator.get_page(page)
+
+
 
 
 

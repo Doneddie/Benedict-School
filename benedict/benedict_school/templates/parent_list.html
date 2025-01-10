@@ -2,9 +2,37 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block extra_css %}
+<style type="text/css" media="print">
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        .table td, .table th {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+        .badge {
+            border: 1px solid #000;
+        }
+        body {
+            padding: 2cm;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <body>
     <h2>Parent List</h2>
+    <div>
+        <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
+            <i class="bi bi-printer"></i> Print List
+        </button>
+    </div>
 
     <!-- Table displaying parent information -->
     <div class="table-container">
@@ -37,13 +65,53 @@
                     <td>{{ parent.email }}</td>
                     <td>{{ parent.tel_no}} </td>
                     <td>{{ parent.address }}</td>
-                    <td>
+                    {{ previous_table_content|safe }}
+                    <td class="no-print">
                         <a href="{% url 'delete-parent' pk=parent.pk %}" class="delete-btn">Delete</a>
                     </td>
+                    {{ previous_action_button|safe }}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-4 no-print">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            {{ previous_pagination|safe }}
+        </nav>
+        {% endif %}
+    </div>
+
+    <div class="d-none d-print-block">
+        <p class="text-center mt-4">
+            Printed on {% now "F j, Y" %} at {% now "H:i" %}
+        </p>
     </div>
 
     <!-- Inline CSS for table and page design -->
