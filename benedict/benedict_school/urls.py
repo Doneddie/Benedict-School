@@ -7,8 +7,6 @@ from .views import (
     about_view,
     contact_view,
     ParentCreateChildCreateView,
-    ParentDeleteView,
-    DeleteChildView,
     delete_child,
     PupilApplicationCreateView,
     EventListView,
@@ -35,7 +33,7 @@ urlpatterns = [
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('parent/', views.parent_list, name='parent-list'),
-    path('parent/<int:pk>/delete/', ParentDeleteView.as_view(), name='delete-parent'),
+    path('parent/<int:pk>/delete/', views.delete_parent, name='delete-parent'),
     path('child/', views.child_list, name='child-list'),
     path('child/<int:child_id>/delete/', delete_child, name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
@@ -45,6 +43,8 @@ urlpatterns = [
     path('staff/<int:pk>/', views.staff_detail, name='staff_detail'),
     path('staff/create/', views.staff_create_view, name='staff_create'),
     path('staff/<int:pk>/delete/', views.staff_delete, name='staff_delete'),
+    path('parent/<int:pk>/move-to-alumni/', views.move_to_alumni, name='move-to-alumni'),
+    path('alumni/', views.alumni_list, name='alumni-list'),
     path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",
     ),  # Create a pupil application
     path("events/", EventListView.as_view(), name="event-list"),  # List all events

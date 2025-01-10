@@ -28,11 +28,6 @@ class SearchForm(forms.Form):
 class StaffForm(forms.ModelForm):
     """Form for creating and updating staff members"""
     
-    # Additional form fields (if needed)
-    confirm_email = forms.EmailField(
-        help_text=_("Please confirm the email address")
-    )
-    
     class Meta:
         model = Staff
         fields = [
@@ -240,6 +235,15 @@ class ParentForm(forms.ModelForm):
             raise ValidationError("ID number should be 14 characters long.")
         
         return ID_number
+
+class ParentFilterForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Search by name...'
+        })
+    )
 
 class ChildForm(forms.ModelForm):
     class Meta:

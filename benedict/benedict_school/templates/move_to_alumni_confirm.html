@@ -1,0 +1,37 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>Move to Alumni - Confirmation</h4>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to move the following parent and their associated chiildren to alumni status?</p>
+            <p><strong>Parent:</strong> {{ parent.first_name }} {{ parent.last_name }}</p>
+            
+            {% if parent.child_set.exists %}
+            <p><strong>Associated Children:</strong></p>
+            <ul>
+                {% for child in parent.child_set.all %}
+                <li>{{ child.name }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="reason">Reason for Leaving:</label>
+                    <textarea name="reason" id="reason" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-warning">Move to Alumni</button>
+                    <a href="{% url 'parent-list' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

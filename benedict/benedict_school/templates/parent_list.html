@@ -34,6 +34,29 @@
         </button>
     </div>
 
+    <!-- Filter Form -->
+    <div class="card mb-4 no-print">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control"
+                           placeholder="Search by name, email or ID number..." 
+                           value="{{ request.GET.search|default:'' }}">
+                </div>
+                <div class="col-md-2">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        {% if request.GET.search %}
+                            <a href="{% url 'parent-list' %}" class="btn btn-secondary">Clear</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Table displaying parent information -->
     <div class="table-container">
         <table>
@@ -67,7 +90,9 @@
                     <td>{{ parent.address }}</td>
                     {{ previous_table_content|safe }}
                     <td class="no-print">
-                        <a href="{% url 'delete-parent' pk=parent.pk %}" class="delete-btn">Delete</a>
+                        <a href="{% url 'move-to-alumni' pk=parent.pk %}" class="btn btn-warning btn-sm">
+                            Move to Alumni
+                        </a>
                     </td>
                     {{ previous_action_button|safe }}
                 </tr>
@@ -75,13 +100,12 @@
             </tbody>
         </table>
 
-        <!-- Pagination -->
         {% if is_paginated %}
         <nav class="mt-4 no-print">
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
                         Previous
                     </a>
                 </li>
@@ -89,7 +113,7 @@
                 
                 {% for num in page_obj.paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
                         {{ num }}
                     </a>
                 </li>
@@ -97,16 +121,14 @@
                 
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
                         Next
                     </a>
                 </li>
                 {% endif %}
             </ul>
-            {{ previous_pagination|safe }}
         </nav>
         {% endif %}
-    </div>
 
     <div class="d-none d-print-block">
         <p class="text-center mt-4">

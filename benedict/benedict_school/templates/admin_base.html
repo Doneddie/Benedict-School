@@ -38,6 +38,10 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'parent-list' %}"><i class="fas fa-user-friends"></i> Parent's List</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'alumni-list' %}"><i class="fas fa-user-friends"></i> Alumni List</a>
+            </li>
+
             <form action="{% url 'logout' %}" method="POST" class="d-inline">
               {% csrf_token %}
               <button type="submit" class="btn btn-link nav-link"><i class="fas fa-sign-out-alt"></i> Logout</button>

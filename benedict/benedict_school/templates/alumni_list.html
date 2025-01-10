@@ -1,0 +1,79 @@
+{% extends "admin_base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Alumni Records</h2>
+    
+    <!-- Alumni Parents -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Alumni Parents</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Alumni Since</th>
+                            <th>Reason for Leaving</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for parent in alumni_parents %}
+                        <tr>
+                            <td>{{ parent.first_name }} {{ parent.last_name }}</td>
+                            <td>{{ parent.alumni_date|date:"F j, Y" }}</td>
+                            <td>{{ parent.reason_for_leaving }}</td>
+                            <td>{{ parent.email }}<br>{{ parent.tel_no }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No alumni parents found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alumni Students -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Alumni Children</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Alumni Since</th>
+                            <th>Reason for Leaving</th>
+                            <th>Parent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in alumni_children %}
+                        <tr>
+                            <td>{{ child.name }}</td>
+                            <td>{{ child.alumni_date|date:"F j, Y" }}</td>
+                            <td>{{ child.reason_for_leaving }}</td>
+                            <td>{{ child.parent.first_name }} {{ child.parent.last_name }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No alumni children found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
