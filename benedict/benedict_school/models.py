@@ -90,7 +90,7 @@ class Subject(models.Model):
         verbose_name_plural = _("Subjects")
 
     def __str__(self):
-        return f"{self.name} ({self.code})"
+        return self.name
 
     def get_teachers(self):
         return self.staff_set.filter(role='teacher')
