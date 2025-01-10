@@ -15,7 +15,20 @@ class Parent(models.Model):
     parent_image = models.ImageField(
         upload_to="parent_images/", null=True, blank=True
     )
-    
+
+    alumni_date = models.DateTimeField(null=True, blank=True)
+    reason_for_leaving = models.TextField(blank=True, null=True)
+
+    def move_to_alumni(self, reason=''):
+        self.status = 'alumni'
+        self.alumni_date = timezone.now()
+        self.reason_for_leaving = reason
+        self.save()
+        
+        # Move all associated children to alumni status
+        for child in self.child_set.all():
+            child.move_to_alumni(reason)
+            
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -42,6 +55,15 @@ class Child(models.Model):
     )
 
     profile_image = models.ImageField(upload_to="child_images/", null=True, blank=True)
+
+    alumni_date = models.DateTimeField(null=True, blank=True)
+    reason_for_leaving = models.TextField(blank=True, null=True)
+
+    def move_to_alumni(self, reason=''):
+        self.status = 'alumni'
+        self.alumni_date = timezone.now()
+        self.reason_for_leaving = reason
+        self.save()
 
     def __str__(self):
         return self.name

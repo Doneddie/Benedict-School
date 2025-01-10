@@ -2,9 +2,60 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block extra_css %}
+<style type="text/css" media="print">
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        .table td, .table th {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+        .badge {
+            border: 1px solid #000;
+        }
+        body {
+            padding: 2cm;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <body>
     <h2>Parent List</h2>
+    <div>
+        <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
+            <i class="bi bi-printer"></i> Print List
+        </button>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card mb-4 no-print">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control"
+                           placeholder="Search by name, email or ID number..." 
+                           value="{{ request.GET.search|default:'' }}">
+                </div>
+                <div class="col-md-2">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        {% if request.GET.search %}
+                            <a href="{% url 'parent-list' %}" class="btn btn-secondary">Clear</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Table displaying parent information -->
     <div class="table-container">
@@ -37,13 +88,52 @@
                     <td>{{ parent.email }}</td>
                     <td>{{ parent.tel_no}} </td>
                     <td>{{ parent.address }}</td>
-                    <td>
-                        <a href="{% url 'delete-parent' pk=parent.pk %}" class="delete-btn">Delete</a>
+                    {{ previous_table_content|safe }}
+                    <td class="no-print">
+                        <a href="{% url 'move-to-alumni' pk=parent.pk %}" class="btn btn-warning btn-sm">
+                            Move to Alumni
+                        </a>
                     </td>
+                    {{ previous_action_button|safe }}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        {% if is_paginated %}
+        <nav class="mt-4 no-print">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+    <div class="d-none d-print-block">
+        <p class="text-center mt-4">
+            Printed on {% now "F j, Y" %} at {% now "H:i" %}
+        </p>
     </div>
 
     <!-- Inline CSS for table and page design -->

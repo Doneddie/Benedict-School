@@ -26,7 +26,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse
 from django.db.models import Count
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 
@@ -107,29 +107,6 @@ def children_data(request):
     # Return the data as JSON to the frontend
     return JsonResponse({'labels': labels, 'data': data})
 
-class ParentDeleteView(DeleteView):
-    model = Parent
-    template_name = 'parent_confirm_delete.html'  # Custom delete confirmation template
-    context_object_name = 'parent'  # Context name for the parent instance
-    success_url = reverse_lazy('parent-list')  # Redirect after successful delete
-
-    def get_queryset(self):
-        """
-        Ensure that only superusers or admins can delete parents.
-        """
-        return Parent.objects.all()  # You can filter here if needed based on user permissions
-
-class DeleteChildView(DeleteView):
-    model = Child
-    template_name = 'child_confirm_delete.html'  # Custom template for confirmation
-    context_object_name = 'child'
-    success_url = reverse_lazy('child-list')  # Redirect after successful delete
-
-    def get_queryset(self):
-        """
-        This can be adjusted to ensure only admins can delete children.
-        """
-        return Child.objects.all()
 
 # Pupil Application Views
 class PupilApplicationCreateView(CreateView):
@@ -351,8 +328,42 @@ def staff_delete(request, pk):
 # Parent views
 @user_passes_test(is_admin, login_url='/admin-login/')
 def parent_list(request):
-    parents = Parent.objects.all()
-    return render(request, 'parent_list.html', {'parents': parents})
+    # Get all parents initially
+    parent_list = Parent.objects.all().order_by('first_name')
+    
+    # Handle search query
+    search_query = request.GET.get('search', '')
+    if search_query:
+        parent_list = parent_list.filter(
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(ID_number__icontains=search_query)
+        )
+
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(parent_list, 10)  # Show 10 parents per page
+    
+    try:
+        parents = paginator.page(page)
+    except PageNotAnInteger:
+        parents = paginator.page(1)
+    except EmptyPage:
+        parents = paginator.page(paginator.num_pages)
+
+    context = {
+        'parents': parents,
+        'page_obj': parents,  # For compatibility with your template
+        'is_paginated': parents.has_other_pages(),
+        'search_query': search_query,
+    }
+
+    return render(request, 'parent_list.html', context)
+
+    @property
+    def title(self):
+        return f"Parent List - {timezone.now().strftime('%Y-%m-%d')}"
 
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_parent(request, parent_id):
@@ -421,6 +432,10 @@ def child_list(request):
     # Render the child list template with the form and the paginated queryset
     return render(request, 'child_list.html', context)
 
+    @property
+    def title(self):
+        return f"Child List - {timezone.now().strftime('%Y-%m-%d')}"
+
 @user_passes_test(is_admin, login_url='/admin-login/')
 def delete_child(request, child_id):
     child = get_object_or_404(Child, id=child_id)
@@ -432,6 +447,36 @@ def delete_child(request, child_id):
 def application_list(request):
     applications = PupilApplication.objects.select_related('child').all()
     return render(request, 'application_list.html', {'applications': applications})
+
+    # Pagination
+    paginator = Paginator(queryset, 10)
+    page = request.GET.get('page')
+    staff_members = paginator.get_page(page)
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def move_to_alumni(request, pk):
+    parent = get_object_or_404(Parent, pk=pk)
+    
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '')
+        parent.move_to_alumni(reason)
+        messages.success(request, f'{parent.first_name} {parent.last_name} and associated children moved to alumni.')
+        return redirect('parent-list')
+        
+    return render(request, 'move_to_alumni_confirm.html', {'parent': parent})
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def alumni_list(request):
+    alumni_parents = Parent.objects.filter(status='alumni').order_by('-alumni_date')
+    alumni_children = Child.objects.filter(status='alumni').order_by('-alumni_date')
+    
+    context = {
+        'alumni_parents': alumni_parents,
+        'alumni_children': alumni_children,
+    }
+    
+    return render(request, 'alumni_list.html', context)
+
 
 
 

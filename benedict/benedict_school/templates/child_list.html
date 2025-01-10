@@ -2,13 +2,41 @@
 {% load custom_filters %}
 {% load static %}
 
+{% block extra_css %}
+<style type="text/css" media="print">
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        .table td, .table th {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+        .badge {
+            border: 1px solid #000;
+        }
+        body {
+            padding: 2cm;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    }
+</style>
+{% endblock %}
+
 
 {% block content %}
 <div class="container py-4">
     <h1 class="mb-4">Children List</h1>
+    <div>
+        <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
+            <i class="bi bi-printer"></i> Print List
+        </button>
+    </div>
 
     <!-- Filter Form -->
-    <div class="card mb-4">
+    <div class="card mb-4 no-print">
         <div class="card-body">
             <form method="get" class="row g-3">
                 <div class="col-md-3">
@@ -31,6 +59,7 @@
                 </div>
             </form>
         </div>
+        {{ previous_search_form_content|safe }}
     </div>
 
     <!-- Children Table -->
@@ -73,14 +102,16 @@
                             </td>
                             <td>{{ child.get_sex_display }}</td>
                             <td>{{ child.get_study_class_display }}</td>
-                            <td>{{ child.parent.name }}</td>
-                            <td>
+                            <td>{{ child.parent.last_name }}</td>
+                            {{ previous_table_content|safe }}
+                            <td class="no-print">
                                 <div class="btn-group">
                                     <a href="{% url 'delete-child' child.pk %}" 
                                        class="btn btn-sm btn-danger">
                                         <i class="bi bi-trash">Delete</i>
                                     </a>
                                 </div>
+                                {{ previous_action_button|safe }}
                             </td>
                         </tr>
                         {% empty %}
@@ -100,7 +131,7 @@
 
     <!-- Pagination -->
     {% if is_paginated %}
-    <nav class="mt-4">
+    <nav class="mt-4 no-print">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item">
@@ -126,7 +157,14 @@
             </li>
             {% endif %}
         </ul>
+        {{ previous_pagination|safe }}
     </nav>
     {% endif %}
+</div>
+
+<div class="d-none d-print-block">
+    <p class="text-center mt-4">
+        Printed on {% now "F j, Y" %} at {% now "H:i" %}
+    </p>
 </div>
 {% endblock %}
