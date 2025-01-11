@@ -3,6 +3,7 @@ from django.core.validators import EmailValidator
 from django import forms
 from .models import Parent, Child, PupilApplication, Staff, Subject, Event, Exit 
 from datetime import date
+from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout, Row, Column, Submit, Div
 from crispy_forms.helper import FormHelper
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +47,7 @@ class StaffForm(forms.ModelForm):
             'qualification', 'certificates', 'years_of_experience',
             
             # Teaching Staff Information
-            'class_name', 'subjects_handled',
+            'class_name', 'subject_handled',
             
             # Non-teaching Staff Information
             'department', 
@@ -83,7 +84,7 @@ class StaffForm(forms.ModelForm):
                 css_class='mb-3'
             ),
             Div(
-                _("Personal Information"),
+                HTML("<h2>Personal Information</h2>"),
                 Row(
                     Column('name', css_class='form-group col-md-6 mb-0'),
                     Column('sex', css_class='form-group col-md-6 mb-0'),
@@ -108,7 +109,7 @@ class StaffForm(forms.ModelForm):
                 css_class='mb-3'
             ),
             Div(
-                _("Emergency Contact"),
+                HTML("<h2>Emergency Contact</h2>"),
                 Row(
                     Column('emergency_contact_name', css_class='form-group col-md-6 mb-0'),
                     Column('emergency_contact_relationship', css_class='form-group col-md-6 mb-0'),
@@ -118,23 +119,23 @@ class StaffForm(forms.ModelForm):
                 css_class='mb-3'
             ),
             Div(
-                _("Qualifications"),
+                HTML("<h2>Qualifications</h2>"),
                 'qualification',
                 'certificates',
                 'years_of_experience',
                 css_class='mb-3'
             ),
             Div(
-                _("Teaching Information"),
+                HTML("<h2>Teaching Information</h2>"),
                 Row(
                     Column('class_name', css_class='form-group col-md-6 mb-0'),
-                    Column('subjects_handled', css_class='form-group col-md-6 mb-0'),
+                    Column('subject_handled', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 css_class='mb-3 teaching-fields'
             ),
             Div(
-                _("Non-Teaching Information"),
+                HTML("<h2>Non-Teaching Information</h2>"),
                 Row(
                     Column('department', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
@@ -142,7 +143,7 @@ class StaffForm(forms.ModelForm):
                 css_class='mb-3 non-teaching-fields'
             ),
             Div(
-                _("Salary Information"),
+                HTML("<h2>Salary Information</h2>"),
                 Row(
                     Column('salary', css_class='form-group col-md-6 mb-0'),
                     Column('bank_name', css_class='form-group col-md-6 mb-0'),
@@ -164,7 +165,7 @@ class StaffForm(forms.ModelForm):
         is_teaching = role in teaching_roles
         
         # Teaching staff fields
-        for field in ['class_name', 'subjects_handled']:
+        for field in ['class_name', 'subject_handled']:
             if field in self.fields:
                 self.fields[field].required = is_teaching
                 if not is_teaching:
@@ -189,7 +190,7 @@ class StaffForm(forms.ModelForm):
         if role in ["teacher"]:
             if not cleaned_data.get('class_name'):
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
-            if not cleaned_data.get('subjects_handled'):
+            if not cleaned_data.get('subject_handled'):
                 raise ValidationError(_("Teaching staff must have at least one subject assigned."))
         else:
             if not cleaned_data.get('department'):

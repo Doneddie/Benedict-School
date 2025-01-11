@@ -32,7 +32,7 @@ class Parent(models.Model):
 
     def move_to_alumni(self, reason=''):
         """Only move parent to alumni if all children are alumni"""
-        if not self.has_active_students():
+        if not self.has_active_children():
             self.status = 'alumni'
             self.alumni_date = timezone.now()
             self.reason_for_leaving = reason
@@ -40,14 +40,14 @@ class Parent(models.Model):
             return True
         return False
 
-    def has_active_students(self):
-        """Check if parent has any active students"""
-        return self.student_set.filter(status='active').exists()
+    def has_active_children(self):
+        """Check if parent has any active children"""
+        return self.children.filter(status='active').exists()
 
-    def get_student_count(self):
-        """Get count of total and active students"""
-        total = self.student_set.count()
-        active = self.student_set.filter(status='active').count()
+    def get_child_count(self):
+        """Get count of total and active children"""
+        total = self.child.count()
+        active = self.child.filter(status='active').count()
         return {'total': total, 'active': active}
 
             
@@ -99,8 +99,8 @@ class Child(models.Model):
         self.reason_for_leaving = reason
         self.save()
         
-        # Check if parent should be moved to alumni (no active students left)
-        if not self.parent.has_active_students():
+        # Check if parent should be moved to alumni (no active children left)
+        if not self.parent.has_active_children():
             self.parent.move_to_alumni(reason)
 
     def __str__(self):
@@ -152,8 +152,6 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
-    def get_teachers(self):
-        return self.staff_set.filter(role='teacher')
 
 class Staff(models.Model):
     """
@@ -305,10 +303,12 @@ class Staff(models.Model):
         null=True,
         help_text=_("Primary class assigned to teacher")
     )
-    subjects_handled = models.ManyToManyField(
+    subject_handled = models.ForeignKey(
         'Subject',
+        null=True,
         blank=True,
-        help_text=_("Subjects taught by the teacher")
+        on_delete=models.SET_NULL,
+        help_text=_("Subject taught by the teacher, only one subject allowed.")
     )
 
     # Non-teaching Staff Information
@@ -363,14 +363,14 @@ class Staff(models.Model):
     def clean(self):
         """Validate model data"""
         if not self.is_teaching_staff:
-            if self.subjects_handled.exists():
+            if self.subject_handled is not None:
                 raise ValidationError(_("Non-teaching staff cannot have subjects assigned."))
             if self.class_name:
                 raise ValidationError(_("Non-teaching staff cannot be assigned to a class."))
         else:
             if not self.class_name:
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
-            if not self.subjects_handled.exists():
+            if not self.subject_handled is None:
                 raise ValidationError(_("Teaching staff must have at least one subject assigned."))
         
         if self.is_teaching_staff and self.department:
@@ -412,11 +412,9 @@ class Staff(models.Model):
     def __str__(self):
         """String representation of the staff member."""
         if self.is_teaching_staff:
-            subjects = ', '.join(
-                [subject.name for subject in self.subjects_handled.all()] or ['No subjects assigned']
-            )
-            return f"{self.name} - {self.role} ({subjects} in {self.class_name or 'No class assigned'})"
-            return f"{self.name} - {self.role} ({self.department or 'No department assigned'})"
+            subject = self.subject_handled.name if self.subject_handled else 'No subject assigned'
+            return f"{self.name} - {self.role} ({subject} in {self.class_name or 'No class assigned'})"
+        return f"{self.name} - {self.role} ({self.department or 'No department assigned'})"
 
 class About(models.Model):
     title = models.CharField(max_length=255, default="Our School Anthem")

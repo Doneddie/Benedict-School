@@ -366,10 +366,19 @@ def parent_list(request):
         return f"Parent List - {timezone.now().strftime('%Y-%m-%d')}"
 
 @user_passes_test(is_admin, login_url='/admin-login/')
-def delete_parent(request, parent_id):
-    parent = get_object_or_404(Parent, id=parent_id)
-    parent.delete()
-    return redirect('parent-list')
+def delete_parent(request, pk):  # Added pk parameter here
+    parent = get_object_or_404(Parent, pk=pk)
+    
+    if request.method == 'POST':
+        parent.delete()
+        messages.success(request, 'Parent deleted successfully')
+        return redirect('parent-list')
+        
+    context = {
+        'parent': parent,
+        'children': parent.children.all()  # Using the related_name we fixed earlier
+    }
+    return render(request, 'parent_confirm_delete.html', context)
 
 # Child views
 
@@ -468,7 +477,7 @@ def alumni_list(request):
 @user_passes_test(is_admin, login_url='/admin-login/')
 def child_to_alumni(request, pk):
     """Move individual child to alumni status"""
-    child = get_object_or_404(child, pk=pk)
+    child = get_object_or_404(Child, pk=pk)
     
     if request.method == 'POST':
         reason = request.POST.get('reason', '')
@@ -477,7 +486,7 @@ def child_to_alumni(request, pk):
         # Check if parent was moved to alumni
         if child.parent.status == 'alumni':
             messages.success(request, 
-                f'{child.name} moved to alumni. Parent {student.parent.first_name} '
+                f'{child.name} moved to alumni. Parent {child.parent.first_name} '
                 'also moved to alumni as no active students remain.')
         else:
             messages.success(request, 
@@ -489,7 +498,7 @@ def child_to_alumni(request, pk):
     context = {
         'child': child,
         'parent': child.parent,
-        'siblings': child.parent.child_set.exclude(pk=child.pk)
+        'siblings': child.parent.children.exclude(pk=child.pk)
     }
     return render(request, 'child_to_alumni_confirm.html', context)
 
@@ -515,8 +524,8 @@ def parent_to_alumni(request, pk):
         
     context = {
         'parent': parent,
-        'active_children': parent.child_set.filter(status='active'),
-        'alumni_children': parent.child_set.filter(status='alumni')
+        'active_children': parent.children.filter(status='active'),
+        'alumni_children': parent.children.filter(status='alumni')
     }
     return render(request, 'parent_to_alumni_confirm.html', context)
 
