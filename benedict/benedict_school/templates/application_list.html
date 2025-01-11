@@ -21,13 +21,13 @@
                 <tr>
                     <td>{{ application.child.name }}</td>
                     <td>
-                        {% if application.form.documents %}
+                        {% if application.document %}
                             <a href="{{ application.documents.url }}" target="_blank" class="document-link">View Document</a>
                         {% else %}
                             <span>No Document Uploaded</span>
                         {% endif %}
                     </td>
-                    <td>{{ application.form.notes }}</td>
+                    <td>{{ application.notes }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
