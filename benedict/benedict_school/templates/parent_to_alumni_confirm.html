@@ -1,13 +1,15 @@
 {% extends "admin_base.html" %}
+{% load custom_filters %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
-            <h4>Move to Alumni - Confirmation</h4>
+            <h4>Move Parent to Alumni - Confirmation</h4>
         </div>
         <div class="card-body">
-            <p>Are you sure you want to move the following parent and their associated chiildren to alumni status?</p>
+            <p>Are you sure you want to move the following parent and their associated children to alumni status?</p>
             <p><strong>Parent:</strong> {{ parent.first_name }} {{ parent.last_name }}</p>
             
             {% if parent.child_set.exists %}

@@ -106,6 +106,9 @@
                             {{ previous_table_content|safe }}
                             <td class="no-print">
                                 <div class="btn-group">
+                                    <a href="{% url 'child-to-alumni' pk=student.pk %}" class="btn btn-warning btn-sm">
+                                        Move to Alumni
+                                    </a>
                                     <a href="{% url 'delete-child' child.pk %}" 
                                        class="btn btn-sm btn-danger">
                                         <i class="bi bi-trash">Delete</i>

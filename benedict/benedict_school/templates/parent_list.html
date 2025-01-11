@@ -90,8 +90,12 @@
                     <td>{{ parent.address }}</td>
                     {{ previous_table_content|safe }}
                     <td class="no-print">
-                        <a href="{% url 'move-to-alumni' pk=parent.pk %}" class="btn btn-warning btn-sm">
+                        <a href="{% url 'parent-to-alumni' pk=parent.pk %}" class="btn btn-warning btn-sm">
                             Move to Alumni
+                        </a>
+                        <a href="{% url 'delete-parent' child.pk %}" 
+                           class="btn btn-sm btn-danger">
+                           <i class="bi bi-trash">Delete</i>
                         </a>
                     </td>
                     {{ previous_action_button|safe }}

@@ -16,18 +16,40 @@ class Parent(models.Model):
         upload_to="parent_images/", null=True, blank=True
     )
 
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('alumni', 'Alumni'),
+    ]
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
+
     alumni_date = models.DateTimeField(null=True, blank=True)
     reason_for_leaving = models.TextField(blank=True, null=True)
 
     def move_to_alumni(self, reason=''):
-        self.status = 'alumni'
-        self.alumni_date = timezone.now()
-        self.reason_for_leaving = reason
-        self.save()
-        
-        # Move all associated children to alumni status
-        for child in self.child_set.all():
-            child.move_to_alumni(reason)
+        """Only move parent to alumni if all children are alumni"""
+        if not self.has_active_students():
+            self.status = 'alumni'
+            self.alumni_date = timezone.now()
+            self.reason_for_leaving = reason
+            self.save()
+            return True
+        return False
+
+    def has_active_students(self):
+        """Check if parent has any active students"""
+        return self.student_set.filter(status='active').exists()
+
+    def get_student_count(self):
+        """Get count of total and active students"""
+        total = self.student_set.count()
+        active = self.student_set.filter(status='active').count()
+        return {'total': total, 'active': active}
+
             
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -56,14 +78,30 @@ class Child(models.Model):
 
     profile_image = models.ImageField(upload_to="child_images/", null=True, blank=True)
 
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('alumni', 'Alumni'),
+    ]
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
+
     alumni_date = models.DateTimeField(null=True, blank=True)
     reason_for_leaving = models.TextField(blank=True, null=True)
 
     def move_to_alumni(self, reason=''):
+        """Move child to alumni status and check parent"""
         self.status = 'alumni'
         self.alumni_date = timezone.now()
         self.reason_for_leaving = reason
         self.save()
+        
+        # Check if parent should be moved to alumni (no active students left)
+        if not self.parent.has_active_students():
+            self.parent.move_to_alumni(reason)
 
     def __str__(self):
         return self.name

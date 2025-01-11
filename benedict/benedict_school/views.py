@@ -454,18 +454,6 @@ def application_list(request):
     staff_members = paginator.get_page(page)
 
 @user_passes_test(is_admin, login_url='/admin-login/')
-def move_to_alumni(request, pk):
-    parent = get_object_or_404(Parent, pk=pk)
-    
-    if request.method == 'POST':
-        reason = request.POST.get('reason', '')
-        parent.move_to_alumni(reason)
-        messages.success(request, f'{parent.first_name} {parent.last_name} and associated children moved to alumni.')
-        return redirect('parent-list')
-        
-    return render(request, 'move_to_alumni_confirm.html', {'parent': parent})
-
-@user_passes_test(is_admin, login_url='/admin-login/')
 def alumni_list(request):
     alumni_parents = Parent.objects.filter(status='alumni').order_by('-alumni_date')
     alumni_children = Child.objects.filter(status='alumni').order_by('-alumni_date')
@@ -477,6 +465,60 @@ def alumni_list(request):
     
     return render(request, 'alumni_list.html', context)
 
+@user_passes_test(is_admin, login_url='/admin-login/')
+def child_to_alumni(request, pk):
+    """Move individual child to alumni status"""
+    child = get_object_or_404(child, pk=pk)
+    
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '')
+        child.move_to_alumni(reason)
+        
+        # Check if parent was moved to alumni
+        if child.parent.status == 'alumni':
+            messages.success(request, 
+                f'{child.name} moved to alumni. Parent {student.parent.first_name} '
+                'also moved to alumni as no active students remain.')
+        else:
+            messages.success(request, 
+                f'{child.name} moved to alumni. Parent remains active with '
+                f'{child.parent.get_child_count()["active"]} active children.')
+        
+        return redirect('child-list')
+        
+    context = {
+        'child': child,
+        'parent': child.parent,
+        'siblings': child.parent.child_set.exclude(pk=child.pk)
+    }
+    return render(request, 'child_to_alumni_confirm.html', context)
+
+@user_passes_test(is_admin, login_url='/admin-login/')
+def parent_to_alumni(request, pk):
+    """Move parent and all children to alumni status"""
+    parent = get_object_or_404(Parent, pk=pk)
+    
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '')
+        
+        # First check if there are active children
+        if parent.has_active_children():
+            messages.error(request, 
+                'Cannot move parent to alumni while they have active children. '
+                'Please move children to alumni first.')
+            return redirect('parent-list')
+            
+        parent.move_to_alumni(reason)
+        messages.success(request, 
+            f'{parent.first_name} {parent.last_name} moved to alumni status.')
+        return redirect('parent-list')
+        
+    context = {
+        'parent': parent,
+        'active_children': parent.child_set.filter(status='active'),
+        'alumni_children': parent.child_set.filter(status='alumni')
+    }
+    return render(request, 'parent_to_alumni_confirm.html', context)
 
 
 
