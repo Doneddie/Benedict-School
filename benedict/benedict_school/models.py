@@ -180,7 +180,7 @@ class Staff(models.Model):
         ('social_studies', 'Social Studies'),
         ('literacy', 'Literacy'),
         ('literacy_1', 'Literacy 1'),
-        ('lieracy_1a', 'Literacy 1A'),
+        ('literacy_1a', 'Literacy 1A'),
         ('literacy_1b', 'Literacy 1B'),
         ('religous_education', 'Religous Education'),
         ('reading', 'Reading'),
@@ -375,7 +375,7 @@ class Staff(models.Model):
         else:
             if not self.class_name:
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
-            if not self.subject_handled is None:
+            if self.subject_handled is None:
                 raise ValidationError(_("Teaching staff must have a subject assigned."))
         
         if self.is_teaching_staff and self.department:

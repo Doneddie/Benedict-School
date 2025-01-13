@@ -223,10 +223,16 @@ def admin_dashboard(request):
 def staff_create_view(request):
     if request.method == 'POST':
         form = StaffForm(request.POST, request.FILES)
+        print("Subject received:", request.POST.get('subject_handled'))  # Debug print
+        
         if form.is_valid():
             staff = form.save()
+            print("Subject saved:", staff.subject_handled)  # Debug print
             messages.success(request, 'Staff member created successfully.')
-            return redirect('staff_list', pk=staff.pk)
+            return redirect('staff_detail', pk=staff.pk)  # Changed to staff_detail
+        else:
+            print("Form errors:", form.errors)  # Debug print
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = StaffForm()
     
@@ -286,8 +292,11 @@ def staff_detail(request, pk):
     
     # Get a subject for teaching staff
     subject = None
-    if staff_member.is_teaching_staff:
-        subject = staff_member.subject_handled
+    if staff_member.is_teaching_staff and staff_member.subject_handled:
+    # Format it as a list of dicts to match your template's expectation
+        subjects = [{'name': staff_member.get_subject_handled_display()}]
+    else:
+        subjects = []
     
     # Get contact information
     contact_info = staff_member.get_contact_info()
@@ -303,7 +312,7 @@ def staff_detail(request, pk):
     
     context = {
         'staff_member': staff_member,
-        'subject': subject,
+        'subjects': subjects,
         'contact_info': contact_info,
         'age': age,
     }

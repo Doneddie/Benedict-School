@@ -161,7 +161,7 @@ class StaffForm(forms.ModelForm):
 
     def show_fields_for_role(self, role):
         """Show/hide fields based on staff role"""
-        teaching_roles = ["teacher", "director"]
+        teaching_roles = ["teacher"]
         is_teaching = role in teaching_roles
         
         # Teaching staff fields
