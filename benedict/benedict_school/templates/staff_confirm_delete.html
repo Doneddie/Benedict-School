@@ -13,7 +13,8 @@
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">{% trans "Confirm Delete" %}</button>
-                    <a href="{% url 'staff_detail' pk=object.pk %}" class="btn btn-secondary">
+                    <a href="{% url 'staff_detail' pk=staff_member.pk %}" class="btn btn-secondary">
+
                         {% trans "Cancel" %}
                     </a>
                 </form>

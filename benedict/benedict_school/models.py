@@ -140,17 +140,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-    
-class Subject(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        ordering = ['name']
-        verbose_name = _("Subject")
-        verbose_name_plural = _("Subjects")
-
-    def __str__(self):
-        return self.name
 
 
 class Staff(models.Model):
@@ -181,6 +170,22 @@ class Staff(models.Model):
         ('primary_4', 'Primary Four'),
         ('primary_5', 'Primary Five'),
         ('primary_6', 'Primary Six'),
+    ]
+
+    # Subejct Choices
+    SUBJECT_CHOICES = [
+        ('english', 'English'),
+        ('mathematics', 'Mathematics'),
+        ('science', 'Science'),
+        ('social_studies', 'Social Studies'),
+        ('literacy', 'Literacy'),
+        ('literacy_1', 'Literacy 1'),
+        ('lieracy_1a', 'Literacy 1A'),
+        ('literacy_1b', 'Literacy 1B'),
+        ('religous_education', 'Religous Education'),
+        ('reading', 'Reading'),
+        ('luganda', 'Luganda'),
+        ('learning_area_1_5', 'Learing Area 1-5')
     ]
 
     # Department Choices
@@ -303,11 +308,11 @@ class Staff(models.Model):
         null=True,
         help_text=_("Primary class assigned to teacher")
     )
-    subject_handled = models.ForeignKey(
-        'Subject',
+    subject_handled = models.CharField(
+        max_length=50,
+        choices=SUBJECT_CHOICES,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
         help_text=_("Subject taught by the teacher, only one subject allowed.")
     )
 
@@ -371,7 +376,7 @@ class Staff(models.Model):
             if not self.class_name:
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
             if not self.subject_handled is None:
-                raise ValidationError(_("Teaching staff must have at least one subject assigned."))
+                raise ValidationError(_("Teaching staff must have a subject assigned."))
         
         if self.is_teaching_staff and self.department:
             raise ValidationError(_("Teaching staff should not be assigned to a department."))
@@ -401,13 +406,13 @@ class Staff(models.Model):
         """Assign a subject to teaching staff"""
         if not self.is_teaching_staff:
             raise ValidationError(_("Cannot assign subjects to non-teaching staff"))
-        self.subjects_handled.add(subject)
+        self.subject_handled.add(subject)
 
     def remove_subject(self, subject):
         """Remove a subject from teaching staff"""
         if not self.is_teaching_staff:
             raise ValidationError(_("Cannot remove subjects from non-teaching staff"))
-        self.subjects_handled.remove(subject)
+        self.subject_handled.remove(subject)
 
     def __str__(self):
         """String representation of the staff member."""

@@ -109,11 +109,11 @@
                             <div class="btn-group" role="group">
                                 <a href="{% url 'staff_detail' pk=staff_member.pk %}"
                                    class="btn btn-sm btn-primary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                    <i class="bi bi-eye">Details</i>
+                                </a> |
                                 <a href="{% url 'staff_delete' pk=staff_member.pk %}"
                                    class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i>
+                                    <i class="bi bi-trash">Delete</i>
                                 </a>
                             </div>
                             {{ previous_action_buttons|safe }}

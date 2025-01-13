@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, About, GalleryImage, Child, Staff, Subject
+from .models import Event, About, GalleryImage, Child, Staff
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -41,11 +41,6 @@ class ChildAdmin(admin.ModelAdmin):
         return super().has_change_permission(request, obj)
     
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ('name', 'role', 'class_name', 'get_subjects')
-    
-    def get_subjects(self, obj):
-        return ", ".join([subject.name for subject in obj.subjects_handled.all()])
-    get_subjects.short_description = 'Subjects'
+    list_display = ('name', 'role', 'class_name')
 
 admin.site.register(Staff, StaffAdmin)
-admin.site.register(Subject)

@@ -14,7 +14,7 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage, Subject
+from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
 from django.db.models import Q
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm, ChildFilterForm
 from django.contrib.auth.forms import UserCreationForm
@@ -284,10 +284,10 @@ def staff_detail(request, pk):
     # Get the staff member or return 404
     staff_member = get_object_or_404(Staff, pk=pk)
     
-    # Get all subjects for teaching staff
-    subjects = None
+    # Get a subject for teaching staff
+    subject = None
     if staff_member.is_teaching_staff:
-        subjects = staff_member.subjects_handled.all()
+        subject = staff_member.subject_handled
     
     # Get contact information
     contact_info = staff_member.get_contact_info()
@@ -303,7 +303,7 @@ def staff_detail(request, pk):
     
     context = {
         'staff_member': staff_member,
-        'subjects': subjects,
+        'subject': subject,
         'contact_info': contact_info,
         'age': age,
     }

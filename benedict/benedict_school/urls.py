@@ -42,6 +42,7 @@ urlpatterns = [
     path('staff/', views.staff_list, name='staff_list'),
     path('staff/<int:pk>/', views.staff_detail, name='staff_detail'),
     path('staff/create/', views.staff_create_view, name='staff_create'),
+    path('staff/<int:pk>/', views.staff_list, name='staff_list'),
     path('staff/<int:pk>/delete/', views.staff_delete, name='staff_delete'),
     path('child/<int:pk>/to-alumni/', views.child_to_alumni, name='child-to-alumni'),
     path('parent/<int:pk>/to-alumni/', views.parent_to_alumni, name='parent-to-alumni'),

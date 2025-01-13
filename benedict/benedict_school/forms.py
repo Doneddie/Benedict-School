@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django import forms
-from .models import Parent, Child, PupilApplication, Staff, Subject, Event, Exit 
+from .models import Parent, Child, PupilApplication, Staff, Event, Exit 
 from datetime import date
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout, Row, Column, Submit, Div
@@ -191,7 +191,7 @@ class StaffForm(forms.ModelForm):
             if not cleaned_data.get('class_name'):
                 raise ValidationError(_("Teaching staff must be assigned to a class."))
             if not cleaned_data.get('subject_handled'):
-                raise ValidationError(_("Teaching staff must have at least one subject assigned."))
+                raise ValidationError(_("Teaching staff must have a subject assigned."))
         else:
             if not cleaned_data.get('department'):
                 raise ValidationError(_("Non-teaching staff must be assigned to a department."))
@@ -200,7 +200,7 @@ class StaffForm(forms.ModelForm):
 
     class Media:
         js = (
-            'js/staff_form.js',  # You'll need to create this JavaScript file
+            'js/staff_form.js',  # created this JavaScript file
         )
 
 class ParentForm(forms.ModelForm):
