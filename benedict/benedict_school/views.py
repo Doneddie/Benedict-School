@@ -38,8 +38,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         # Separate upcoming and past events
         current_time = timezone.now()
-        context["upcoming_events"] = Event.objects.filter(date__gte=timezone.now()).order_by("date")
-        context["past_events"] = Event.objects.filter(date__lt=current_time).order_by("-date")  # Latest past events first
+        context["upcoming_events"] = Event.objects.filter(date__gte=timezone.now()).order_by("date")[:3]
+        context["past_events"] = Event.objects.filter(date__lt=current_time).order_by("-date")[:3]  # Latest past events first
 
         # Fetch the first 3 gallery images for the homepage
         context["images"] = GalleryImage.objects.all()[:3]  # Get the first 3 images
@@ -141,6 +141,15 @@ class PupilApplicationCreateView(CreateView):
 class EventListView(ListView):
     model = Event
     template_name = 'event_list.html'
+    context_object_name = 'events'  # Use this name in your template for easier access
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_time = timezone.now()
+        # Separate upcoming and past events
+        context["upcoming_events"] = Event.objects.filter(date__gte=current_time).order_by("date")
+        context["past_events"] = Event.objects.filter(date__lt=current_time).order_by("-date")
+        return context
 
 def contact_view(request):
     if request.method == "POST":
@@ -188,7 +197,17 @@ def search_view(request):
 
 def about_view(request):
     about_content = About.objects.first()  # Assuming a single entry for the "About" page
-    return render(request, 'about.html', {'about': about_content})
+    
+    # Filter staff members with roles 'admin', 'teacher', or 'director'
+    staff_members = Staff.objects.filter(role__in=['admin', 'teacher', 'director'])
+    
+    context = {
+        'about': about_content,
+        'staff_members': staff_members,  # Pass the filtered staff members to the template
+    }
+    
+    return render(request, 'about.html', context)
+
 
 def privacy_policy(request):
     return render(request, 'privacy_policy.html')

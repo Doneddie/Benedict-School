@@ -65,20 +65,21 @@
             <h2 class="card-title">Meet Our Team</h2>
             <div class="team-container">
                 {% for staff_member in staff_members %}
-                    {% if staff_member.role == "admin" or staff_member.role == "teacher" %}
-                        <div class="team-member">
-                            {% if staff_member.photo %}
-                                <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
-                            {% else %}
-                                <img src="{% static 'images/default-photo.jpg' %}" alt="Default Photo" class="team-photo">
-                            {% endif %}
-                            <h3>{{ staff_member.name }}</h3>
-                        </div>
+                {% if staff_member.role == "admin" or staff_member.role == "teacher" or staff_member.role == "director" %}
+                <div class="team-member">
+                    {% if staff_member.photo %}
+                    <img src="{{ staff_member.photo.url }}" alt="{{ staff_member.name }}" class="team-photo">
+                    {% else %}
+                    <img src="{% static 'images/default-photo.jpg' %}" alt="Default Photo" class="team-photo">
                     {% endif %}
+                    <h3>{{ staff_member.name }}</h3>
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
+
     
 
     <!-- Accreditation & Achievements -->
@@ -86,8 +87,7 @@
         <div class="card-body">
             <h2 class="card-title">Accreditation and Achievements</h2>
             <ul>
-                <li>Accredited by the Ministry of Education and Sports</li>
-                <li>Member of the Schools Association</li>
+                <li>Accredited by the Ministry of Education and Sports. MOES/ECD/N/B/04/2018/L0812</li>
             </ul>
         </div>
     </div>

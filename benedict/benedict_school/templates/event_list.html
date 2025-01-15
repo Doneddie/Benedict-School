@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load django_bootstrap5 %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/event.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
+
 {% block title %} EVENT LIST {% endblock title %}
 
 {% block content %}
 <div class="event-list-container">
-  <h2>School Events</h2>
+  <h1>School Events</h1>
   <!-- Upcoming Events -->
-   <section class="events-section">
+  <section class="events-section">
     <h2><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
     <div class="events-carousel">
-      {% if events %}
-      {% for event in events %}
+      {% if upcoming_events %}
+      {% for event in upcoming_events %}
       <div class="event-card">
         <div class="event-date">{{ event.date|date:"M d" }}</div>
         <h3>{{ event.title }}</h3>
