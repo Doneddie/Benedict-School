@@ -3,6 +3,12 @@
 {% load static %}
 {% load django_bootstrap5 %}
 
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/staff_form.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
+
 {% block staff_content %}
 <div class="row">
     <div class="col-md-8 offset-md-2">
