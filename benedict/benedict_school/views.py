@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_protect
@@ -94,18 +95,6 @@ class ParentCreateChildCreateView(CreateView):
             'parent_form': parent_form,
             'child_form': child_form
         })
-
-def children_data(request):
-    # Query the Child model and count the number of children per class (study_class)
-    class_data = Child.objects.values('study_class').annotate(num_children=Count('study_class'))
-
-    # Map the result to match the expected format for the chart
-    # This will give us two lists: labels (class names) and data (number of children in each class)
-    labels = [item['study_class'] for item in class_data]
-    data = [item['num_children'] for item in class_data]
-
-    # Return the data as JSON to the frontend
-    return JsonResponse({'labels': labels, 'data': data})
 
 
 # Pupil Application Views
@@ -237,6 +226,81 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', context)
     return render(request, 'admin_dashboard.html', {'parents': parents}, {'children': children})
 
+@require_http_methods(["GET"])
+def children_data(request):
+    try:
+        # Define the order of classes as they should appear in the chart
+        class_order = [
+            'baby_class',
+            'middle_class',
+            'top_class',
+            'primary_one',
+            'primary_two',
+            'primary_three',
+            'primary_four'
+        ]
+        
+        # Query the Child model and count active children per class
+        class_data = Child.objects.filter(status='active')\
+                                .values('study_class')\
+                                .annotate(num_children=Count('study_class'))\
+                                .order_by('study_class')
+        
+        # Convert queryset to dictionary for easier lookup
+        class_counts = {item['study_class']: item['num_children'] for item in class_data}
+        
+        # Create ordered lists ensuring all classes are included (even if empty)
+        labels = [dict(Child.study_class.field.choices)[class_name] for class_name in class_order]
+        data = [class_counts.get(class_name, 0) for class_name in class_order]
+        
+        return JsonResponse({
+            'labels': labels,
+            'data': data,
+            'success': True
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e),
+            'success': False
+        }, status=500)
+
+@require_http_methods(["GET"])
+def gender_distribution(request):
+    """API endpoint for gender distribution data"""
+    try:
+        male_count = Child.objects.filter(status='active', sex='male').count()
+        female_count = Child.objects.filter(status='active', sex='female').count()
+        
+        return JsonResponse({
+            'male': male_count,
+            'female': female_count,
+            'success': True
+        })
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e),
+            'success': False
+        }, status=500)
+
+@require_http_methods(["GET"])
+def alumni_distribution(request):
+    """API endpoint for alumni vs current students data"""
+    try:
+        current_students = Child.objects.filter(status='active').count()
+        alumni_count = Child.objects.filter(status='alumni').count()
+        
+        return JsonResponse({
+            'current': current_students,
+            'alumni': alumni_count,
+            'success': True
+        })
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e),
+            'success': False
+        }, status=500)
+    
 # Admin view to create a new staff member
 @user_passes_test(is_admin, login_url='/admin-login/')
 def staff_create_view(request):
