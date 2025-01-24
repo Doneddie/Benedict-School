@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container-fluid px-4 py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="text-center mb-0">
+                        <i class="bi bi-person-plus me-2"></i>Child Registration Form
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ formset.management_form|crispy }}
+                        
+                        {% for form in formset %}
+                        <div class="card mb-3">
+                            <div class="card-header bg-light">
+                                Child {{ forloop.counter }}
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        {{ form.full_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form.date_of_birth|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ form.sex|as_crispy_field }}
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.study_class|as_crispy_field }}
+                                    </div>
+                                    <div class="col-12">
+                                        {{ form.profile_image|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Proceed to other details
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-header {
+        font-weight: 600;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+</style>
+{% endblock %}

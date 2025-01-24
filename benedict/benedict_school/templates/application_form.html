@@ -1,158 +1,99 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<body>
-    <h1>Pupil Application Form</h1>
+<div class="container-fluid px-4 py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="text-center mb-0">
+                        <i class="bi bi-file-earmark-text me-2"></i>Pupil Application
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Medical Information</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.allergies|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.allergy_details|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- Display form submission errors (if any) -->
-    {% if form.errors %}
-        <div class="errors">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+                        <div class="mb-4">
+                            {{ form.medical_conditions|as_crispy_field }}
+                        </div>
 
-    <!-- Form to submit Pupil Application -->
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <div class="form-container">
-            <div class="form-group">
-                <label for="id_documents">Documents:</label>
-                {{ form.documents }}
+                        <div class="mb-4">
+                            <label class="form-label">Emergency Contact</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.emergency_contact_name|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.emergency_contact_phone|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.special_needs|as_crispy_field }}
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.previous_school|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Supporting Documents</label>
+                                    {{ form.documents|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.notes|as_crispy_field }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="id_notes">Notes:</label>
-                {{ form.notes }}
-            </div>
-
-            <button type="submit" class="btn-submit">Submit Application</button>
         </div>
-    </form>
+    </div>
+</div>
+{% endblock %}
 
-    <!-- Inline CSS for responsiveness and design -->
-    <style>
-        /* Reset basic styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #4CAF50;
-        }
-
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        /* Error message styles */
-        .errors {
-            color: #f44336;
-            background-color: #fdecea;
-            border-left: 4px solid #f44336;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-
-        .errors ul {
-            list-style-type: none;
-        }
-
-        .errors ul li {
-            padding-left: 10px;
-        }
-
-        .btn-submit {
-            padding: 12px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn-submit:hover {
-            background-color: #45a049;
-        }
-
-        /* Responsive design adjustments */
-        @media (max-width: 768px) {
-            .form-container {
-                padding: 10px;
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                font-size: 0.9em;
-                padding: 10px;
-            }
-
-            .btn-submit {
-                font-size: 1.1em;
-            }
-
-            h1 {
-                font-size: 1.5em;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
-</body>
+{% block extra_css %}
+<style>
+    body {
+        background-color: #f4f6f9;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+</style>
 {% endblock %}
 

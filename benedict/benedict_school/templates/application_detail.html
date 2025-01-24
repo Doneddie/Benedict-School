@@ -1,0 +1,124 @@
+{% extends "admin_base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container-fluid px-4 py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Application for {{ application.child.name }}
+                    </h2>
+                    <div class="btn-group">
+                        <a href="{% url 'application_list' %}" class="btn btn-light">
+                            <i class="bi bi-list-check me-2"></i>Back to List
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card bg-light mb-3">
+                                <div class="card-header">Child Details</div>
+                                <div class="card-body">
+                                    <p><strong>Name:</strong> {{ application.child.name }}</p>
+                                    <p><strong>Class:</strong> {{ application.child.get_study_class_display }}</p>
+                                    <p><strong>Date of Birth:</strong> {{ application.child.date_of_birth|date:"d M Y" }}</p>
+                                    <p><strong>Gender:</strong> {{ application.child.get_sex_display }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-header">Medical Information</div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p><strong>Allergies:</strong> {{ application.get_allergies_display }}</p>
+                                                    {% if application.allergy_details %}
+                                                        <p><strong>Allergy Details:</strong> {{ application.allergy_details }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {% if application.medical_conditions %}
+                                                        <p><strong>Medical Conditions:</strong> {{ application.medical_conditions }}</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="card bg-light">
+                                        <div class="card-header">Emergency Contact & Additional Information</div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p><strong>Emergency Contact:</strong> {{ application.emergency_contact_name|default:"Not Provided" }}</p>
+                                                    <p><strong>Contact Phone:</strong> {{ application.emergency_contact_phone|default:"Not Provided" }}</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {% if application.previous_school %}
+                                                        <p><strong>Previous School:</strong> {{ application.previous_school }}</p>
+                                                    {% endif %}
+                                                    {% if application.special_needs %}
+                                                        <p><strong>Special Needs:</strong> {{ application.special_needs }}</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if application.documents %}
+                    <div class="mt-4">
+                        <div class="card bg-light">
+                            <div class="card-header">Supporting Documents</div>
+                            <div class="card-body">
+                                <a href="{{ application.documents.url }}" class="btn btn-outline-primary" target="_blank">
+                                    <i class="bi bi-file-earmark-arrow-down me-2"></i>
+                                    Download Document
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if application.notes %}
+                    <div class="mt-4">
+                        <div class="card bg-light">
+                            <div class="card-header">Additional Notes</div>
+                            <div class="card-body">
+                                <p>{{ application.notes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted">
+                    <small>Application submitted on {{ application.application_date|date:"d M Y" }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-header {
+        font-weight: 600;
+    }
+    .bg-light {
+        --bs-bg-opacity: 0.5;
+    }
+</style>
+{% endblock %}

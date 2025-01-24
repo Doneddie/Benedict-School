@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container-fluid px-4 py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="text-center mb-0">
+                        <i class="bi bi-person-plus me-2"></i>Parent Registration Form
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Relationship Type</label>
+                                {{ form.relationship_type }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                {{ form.sex }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">ID Number</label>
+                                {{ form.ID_number }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Telephone Number</label>
+                                {{ form.tel_no }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Number of Children</label>
+                                {{ form.num_children }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Parent Image</label>
+                                {{ form.parent_image }}
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Register Child/Children
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

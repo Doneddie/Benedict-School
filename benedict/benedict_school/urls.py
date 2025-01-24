@@ -5,10 +5,12 @@ from . import views
 from .views import (
     HomeView,
     about_view,
-    contact_view,
-    ParentCreateChildCreateView,
+    contact_view, 
     delete_child,
+    ParentCreateView,
+    ChildCreateView,
     PupilApplicationCreateView,
+    pupil_application_detail,
     EventListView,
     staff_create_view,
     admin_dashboard,
@@ -28,17 +30,19 @@ urlpatterns = [
     path("contact_views/", views.contact_view, name="contact"),
     path("search/", views.search_view, name="search"),
     path("contactus/", contact_view, name="contact"),
-    path('register/', views.ParentCreateChildCreateView.as_view(), name='register_parent_and_child'), # Register new parent and child
     path('school-tour/', views.school_tour, name='school_tour'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('parent/create/', ParentCreateView.as_view(), name='parent_create'),
     path('parent/', views.parent_list, name='parent-list'),
     path('parent/<int:pk>/delete/', views.delete_parent, name='delete-parent'),
+    path('child/create/<int:parent_pk>/', ChildCreateView.as_view(), name='child_create'),
     path('child/', views.child_list, name='child-list'),
     path('child/<int:child_id>/delete/', delete_child, name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
+    path('applications/<int:pk>/', pupil_application_detail, name='application-detail'),
     path('admin-dashboard/api/childrenData/', views.children_data, name='children_data'),  # The API endpoint for fetching data
-     path('admin-dashboard/api/genderDistribution/', views.gender_distribution, name='gender_distribution'),
+    path('admin-dashboard/api/genderDistribution/', views.gender_distribution, name='gender_distribution'),
     path('admin-dashboard/api/alumniDistribution/', views.alumni_distribution, name='alumni_distribution'),
     path('gallery/', views.gallery, name='gallery'),
     path('staff/', views.staff_list, name='staff_list'),
@@ -49,7 +53,7 @@ urlpatterns = [
     path('child/<int:pk>/to-alumni/', views.child_to_alumni, name='child-to-alumni'),
     path('parent/<int:pk>/to-alumni/', views.parent_to_alumni, name='parent-to-alumni'),
     path('alumni/', views.alumni_list, name='alumni-list'),
-    path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="pupil-application-create",
+    path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="application_create",
     ),  # Create a pupil application
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
 ]

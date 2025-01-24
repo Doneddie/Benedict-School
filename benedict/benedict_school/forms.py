@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django import forms
-from .models import Parent, Child, PupilApplication, Staff, Event, Exit 
+from .models import Parent, Child, PupilApplication, Staff, Event, Exit
 from datetime import date
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout, Row, Column, Submit, Div
@@ -206,7 +206,17 @@ class StaffForm(forms.ModelForm):
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        fields = ['first_name', 'last_name', 'ID_number', 'email', 'tel_no', 'address', 'parent_image']
+        fields = [
+            'first_name', 'last_name', 'relationship_type', 'sex', 
+            'ID_number', 'email', 'tel_no', 'address', 
+            'parent_image', 'num_children'
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'tel_no': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -249,10 +259,15 @@ class ParentFilterForm(forms.Form):
 class ChildForm(forms.ModelForm):
     class Meta:
         model = Child
-        fields = ['name', 'date_of_birth', 'sex', 'study_class', 'profile_image']
-        date_of_birth = forms.DateField(
-        widget=forms.DateInput(attrs={'placeholder': 'YYYY-MM-DD', 'type': 'date'})
-    )
+        fields = ['full_name', 'date_of_birth', 'sex', 'study_class', 'profile_image']
+    
+    def __init__(self, *args, **kwargs):
+        parent = kwargs.pop('parent', None)  # Get parent from kwargs
+        super().__init__(*args, **kwargs)  # Call the parent class's __init__ method
+        
+        # If parent is provided, you can set any logic you need (like setting initial values)
+        if parent:
+            self.parent = parent
 
     def clean_date_of_birth(self):
         date_of_birth = self.cleaned_data.get('date_of_birth')
@@ -295,39 +310,33 @@ class ChildFilterForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
+class ParentChildFormSet(forms.BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        self.parent = kwargs.pop('parent', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instances = super().save(commit=False)
+        for instance in instances:
+            instance.parent = self.parent
+            instance.save()
+        return instances
+
 class PupilApplicationForm(forms.ModelForm):
     class Meta:
         model = PupilApplication
-        fields = ['documents', 'notes']
+        fields = [
+            'documents', 
+            'allergies', 
+            'allergy_details', 
+            'medical_conditions', 
+            'emergency_contact_name', 
+            'emergency_contact_phone', 
+            'special_needs', 
+            'previous_school', 
+            'notes'
+        ]
 
-    def clean_documents(self):
-        documents = self.cleaned_data.get('documents')
-
-        if documents:
-            # File size validation: Limit to 5MB (5 * 1024 * 1024)
-            max_size = 5 * 1024 * 1024  # 5 MB
-            if documents.size > max_size:
-                raise ValidationError("The document size exceeds the 5MB limit.")
-
-            # File type validation: Allow only PDF or DOCX
-            allowed_extensions = ['pdf','docx']
-            file_extension = documents.name.split('.')[-1].lower()
-            if file_extension not in allowed_extensions:
-                raise ValidationError("Only PDF or DOCX files are allowed.")
-        
-        return documents
-        
-        if documents:
-            # Check the size and type if a document is uploaded
-            ...
-        else:
-            # You can handle the case where no file is uploaded if needed
-            pass
-
-    def clean_notes(self):
-        notes = self.cleaned_data.get('notes')
-       
-        return notes
 
 class ExitForm(forms.ModelForm):
     class Meta:

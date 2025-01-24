@@ -519,3 +519,42 @@ if not self.subject_handled is None:
                 def __str__(self):
                     return self.name
 
+                    class ParentCreateChildCreateView(CreateView):
+    def get(self, request, *args, **kwargs):
+        """Display the form to register both a parent and a child"""
+        parent_form = ParentForm()
+        child_form = ChildForm()
+        return render(request, 'register_parent_and_child.html', {
+            'parent_form': parent_form,
+            'child_form': child_form
+        })
+
+    def form_valid(self, form):
+        # Logic for saving the parent and child info
+        child_id = 1
+
+    def post(self, request, *args, **kwargs):
+        """Process both the parent and child form submissions"""
+        parent_form = ParentForm(request.POST, request.FILES)
+        child_form = ChildForm(request.POST, request.FILES)
+
+        if parent_form.is_valid() and child_form.is_valid():
+            # Save the parent
+            parent = parent_form.save()
+
+            # Set the parent on the child form before saving
+            child = child_form.save(commit=False)
+            child.parent = parent  # Associate the parent with the child
+            child.save()
+
+            # Get the child_id from the saved child object
+            child_id = child.id
+
+            # Redirect to the application form for the newly created child
+            return HttpResponseRedirect(reverse('pupil-application-create', kwargs={'child_id': child_id}))
+
+        # If forms are not valid, re-render the form with errors
+        return render(request, 'register_parent_and_child.html', {
+            'parent_form': parent_form,
+            'child_form': child_form
+        })

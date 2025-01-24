@@ -2,12 +2,26 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 
 
 class Parent(models.Model): 
     first_name = models.CharField(max_length=50, default='')
-    last_name = models.CharField(max_length=50, default='') 
+    last_name = models.CharField(max_length=50, default='')
+    RELATIONSHIP_TYPES = [
+        ('mother', 'Mother'),
+        ('father', 'Father'),
+        ('guardian', 'Guardian'),
+        ('relative', 'Relative'),
+    ]
+    relationship_type = models.CharField(
+        max_length=20, 
+        choices=RELATIONSHIP_TYPES,
+        default='father'
+    )
+    sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
     ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
     email = models.EmailField(unique=True)
     tel_no = models.CharField(max_length=15, default='') 
@@ -15,6 +29,17 @@ class Parent(models.Model):
     parent_image = models.ImageField(
         upload_to="parent_images/", null=True, blank=True
     )
+    num_children = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(4)
+        ],
+        default=1
+    )
+
+    def can_add_child(self):
+        """Check if parent can add more children"""
+        return self.children.count() < self.num_children
 
     STATUS_CHOICES = [
         ('active', 'Active'),
@@ -53,13 +78,20 @@ class Parent(models.Model):
             
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+def limit_children_to_four():
+    return {'children__lt': 4}
 
 
 class Child(models.Model):
     parent = models.ForeignKey(
-        Parent, on_delete=models.CASCADE, related_name="children"
+        Parent, 
+        on_delete=models.CASCADE, 
+        related_name="children",
+        # Optional: added a custom validator
+        limit_choices_to=limit_children_to_four
     )
-    name = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
     study_class = models.CharField(
@@ -71,7 +103,9 @@ class Child(models.Model):
             ("primary_one", "Primary one"),
             ("primary_two", "Primary two"),
             ("primary_three", "Primary three"),
-            ("primary_four", "Primary four")
+            ("primary_four", "Primary four"),
+            ("primary_five", "Primary five"),
+            ("primary_six", "Primary six")
         ],
         default="primary_one",
     )
@@ -105,14 +139,58 @@ class Child(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        """Custom save method to enforce child limit"""
+        if not self.parent.can_add_child():
+            raise ValidationError("Maximum number of children reached")
+        super().save(*args, **kwargs)
 
 
 class PupilApplication(models.Model):
     child = models.OneToOneField(Child, on_delete=models.CASCADE)
     application_date = models.DateField(auto_now_add=True)
-    documents = models.FileField(upload_to="applications/", null=True, blank=True)
-    notes = models.TextField(null=True, blank=True)  # Filled by administrator
-
+    
+    # Enhanced document upload with validation
+    documents = models.FileField(
+        upload_to="applications/", 
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])]
+    )
+    
+    # Medical History
+    ALLERGY_CHOICES = [
+        ('none', 'No Known Allergies'),
+        ('food', 'Food Allergy'),
+        ('medication', 'Medication Allergy'),
+        ('environmental', 'Environmental Allergy')
+    ]
+    
+    allergies = models.CharField(
+        max_length=20, 
+        choices=ALLERGY_CHOICES, 
+        default='none'
+    )
+    allergy_details = models.TextField(null=True, blank=True)
+    
+    # Medical Conditions
+    medical_conditions = models.TextField(
+        null=True, 
+        blank=True, 
+        help_text="List any existing medical conditions"
+    )
+    
+    # Emergency Contact
+    emergency_contact_name = models.CharField(max_length=100, null=True)
+    emergency_contact_phone = models.CharField(max_length=15, null=True)
+    
+    # Additional Application Details
+    special_needs = models.TextField(null=True, blank=True)
+    previous_school = models.CharField(max_length=100, null=True, blank=True)
+    
+    notes = models.TextField(null=True, blank=True)
+    
     def __str__(self):
         return f"Application for {self.child.name}"
 
