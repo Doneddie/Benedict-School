@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'django_bootstrap5',
     'crispy_bootstrap5',
+    'formtools',
     # "haystack",
 ]
 

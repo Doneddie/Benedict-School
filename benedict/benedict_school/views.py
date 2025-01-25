@@ -20,6 +20,7 @@ from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, 
 from django.db.models import Q
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm, ChildFilterForm
 from django.contrib.auth.forms import UserCreationForm
+from formtools.wizard.views import SessionWizardView
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone
 from datetime import datetime
@@ -64,82 +65,46 @@ class ParentCreateView(CreateView):
 
     def get_success_url(self):
         # After the parent is created, get the parent_pk
-        return reverse_lazy('child_create', kwargs={'parent_pk': self.object.pk})
+        return reverse_lazy('child_application_wizard', kwargs={'parent_pk': self.object.pk})
 
-class ChildCreateView(CreateView):
-    model = Child
-    template_name = 'child_form.html'
-    form_class = ChildForm  # This is for a single form, we use formset in get_context_data
-    success_url = reverse_lazy('application_create') 
+class ChildApplicationWizard(SessionWizardView):
+    template_name = 'child_application_wizard.html'
+    
+    def get_form_initial(self, step):
+        # Get the parent and number of children
+        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+        return {'total_children': parent.num_children}
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # Retrieve the parent using parent_pk from URL parameters
-        parent = get_object_or_404(Parent, pk=self.kwargs['parent_pk'])
-        
-        # Create a formset based on the number of children the parent wants to register
-        ChildFormSet = modelformset_factory(
-            Child, 
-            form=ChildForm, 
-            extra=parent.num_children,  # extra fields for additional forms
-            max_num=parent.num_children  # Ensure you can't add more than the parent allows
-        )
-        
-        # If POST request, handle the formset data
-        if self.request.POST:
-            context['formset'] = ChildFormSet(
-                self.request.POST, 
-                self.request.FILES, 
-                queryset=Child.objects.none(),  # No pre-existing children
-                form_kwargs={'parent': parent}  # Pass parent to each form in the formset
-            )
-        else:
-            context['formset'] = ChildFormSet(
-                queryset=Child.objects.none(),  # No pre-existing children
-                form_kwargs={'parent': parent}  # Pass parent to each form in the formset
-            )
-        
-        context['parent_pk'] = self.kwargs['parent_pk']  # Make parent_pk available in context
-        return context
-
-    def form_valid(self, form):
-        # Get the parent object based on parent_pk
-        parent = get_object_or_404(Parent, pk=self.kwargs['parent_pk'])
-        
-        # Process the formset
-        context = self.get_context_data()
-        formset = context['formset']
-        
-        if formset.is_valid():
-            # Save each child form in the formset and assign the parent
-            children = formset.save(commit=False)
-            for child in children:
-                child.parent = parent  # Assign the correct parent
-                child.save()
+    def get_form_list(self):
+        # Dynamically create form list based on number of children
+        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+        forms = []
+        if not parent:
+            raise ValueError(f"Parent with pk {self.kwargs['parent_pk']} does not exist.")
+        for i in range(parent.num_children):
+            forms.append(ChildForm(parent=parent)) # Add ChildForm for each child  
+            forms.append(PupilApplicationForm())  # Add ApplicationForm for each child
             
-            return super().form_valid(form)
-        else:
-            # If the formset is not valid, re-render the form with errors
-            return self.render_to_response(self.get_context_data(form=form))
+        return forms
 
-
-
-# Pupil Application Views
-class PupilApplicationCreateView(CreateView):
-    model = PupilApplication
-    form_class = PupilApplicationForm
-    template_name = 'application_form.html'
-    success_url = reverse_lazy('home')
-
-    def form_valid(self, form):
-        # Attach the current child to the application
-        form.instance.child = self.get_child()
-        return super().form_valid(form)
-
-    def get_child(self):
-        # Logic to get the child (could be from session, etc.)
-        return Child.objects.filter(parent__user=self.request.user).first()
+    def done(self, form_list, **kwargs):
+        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+        
+        for i in range(0, len(form_list), 2):
+            child_form = form_list[i]
+            application_form = form_list[i + 1]
+            
+            # Save child
+            child = child_form.save(commit=False)
+            child.parent = parent
+            child.save()
+            
+            # Save application
+            application = application_form.save(commit=False)
+            application.child = child  # Ensure correct child is assigned to the application
+            application.save()
+            
+            return redirect('success_page')
         
 
 # Event views

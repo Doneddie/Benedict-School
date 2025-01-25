@@ -8,8 +8,7 @@ from .views import (
     contact_view, 
     delete_child,
     ParentCreateView,
-    ChildCreateView,
-    PupilApplicationCreateView,
+    ChildApplicationWizard,
     pupil_application_detail,
     EventListView,
     staff_create_view,
@@ -26,7 +25,6 @@ urlpatterns = [
     path('admissions/', views.admissions, name='admissions'),  # Admissions page route
     path('admin-login/', auth_views.LoginView.as_view(template_name='admin_login.html'), name='admin-login'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('admissions/form/<int:child_id>/', views.PupilApplicationCreateView.as_view(), name='admission_form'),  # Application form
     path("contact_views/", views.contact_view, name="contact"),
     path("search/", views.search_view, name="search"),
     path("contactus/", contact_view, name="contact"),
@@ -36,7 +34,6 @@ urlpatterns = [
     path('parent/create/', ParentCreateView.as_view(), name='parent_create'),
     path('parent/', views.parent_list, name='parent-list'),
     path('parent/<int:pk>/delete/', views.delete_parent, name='delete-parent'),
-    path('child/create/<int:parent_pk>/', ChildCreateView.as_view(), name='child_create'),
     path('child/', views.child_list, name='child-list'),
     path('child/<int:child_id>/delete/', delete_child, name='delete-child'),
     path('applications/', views.application_list, name='application-list'),
@@ -53,7 +50,6 @@ urlpatterns = [
     path('child/<int:pk>/to-alumni/', views.child_to_alumni, name='child-to-alumni'),
     path('parent/<int:pk>/to-alumni/', views.parent_to_alumni, name='parent-to-alumni'),
     path('alumni/', views.alumni_list, name='alumni-list'),
-    path("child/<int:child_id>/application/new/", PupilApplicationCreateView.as_view(), name="application_create",
-    ),  # Create a pupil application
+    path('child-application/<int:parent_pk>/', ChildApplicationWizard.as_view(), name='child_application_wizard'),
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
 ]

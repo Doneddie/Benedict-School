@@ -1,12 +1,12 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
 from django import forms
-from .models import Parent, Child, PupilApplication, Staff, Event, Exit
 from datetime import date
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout, Row, Column, Submit, Div
 from crispy_forms.helper import FormHelper
-from django.utils.translation import gettext_lazy as _
+from .models import Parent, Child, PupilApplication, Staff, Event, Exit
 
 
 class LoginForm(forms.Form):
@@ -27,8 +27,7 @@ class SearchForm(forms.Form):
 
 
 class StaffForm(forms.ModelForm):
-    """Form for creating and updating staff members"""
-    
+    """Form for creating and updating staff members""" 
     class Meta:
         model = Staff
         fields = [
