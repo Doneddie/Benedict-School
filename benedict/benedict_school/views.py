@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
+from collections import OrderedDict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_protect
@@ -15,6 +16,7 @@ from django.views.generic import (
 )
 from django.forms import modelformset_factory
 from django.urls import reverse_lazy
+from django import forms
 from django.contrib.auth.views import LoginView
 from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
 from django.db.models import Q
@@ -69,43 +71,68 @@ class ParentCreateView(CreateView):
 
 class ChildApplicationWizard(SessionWizardView):
     template_name = 'child_application_wizard.html'
-    
-    def get_form_initial(self, step):
-        # Get the parent and number of children
-        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
-        return {'total_children': parent.num_children}
 
+    def get_parent(self):
+        """Retrieve the parent instance safely using get_object_or_404"""
+        return get_object_or_404(Parent, pk=self.kwargs['parent_pk'])
+        
+        
     def get_form_list(self):
-        # Dynamically create form list based on number of children
-        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
-        forms = []
-        if not parent:
-            raise ValueError(f"Parent with pk {self.kwargs['parent_pk']} does not exist.")
-        for i in range(parent.num_children):
-            forms.append(ChildForm(parent=parent)) # Add ChildForm for each child  
-            forms.append(PupilApplicationForm())  # Add ApplicationForm for each child
+        """Dynamically generate the form list based on the number of children"""
+        parent = self.get_parent()
+        forms = OrderedDict()
+        
+        if parent.num_children < 1:
+            print("⚠️ Warning: Parent has no children assigned!")  # Debugging
+            return {'child_0': ChildForm, 'application_0': PupilApplicationForm}  # Ensures at least one form exists
             
+        for i in range(parent.num_children):
+            forms[f'child_{i}'] = ChildForm
+            forms[f'application_{i}'] = PupilApplicationForm
+                
+        print(f"✅ Forms generated: {list(forms.keys())}")  # Debugging
         return forms
 
+    def get_form_initial(self, step):
+        """Provide initial data for the forms"""
+        parent = self.get_parent()
+
+        if 'child' in step:
+            return {'parent': parent}  # Prefill the parent field in ChildForm
+        
+        return {}
+
+    def get_form_instance(self, step):
+        """Provide form instances for specific steps"""
+        parent = self.get_parent()
+
+        if 'child' in step:
+            return ChildForm(parent=parent)  # Ensure the form is tied to the parent
+        
+        return PupilApplicationForm()  # No special instance needed for application
+
     def done(self, form_list, **kwargs):
-        parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
-        
-        for i in range(0, len(form_list), 2):
-            child_form = form_list[i]
-            application_form = form_list[i + 1]
-            
-            # Save child
-            child = child_form.save(commit=False)
-            child.parent = parent
-            child.save()
-            
-            # Save application
-            application = application_form.save(commit=False)
-            application.child = child  # Ensure correct child is assigned to the application
-            application.save()
-            
-            return redirect('success_page')
-        
+        """Process the submitted forms and save data"""
+        parent = self.get_parent()
+        child_instances = {}
+
+        # Loop through form steps and save models accordingly
+        for step_name, form in form_list.items():
+            if 'child' in step_name:
+                child = form.save(commit=False)
+                child.parent = parent
+                child.save()
+                child_instances[step_name] = child  # Store child instance for later reference
+            elif 'application' in step_name:
+                application = form.save(commit=False)
+                
+                # Match the correct child instance using the corresponding step name
+                child_step_name = step_name.replace('application', 'child')
+                application.child = child_instances.get(child_step_name)
+                
+                application.save()
+
+        return redirect('success_page')
 
 # Event views
 class EventListView(ListView):

@@ -153,10 +153,11 @@ class PupilApplication(models.Model):
     
     # Enhanced document upload with validation
     documents = models.FileField(
-        upload_to="applications/", 
-        null=True, 
-        blank=True,
-        validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])]
+    upload_to="applications/", 
+    null=True, 
+    blank=True,
+    validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])],
+    verbose_name="Application Documents"
     )
     
     # Medical History

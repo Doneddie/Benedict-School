@@ -631,3 +631,58 @@ if not self.subject_handled is None:
                     def get_child(self):
                         # Logic to get the child (could be from session, etc.)
                         return Child.objects.filter(parent__user=self.request.user).first()
+
+
+
+
+                        class ChildApplicationWizard(SessionWizardView):
+                        template_name = 'child_application_wizard.html'
+                        
+                        def get_form_initial(self, step):
+                            # Get the parent and number of children
+                            parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+                            return {'total_children': parent.num_children}
+                    
+                        def get_form_list(self):
+                            # Dynamically create form list based on number of children
+                            parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+                            if not parent:
+                                raise ValueError(f"Parent with pk {self.kwargs['parent_pk']} does not exist.")
+                            
+                            # Create a list of form classes (not instances)
+                            forms = []
+                            for _ in range(parent.num_children):
+                                forms.append(ChildForm)  # Add ChildForm class for each child
+                                forms.append(PupilApplicationForm)  # Add PupilApplicationForm class for each child
+                                
+                            return forms
+                    
+                        def get_form_instance(self, step):
+                            # Provide an instance of the form if needed
+                            parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+                            if step % 2 == 0:
+                                # ChildForm instance
+                                return ChildForm(parent=parent)
+                            else:
+                                # PupilApplicationForm instance
+                                return PupilApplicationForm()
+                    
+                        def done(self, form_list, **kwargs):
+                            parent = Parent.objects.get(pk=self.kwargs['parent_pk'])
+                            
+                            for i in range(0, len(form_list), 2):
+                                child_form = form_list[i]
+                                application_form = form_list[i + 1]
+                                
+                                # Save child
+                                child = child_form.save(commit=False)
+                                child.parent = parent
+                                child.save()
+                                
+                                # Save application
+                                application = application_form.save(commit=False)
+                                application.child = child  # Ensure correct child is assigned to the application
+                                application.save()
+                                
+                            # Redirect after processing all children
+                            return redirect('success_page')
