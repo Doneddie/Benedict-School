@@ -8,7 +8,7 @@ from .views import (
     contact_view, 
     delete_child,
     ParentCreateView,
-    ChildApplicationWizard,
+    register_children,
     pupil_application_detail,
     EventListView,
     staff_create_view,
@@ -50,6 +50,6 @@ urlpatterns = [
     path('child/<int:pk>/to-alumni/', views.child_to_alumni, name='child-to-alumni'),
     path('parent/<int:pk>/to-alumni/', views.parent_to_alumni, name='parent-to-alumni'),
     path('alumni/', views.alumni_list, name='alumni-list'),
-    path('child-application/<int:parent_pk>/', ChildApplicationWizard.as_view(), name='child_application_wizard'),
+    path('register/<int:parent_id>/', register_children, name='register_children'),
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
 ]

@@ -57,11 +57,11 @@
                                 {{ form.parent_image }}
                             </div>
                         </div>
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                Register Child/Children
-                            </button>
-                        </div>
+                        <form method="get" action="{% url 'register_children' parent.id %}">
+                            <label for="num_children">Number of Children to Register:</label>
+                            <input type="number" id="num_children" name="num_children" min="1" required>
+                            <button type="submit" class="btn btn-primary btn-lg">Proceed</button>
+                        </form>
                     </form>
                 </div>
             </div>

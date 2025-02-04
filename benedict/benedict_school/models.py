@@ -7,9 +7,10 @@ from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 
 
-class Parent(models.Model): 
+class Parent(models.Model):
     first_name = models.CharField(max_length=50, default='')
     last_name = models.CharField(max_length=50, default='')
+
     RELATIONSHIP_TYPES = [
         ('mother', 'Mother'),
         ('father', 'Father'),
@@ -21,45 +22,41 @@ class Parent(models.Model):
         choices=RELATIONSHIP_TYPES,
         default='father'
     )
-    sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
-    ID_number = models.CharField(max_length=14, unique=True, null=False, default='')
-    email = models.EmailField(unique=True)
-    tel_no = models.CharField(max_length=15, default='') 
-    address = models.CharField(max_length=100)
-    parent_image = models.ImageField(
-        upload_to="parent_images/", null=True, blank=True
-    )
-    num_children = models.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(4)
-        ],
-        default=1
+
+    sex = models.CharField(
+        max_length=10, 
+        choices=[("male", "Male"), ("female", "Female")], 
+        default="male"
     )
 
-    def can_add_child(self):
-        """Check if parent can add more children"""
-        return self.children.count() < self.num_children
+    ID_number = models.CharField(max_length=14, unique=True, null=False)
+    email = models.EmailField(unique=True)
+    tel_no = models.CharField(max_length=15, default='')
+    address = models.CharField(max_length=100)
+    parent_image = models.ImageField(upload_to="parent_images/", null=True, blank=True)
 
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('alumni', 'Alumni'),
     ]
-    
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='active'
     )
 
-    alumni_date = models.DateTimeField(null=True, blank=True)
+    alumni_date = models.DateField(null=True, blank=True)
     reason_for_leaving = models.TextField(blank=True, null=True)
 
+    def can_add_child(self):
+        """Check if parent can add more children (limit of 4)"""
+        return self.children.count() < 4
+
     def move_to_alumni(self, reason=''):
-        """Only move parent to alumni if all children are alumni"""
+        """Move parent to alumni status if all children are alumni"""
         if not self.has_active_children():
             self.status = 'alumni'
-            self.alumni_date = timezone.now()
+            self.alumni_date = timezone.now().date()
             self.reason_for_leaving = reason
             self.save()
             return True
@@ -71,29 +68,27 @@ class Parent(models.Model):
 
     def get_child_count(self):
         """Get count of total and active children"""
-        total = self.child.count()
-        active = self.child.filter(status='active').count()
+        total = self.children.count()
+        active = self.children.filter(status='active').count()
         return {'total': total, 'active': active}
 
-            
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-    
-def limit_children_to_four():
-    return {'children__lt': 4}
+        return f"{self.first_name} {self.last_name} ({self.relationship_type})"
 
 
 class Child(models.Model):
     parent = models.ForeignKey(
         Parent, 
         on_delete=models.CASCADE, 
-        related_name="children",
-        # Optional: added a custom validator
-        limit_choices_to=limit_children_to_four
+        related_name="children"
     )
     full_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    sex = models.CharField(max_length=10, choices=[ ("male", "Male"), ("female", "Female")], default="male",)
+    sex = models.CharField(
+        max_length=10, 
+        choices=[("male", "Male"), ("female", "Female")], 
+        default="male"
+    )
     study_class = models.CharField(
         max_length=20, 
         choices=[
@@ -109,27 +104,24 @@ class Child(models.Model):
         ],
         default="primary_one",
     )
-
     profile_image = models.ImageField(upload_to="child_images/", null=True, blank=True)
 
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('alumni', 'Alumni'),
     ]
-    
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='active'
     )
-
-    alumni_date = models.DateTimeField(null=True, blank=True)
+    alumni_date = models.DateField(null=True, blank=True)
     reason_for_leaving = models.TextField(blank=True, null=True)
 
     def move_to_alumni(self, reason=''):
         """Move child to alumni status and check parent"""
         self.status = 'alumni'
-        self.alumni_date = timezone.now()
+        self.alumni_date = timezone.now().date()
         self.reason_for_leaving = reason
         self.save()
         
@@ -138,26 +130,30 @@ class Child(models.Model):
             self.parent.move_to_alumni(reason)
 
     def __str__(self):
-        return self.name
-    
+        return self.full_name
+
     def save(self, *args, **kwargs):
         """Custom save method to enforce child limit"""
-        if not self.parent.can_add_child():
+        if self.parent and not self.parent.can_add_child():
             raise ValidationError("Maximum number of children reached")
         super().save(*args, **kwargs)
 
 
 class PupilApplication(models.Model):
-    child = models.OneToOneField(Child, on_delete=models.CASCADE)
+    child = models.OneToOneField(
+        Child, 
+        on_delete=models.CASCADE, 
+        related_name="application"
+    )
     application_date = models.DateField(auto_now_add=True)
     
     # Enhanced document upload with validation
     documents = models.FileField(
-    upload_to="applications/", 
-    null=True, 
-    blank=True,
-    validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])],
-    verbose_name="Application Documents"
+        upload_to="applications/", 
+        null=True, 
+        blank=True,
+        validators=[FileExtensionValidator(['pdf', 'doc', 'docx'])],
+        verbose_name="Application Documents"
     )
     
     # Medical History
@@ -165,7 +161,8 @@ class PupilApplication(models.Model):
         ('none', 'No Known Allergies'),
         ('food', 'Food Allergy'),
         ('medication', 'Medication Allergy'),
-        ('environmental', 'Environmental Allergy')
+        ('environmental', 'Environmental Allergy'),
+        ('other', 'Other')
     ]
     
     allergies = models.CharField(
@@ -183,17 +180,30 @@ class PupilApplication(models.Model):
     )
     
     # Emergency Contact
-    emergency_contact_name = models.CharField(max_length=100, null=True)
-    emergency_contact_phone = models.CharField(max_length=15, null=True)
+    emergency_contact_name = models.CharField(max_length=100, default='')
+    emergency_contact_phone = models.CharField(max_length=15, default='')
     
     # Additional Application Details
-    special_needs = models.TextField(null=True, blank=True)
-    previous_school = models.CharField(max_length=100, null=True, blank=True)
+    special_needs = models.TextField(
+        null=True, 
+        blank=True, 
+        help_text="Describe any special needs or accommodations required"
+    )
+    previous_school = models.CharField(
+        max_length=100, 
+        null=True, 
+        blank=True, 
+        help_text="Name of the previous school attended"
+    )
     
-    notes = models.TextField(null=True, blank=True)
+    notes = models.TextField(
+        null=True, 
+        blank=True, 
+        help_text="Additional notes or comments"
+    )
     
     def __str__(self):
-        return f"Application for {self.child.name}"
+        return f"Application for {self.child.full_name}"
 
     
 class Exit(models.Model): 

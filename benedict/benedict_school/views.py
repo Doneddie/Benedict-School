@@ -14,7 +14,7 @@ from django.views.generic import (
     DeleteView,
     TemplateView,
 )
-from django.forms import modelformset_factory
+from django.forms import formset_factory
 from django.urls import reverse_lazy
 from django import forms
 from django.contrib.auth.views import LoginView
@@ -22,7 +22,6 @@ from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, 
 from django.db.models import Q
 from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm, ChildFilterForm
 from django.contrib.auth.forms import UserCreationForm
-from formtools.wizard.views import SessionWizardView
 from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
 from django.utils import timezone
 from datetime import datetime
@@ -67,72 +66,46 @@ class ParentCreateView(CreateView):
 
     def get_success_url(self):
         # After the parent is created, get the parent_pk
-        return reverse_lazy('child_application_wizard', kwargs={'parent_pk': self.object.pk})
+        return reverse_lazy('register_children', kwargs={'parent_pk': self.object.pk})
 
-class ChildApplicationWizard(SessionWizardView):
-    template_name = 'child_application_wizard.html'
 
-    def get_parent(self):
-        """Retrieve the parent instance safely using get_object_or_404"""
-        return get_object_or_404(Parent, pk=self.kwargs['parent_pk'])
+def register_children(request, parent_id):
+    parent = Parent.objects.get(id=parent_id)
+    
+    # Get the number of children to register (from the request or a form input)
+    num_children = int(request.GET.get('num_children', 1))  # Default to 1
+    
+    # Create formsets
+    ChildFormSet = formset_factory(ChildForm, extra=num_children)
+    PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
+    
+    if request.method == 'POST':
+        child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
+        application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
         
-        
-    def get_form_list(self):
-        """Dynamically generate the form list based on the number of children"""
-        parent = self.get_parent()
-        forms = OrderedDict()
-        
-        if parent.num_children < 1:
-            print("⚠️ Warning: Parent has no children assigned!")  # Debugging
-            return {'child_0': ChildForm, 'application_0': PupilApplicationForm}  # Ensures at least one form exists
-            
-        for i in range(parent.num_children):
-            forms[f'child_{i}'] = ChildForm
-            forms[f'application_{i}'] = PupilApplicationForm
-                
-        print(f"✅ Forms generated: {list(forms.keys())}")  # Debugging
-        return forms
-
-    def get_form_initial(self, step):
-        """Provide initial data for the forms"""
-        parent = self.get_parent()
-
-        if 'child' in step:
-            return {'parent': parent}  # Prefill the parent field in ChildForm
-        
-        return {}
-
-    def get_form_instance(self, step):
-        """Provide form instances for specific steps"""
-        parent = self.get_parent()
-
-        if 'child' in step:
-            return ChildForm(parent=parent)  # Ensure the form is tied to the parent
-        
-        return PupilApplicationForm()  # No special instance needed for application
-
-    def done(self, form_list, **kwargs):
-        """Process the submitted forms and save data"""
-        parent = self.get_parent()
-        child_instances = {}
-
-        # Loop through form steps and save models accordingly
-        for step_name, form in form_list.items():
-            if 'child' in step_name:
-                child = form.save(commit=False)
+        if child_formset.is_valid() and application_formset.is_valid():
+            for child_form, application_form in zip(child_formset, application_formset):
+                # Save Child instance
+                child = child_form.save(commit=False)
                 child.parent = parent
                 child.save()
-                child_instances[step_name] = child  # Store child instance for later reference
-            elif 'application' in step_name:
-                application = form.save(commit=False)
                 
-                # Match the correct child instance using the corresponding step name
-                child_step_name = step_name.replace('application', 'child')
-                application.child = child_instances.get(child_step_name)
-                
+                # Save PupilApplication instance
+                application = application_form.save(commit=False)
+                application.child = child
                 application.save()
-
-        return redirect('success_page')
+            
+            return redirect('success_page')  # Redirect to a success page
+    else:
+        child_formset = ChildFormSet(prefix='child')
+        application_formset = PupilApplicationFormSet(prefix='application')
+    
+    context = {
+        'parent': parent,
+        'child_formset': child_formset,
+        'application_formset': application_formset,
+    }
+    return render(request, 'register_children.html', context)
 
 # Event views
 class EventListView(ListView):

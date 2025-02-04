@@ -101,7 +101,6 @@ class Migration(migrations.Migration):
             model_name="child",
             name="parent",
             field=models.ForeignKey(
-                limit_choices_to=benedict_school.models.limit_children_to_four,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="children",
                 to="benedict_school.parent",

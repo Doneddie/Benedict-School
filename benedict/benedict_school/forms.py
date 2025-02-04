@@ -208,7 +208,7 @@ class ParentForm(forms.ModelForm):
         fields = [
             'first_name', 'last_name', 'relationship_type', 'sex', 
             'ID_number', 'email', 'tel_no', 'address', 
-            'parent_image', 'num_children'
+            'parent_image'
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),

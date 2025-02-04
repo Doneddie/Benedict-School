@@ -686,3 +686,72 @@ if not self.subject_handled is None:
                                 
                             # Redirect after processing all children
                             return redirect('success_page')
+
+                            class ChildApplicationWizard(SessionWizardView):
+                            template_name = 'child_application_wizard.html'
+                        
+                            def get_parent(self):
+                                """Retrieve the parent instance safely using get_object_or_404"""
+                                return get_object_or_404(Parent, pk=self.kwargs['parent_pk'])
+                                
+                                
+                            def get_form_list(self):
+                                """Dynamically generate the form list based on the number of children"""
+                                parent = self.get_parent()
+                                forms = OrderedDict()
+                                
+                                if parent.num_children < 1:
+                                    print("⚠️ Warning: Parent has no children assigned!")  # Debugging
+                                    return {'child_0': ChildForm, 'application_0': PupilApplicationForm}  # Ensures at least one form exists
+                                    
+                                for i in range(parent.num_children):
+                                    forms[f'child_{i}'] = ChildForm
+                                    forms[f'application_{i}'] = PupilApplicationForm
+                                        
+                                print(f"✅ Forms generated: {list(forms.keys())}")  # Debugging
+                                return forms
+                        
+                            def get_form_initial(self, step):
+                                """Provide initial data for the forms"""
+                                parent = self.get_parent()
+                        
+                                if 'child' in step:
+                                    return {'parent': parent}  # Prefill the parent field in ChildForm
+                                
+                                return {}
+                        
+                            def get_form_instance(self, step):
+                                """Provide form instances for specific steps"""
+                                parent = self.get_parent()
+                        
+                                if 'child' in step:
+                                    return ChildForm(parent=parent)  # Ensure the form is tied to the parent
+                                
+                                return PupilApplicationForm()  # No special instance needed for application
+                        
+                            def done(self, form_list, **kwargs):
+                                """Process the submitted forms and save data"""
+                                parent = self.get_parent()
+                                child_instances = {}
+                        
+                                # Loop through form steps and save models accordingly
+                                for step_name, form in form_list.items():
+                                    if 'child' in step_name:
+                                        child = form.save(commit=False)
+                                        child.parent = parent
+                                        child.save()
+                                        child_instances[step_name] = child  # Store child instance for later reference
+                                    elif 'application' in step_name:
+                                        application = form.save(commit=False)
+                                        
+                                        # Match the correct child instance using the corresponding step name
+                                        child_step_name = step_name.replace('application', 'child')
+                                        application.child = child_instances.get(child_step_name)
+                                        
+                                        application.save()
+                        
+                                return redirect('success_page')
+
+
+from formtools.wizard.views import SessionWizardView
+from django.forms import modelformset_factory
