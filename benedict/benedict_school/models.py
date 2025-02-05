@@ -34,6 +34,7 @@ class Parent(models.Model):
     tel_no = models.CharField(max_length=15, default='')
     address = models.CharField(max_length=100)
     parent_image = models.ImageField(upload_to="parent_images/", null=True, blank=True)
+    num_children = models.PositiveIntegerField(default=1)
 
     STATUS_CHOICES = [
         ('active', 'Active'),

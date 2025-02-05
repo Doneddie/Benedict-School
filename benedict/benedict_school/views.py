@@ -64,48 +64,57 @@ class ParentCreateView(CreateView):
     form_class = ParentForm
     template_name = 'parent_form.html'
 
+    def form_valid(self, form):
+        # Save the parent object and then pass it to the template
+        self.object = form.save()
+        # Redirect to the register_children page with the parent_pk
+        return redirect('register_children', parent_id=self.object.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['parent'] = self.object  # Add the parent object to context
+        return context
+
     def get_success_url(self):
-        # After the parent is created, get the parent_pk
         return reverse_lazy('register_children', kwargs={'parent_pk': self.object.pk})
 
-
+# Child and application create view
 def register_children(request, parent_id):
     parent = Parent.objects.get(id=parent_id)
+
+    # Get the number of children to register (from the parent object, not from a POST or GET request)
+    num_children = parent.num_children 
     
-    # Get the number of children to register (from the request or a form input)
-    num_children = int(request.GET.get('num_children', 1))  # Default to 1
-    
-    # Create formsets
+    # Create formsets based on the number of children
     ChildFormSet = formset_factory(ChildForm, extra=num_children)
     PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
-    
+
     if request.method == 'POST':
         child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
         application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
-        
+
         if child_formset.is_valid() and application_formset.is_valid():
             for child_form, application_form in zip(child_formset, application_formset):
-                # Save Child instance
                 child = child_form.save(commit=False)
                 child.parent = parent
                 child.save()
-                
-                # Save PupilApplication instance
                 application = application_form.save(commit=False)
                 application.child = child
                 application.save()
-            
-            return redirect('success_page')  # Redirect to a success page
+
+            return redirect('success_page')  # Redirect to a success page or wherever you need
+
     else:
         child_formset = ChildFormSet(prefix='child')
         application_formset = PupilApplicationFormSet(prefix='application')
-    
+
     context = {
         'parent': parent,
         'child_formset': child_formset,
         'application_formset': application_formset,
     }
     return render(request, 'register_children.html', context)
+
 
 # Event views
 class EventListView(ListView):

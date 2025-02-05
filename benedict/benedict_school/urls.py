@@ -50,6 +50,6 @@ urlpatterns = [
     path('child/<int:pk>/to-alumni/', views.child_to_alumni, name='child-to-alumni'),
     path('parent/<int:pk>/to-alumni/', views.parent_to_alumni, name='parent-to-alumni'),
     path('alumni/', views.alumni_list, name='alumni-list'),
-    path('register/<int:parent_id>/', register_children, name='register_children'),
+    path('register/<int:parent_id>/', views.register_children, name='register_children'),
     path("events/", EventListView.as_view(), name="event-list"),  # List all events
 ]
