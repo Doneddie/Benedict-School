@@ -67,6 +67,10 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    'https://cautious-dollop-7jqjxgvr5rghwwwj-8000.app.github.dev',
+]
+
 ROOT_URLCONF = "benedict.urls"
 
 TEMPLATES = [

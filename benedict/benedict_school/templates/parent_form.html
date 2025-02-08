@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% block stylesheets %}
+    {{ block.super }}  <!-- This includes the CSS from the base.html -->
+    <link rel="stylesheet" href="{% static 'benedict_school/css/parent_form.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-4 py-5">

@@ -80,39 +80,50 @@ class ParentCreateView(CreateView):
 
 # Child and application create view
 def register_children(request, parent_id):
-    parent = Parent.objects.get(id=parent_id)
-
-    # Get the number of children to register (from the parent object, not from a POST or GET request)
+    parent = Parent.objects.get(id=parent_id)  # Get the parent object
+    
+    # Get the number of children to register from the parent object
     num_children = parent.num_children 
     
-    # Create formsets based on the number of children
+    # Create formsets dynamically based on the number of children
     ChildFormSet = formset_factory(ChildForm, extra=num_children)
     PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
 
     if request.method == 'POST':
+        # Process the formsets with POST data
         child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
         application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
 
         if child_formset.is_valid() and application_formset.is_valid():
+            # Save the data for each child and their corresponding application form
             for child_form, application_form in zip(child_formset, application_formset):
                 child = child_form.save(commit=False)
                 child.parent = parent
                 child.save()
+
+                # Save the associated application for the child
                 application = application_form.save(commit=False)
                 application.child = child
                 application.save()
 
-            return redirect('success_page')  # Redirect to a success page or wherever you need
+            return redirect('home.html')  # Redirect after successful form submission
 
     else:
+        # Initialize empty formsets on GET request
         child_formset = ChildFormSet(prefix='child')
         application_formset = PupilApplicationFormSet(prefix='application')
 
+    # Combine child formset and application formset into a single iterable
+    combined_forms = zip(child_formset, application_formset)
+
+    # Pass formsets to the template
     context = {
         'parent': parent,
+        'combined_forms': combined_forms,  # This is the combined iterable of child and application forms
         'child_formset': child_formset,
         'application_formset': application_formset,
     }
+
     return render(request, 'register_children.html', context)
 
 

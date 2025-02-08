@@ -1,0 +1,197 @@
+/* Base styling for the page */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for the entire form */
+.container-fluid {
+    max-width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+/* Header */
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2d3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Accordion styling */
+.accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Accordion header styling */
+.accordion-header {
+    background-color: #007bff;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.accordion-header .accordion-button {
+    color: white;
+    background-color: transparent;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.accordion-header .accordion-button:focus {
+    box-shadow: none;
+}
+
+/* Accordion body */
+.accordion-body {
+    padding: 1.5rem;
+    background-color: #fff;
+}
+
+/* Form styling */
+fieldset {
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+    padding: 0 0.5rem;
+}
+
+/* Input fields */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+textarea {
+    font-size: 0.875rem; /* Small font size for input fields */
+}
+
+select {
+    font-size: 1rem; /* Standard font size for dropdowns */
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Accordion collapse settings */
+.accordion-collapse {
+    margin-bottom: 1rem;
+}
+
+/* Ensure the Submit button is styled similarly to the parent form's button */
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    font-size: 1.1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .accordion-button {
+        font-size: 1rem;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 0.875rem; /* Small font size for mobile devices */
+    }
+}
+
+/* Additional styling for application form fields */
+.application-fieldset {
+    margin-top: 2rem;
+}
+
+.application-fieldset legend {
+    color: #007bff;
+}
+
+.application-fieldset input,
+.application-fieldset select,
+.application-fieldset textarea {
+    background-color: #e9f1ff;
+}
+
+/* Optional: To make form inputs a little more compact */
+fieldset input,
+fieldset select,
+fieldset textarea {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+}
+
+/* Style the accordion items so they’re easier to navigate */
+.accordion-button {
+    font-size: 1rem;
+    padding: 1rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: #f1f5f8;
+    color: #333;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-button.collapsed {
+    color: #007bff;
+}
+
+/* Ensure each child form and application form appears clean and readable */
+.accordion-body fieldset {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-top: 1rem;
+}
