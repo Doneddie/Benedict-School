@@ -2,37 +2,45 @@ body {
     font-family: "Roboto", sans-serif;
     background-color: #f9f9f9;
 }
+
 .hero-section {
     background-color: #747988;
     color: #110000;
     text-align: center;
     padding: 50px 20px;
 }
+
 .cta-btn {
     background-color: #32cd32; /* Lemon green */
     color: #fff;
     border: none;
+    transition: all 0.3s ease; /* Added transition */
 }
+
 .cta-btn:hover {
     background-color: #28a745; /* Darker lemon green */
 }
+
 .section-title {
     color: #e6640e;
     text-transform: uppercase;
     font-weight: 600;
     margin-bottom: 30px;
 }
+
 .card {
     background: #fff;
     border: none;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Added transition */
 }
+
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
 }
+
 .faq-item h4 {
     color: #000;
 }
@@ -44,7 +52,7 @@ body {
         padding-right: 15px;
     }
 
-    .hero {
+    .hero-section {
         padding: 20px 0;
     }
 
@@ -55,30 +63,131 @@ body {
 
 /* Centering unordered and ordered lists */
 ul, ol {
-    list-style-position: inside;  /* Ensures the bullets/numbers are inside the content area */
-    text-align: center;           /* Centers the list items */
-    padding-left: 0;              /* Removes any default left padding */
+    list-style-position: inside; /* Ensures the bullets/numbers are inside the content area */
+    text-align: left; /* Align text to the left for better readability */
+    padding-left: 0; /* Removes any default left padding */
+    max-width: 600px; /* Adjust this value as needed */
     margin-left: auto;
     margin-right: auto;
-    display: table;               /* Makes the lists behave like table elements for centering */
 }
 
 /* Styling list items */
 ul li, ol li {
-    display: list-item;        /* Makes each list item in verticle alignment */
-    margin: 10px 0;            /* Adds space between list items */
+    display: list-item; /* Makes each list item in vertical alignment */
+    margin: 10px 0; /* Adds space between list items */
 }
 
-/* Optional: For ordered lists, add a little spacing between the number and the text */
+/* Ordered list numbering */
 ol {
-    counter-reset: list;         /* Resets the numbering */
+    counter-reset: list; /* Resets the numbering */
+}
+
+ol li {
+    counter-increment: list; /* Increments the counter for each list item */
+    position: relative; /* Ensures the ::before pseudo-element is positioned correctly */
+    padding-left: 30px; /* Adds space for the numbers */
 }
 
 ol li::before {
     content: counter(list) ". "; /* Adds number before the list item */
     position: absolute;
-    left: -30px;                 /* Adjust this value for desired distance from the text */
+    left: 0; /* Adjust this value for desired distance from the text */
+    font-weight: bold;
+    font-size: 16px;
+}body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f9f9f9;
+}
+
+.hero-section {
+    background-color: #747988;
+    color: #110000;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.cta-btn {
+    background-color: #32cd32; /* Lemon green */
+    color: #fff;
+    border: none;
+    transition: all 0.3s ease; /* Added transition */
+}
+
+.cta-btn:hover {
+    background-color: #28a745; /* Darker lemon green */
+}
+
+.section-title {
+    color: #e6640e;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; /* Added transition */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.faq-item h4 {
+    color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .hero-section {
+        padding: 20px 0;
+    }
+
+    .cta-btn {
+        font-size: 1.2em;
+    }
+}
+
+/* Centering unordered and ordered lists */
+ul, ol {
+    list-style-position: inside; /* Ensures the bullets/numbers are inside the content area */
+    text-align: left; /* Align text to the left for better readability */
+    padding-left: 0; /* Removes any default left padding */
+    max-width: 600px; /* Adjust this value as needed */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styling list items */
+ul li, ol li {
+    display: list-item; /* Makes each list item in vertical alignment */
+    margin: 10px 0; /* Adds space between list items */
+}
+
+/* Ordered list numbering */
+ol {
+    counter-reset: list; /* Resets the numbering */
+}
+
+ol li {
+    counter-increment: list; /* Increments the counter for each list item */
+    position: relative; /* Ensures the ::before pseudo-element is positioned correctly */
+    padding-left: 30px; /* Adds space for the numbers */
+}
+
+ol li::before {
+    content: counter(list) ". "; /* Adds number before the list item */
+    position: absolute;
+    left: 0; /* Adjust this value for desired distance from the text */
     font-weight: bold;
     font-size: 16px;
 }
-
