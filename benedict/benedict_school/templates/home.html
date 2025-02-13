@@ -5,12 +5,13 @@
     {{ block.super }}  <!-- This includes the CSS from the base.html -->
     <link rel="stylesheet" href="{% static 'benedict_school/css/home-styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 {% endblock %}
 
 {% block content %}
 <!-- Hero Section with Animated Background -->
 <!-- Hero Section with Background Image and Overlaid Content -->
-<section class="hero-section  container-fluid" style="background-image: url('/static/images/hero_picture.jpg');">
+<section class="hero-section  container-fluid" style="background-image: url('{% static 'images/hero_picture.jpg' %}');" aria-label="Hero Section">
     <div class="hero-overlay">
         <div class="hero-content">
             <h1 class="animate__animated animate__bounceIn">{{ school_name|default:"BENEDICT KINDERGARTEN AND PRIMARY SCHOOL" }}</h1>
@@ -34,7 +35,7 @@
 <section class="welcome-section">
     <div class="principal-message">
         <!-- Principal's Photo -->
-        <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo">
+        <img src="{% static 'images/principal.jpg' %}" alt="{{ principal.name }}" class="principal-photo" loading="lazy">
 
         <!-- Principal's Message and Details -->
         <div class="message-content">
@@ -75,7 +76,7 @@
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
                 {% if event.image %}
-                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:200px; height:auto;">
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy" style="width:200px; height:auto;">
                 {% else %}
                 <p>No image available</p>
                 {% endif %}
@@ -101,7 +102,7 @@
                 <h3>{{ event.title }}</h3>
                 <p>{{ event.description }}</p>
                 {% if event.image %}
-                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:200px; height:auto;">
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy" style="width:200px; height:auto;">
                 {% else %}
                 <p>No image available</p>
                 {% endif %}
@@ -115,23 +116,55 @@
     </div>
 </section>
 
-<!-- Testimonials -->
+<!-- Testimonials Section -->
 <section class="testimonials-section">
     <h2><i class="fas fa-quote-left"></i> Parent Testimonials</h2>
-    <div class="testimonials-container">
-        {% if testimonials %}
-            {% for testimonial in testimonials %}
-            <div class="testimonial-card">
-                <p>"{{ testimonial.content }}"</p>
-                <span class="parent-name">- {{ testimonial.parent_name }}</span>
+    
+    <!-- Bootstrap Carousel -->
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Carousel Inner -->
+        <div class="carousel-inner">
+            <!-- Testimonial 1 -->
+            <div class="carousel-item active">
+                <div class="testimonial-card">
+                    <p>"The teachers here are amazing! My daughter loves coming to school every day."</p>
+                    <span class="parent-name">- Joy's Mom</span>
+                </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <div class="testimonial-card">
-                <p>"The teachers here are amazing! My daughter loves coming to school every day."</p>
-                <span class="parent-name">- Joy's Mom</span>
+
+            <!-- Testimonial 2 -->
+            <div class="carousel-item">
+                <div class="testimonial-card">
+                    <p>"Benedict School has provided a nurturing environment for my child to grow and learn."</p>
+                    <span class="parent-name">- Betina's Dad</span>
+                </div>
             </div>
-        {% endif %}
+
+            <!-- Testimonial 3 -->
+            <div class="carousel-item">
+                <div class="testimonial-card">
+                    <p>"The facilities are excellent, and the staff is very supportive. Highly recommended!"</p>
+                    <span class="parent-name">- Jovia's Mom</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 </section>
 
@@ -149,7 +182,7 @@
         
         <!-- Embedded Google Map -->
         <div id="school-map" class="mt-8" style="height: 400px;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3989.758653300606!2d32.504067!3d0.3133494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177da328376e9b43%3A0x454471dbdb33afed!2sBenedict%20kindergarten%20and%20primary%20school!5e0!3m2!1sen!2sug!4v1733732843074!5m2!1sen!2sug"
+            <iframe title="Location of Benedict Kindergarten and Primary School" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3989.758653300606!2d32.504067!3d0.3133494!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177da328376e9b43%3A0x454471dbdb33afed!2sBenedict%20kindergarten%20and%20primary%20school!5e0!3m2!1sen!2sug!4v1733732843074!5m2!1sen!2sug"
                 width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
@@ -174,5 +207,5 @@
 
 {% block extra_head %}
     <!--Custom JS -->
-    <script src="{% static 'js/home-scripts.js' %}"></script>
+    <script src="{% static 'js/home-scripts.js' %}" defer></script>
 {% endblock %}

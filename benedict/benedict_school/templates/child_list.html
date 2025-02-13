@@ -75,6 +75,7 @@
                             <th>Sex</th>
                             <th>Class</th>
                             <th>Parent</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -103,6 +104,17 @@
                             <td>{{ child.get_sex_display }}</td>
                             <td>{{ child.get_study_class_display }}</td>
                             <td>{{ child.parent.last_name }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if application.child.status == 'active' %}
+                                        bg-success
+                                    {% else %}
+                                        bg-secondary
+                                    {% endif %}
+                                ">
+                                    {{ application.child.status|title }}
+                                </span>
+                            </td>
                             {{ previous_table_content|safe }}
                             <td class="no-print">
                                 <div class="btn-group">

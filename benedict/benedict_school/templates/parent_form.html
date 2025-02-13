@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
+{% load i18n %}
+
+{% block title %}{% trans "REGISTRATION" %}{% endblock title %}
+
 {% block stylesheets %}
     {{ block.super }}  <!-- This includes the CSS from the base.html -->
     <link rel="stylesheet" href="{% static 'benedict_school/css/parent_form.css' %}">
@@ -14,61 +18,52 @@
             <div class="card shadow-lg border-0 rounded-4">
                 <div class="card-header bg-primary text-white py-3">
                     <h2 class="text-center mb-0">
-                        <i class="bi bi-person-plus me-2"></i>Parent Registration Form
+                        <i class="fas fa-user-plus me-2"></i>Parent Registration Form
                     </h2>
                 </div>
                 <div class="card-body p-4">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% bootstrap_form_errors form %}
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label">First Name</label>
-                                {{ form.first_name }}
+                                {% bootstrap_field form.first_name %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Last Name</label>
-                                {{ form.last_name }}
+                                {% bootstrap_field form.last_name %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Relationship Type</label>
-                                {{ form.relationship_type }}
+                                {% bootstrap_field form.relationship_type %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Gender</label>
-                                {{ form.sex }}
+                                {% bootstrap_field form.sex %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">ID Number</label>
-                                {{ form.ID_number }}
+                                {% bootstrap_field form.ID_number %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                {{ form.email }}
+                                {% bootstrap_field form.email %}
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Telephone Number</label>
-                                {{ form.tel_no }}
+                                {% bootstrap_field form.tel_no %}
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Address</label>
-                                {{ form.address }}
+                                {% bootstrap_field form.address %}
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Parent Image</label>
-                                {{ form.parent_image }}
+                                {% bootstrap_field form.parent_image %}
                             </div>
                         </div>
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="num_children">Number of Children to Register:</label>
-                                <input type="number" id="num_children" name="num_children" min="1" required>
+                                {% bootstrap_field form.num_children %}
                             </div>
                         </div>
 
                         <div class="row g-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Submit</button>
                             </div>
                         </div>
                     </form>

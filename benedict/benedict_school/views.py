@@ -80,50 +80,55 @@ class ParentCreateView(CreateView):
 
 # Child and application create view
 def register_children(request, parent_id):
-    parent = Parent.objects.get(id=parent_id)  # Get the parent object
+    parent = Parent.objects.get(id=parent_id)
+    num_children = parent.num_children
     
-    # Get the number of children to register from the parent object
-    num_children = parent.num_children 
-    
-    # Create formsets dynamically based on the number of children
     ChildFormSet = formset_factory(ChildForm, extra=num_children)
     PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
-
+    
     if request.method == 'POST':
-        # Process the formsets with POST data
-        child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
-        application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
-
+        print("POST received")
+        print("POST data:", request.POST)
+        print("FILES:", request.FILES)
+        child_formset = ChildFormSet(
+            request.POST, 
+            request.FILES,
+            form_kwargs={'parent': parent}
+        )
+        application_formset = PupilApplicationFormSet(request.POST, request.FILES)
+        print("Child Formset Errors:", child_formset.errors)
+        print("Application Formset Errors:", application_formset.errors)
+        
         if child_formset.is_valid() and application_formset.is_valid():
-            # Save the data for each child and their corresponding application form
-            for child_form, application_form in zip(child_formset, application_formset):
-                child = child_form.save(commit=False)
-                child.parent = parent
-                child.save()
-
-                # Save the associated application for the child
-                application = application_form.save(commit=False)
-                application.child = child
-                application.save()
-
-            return redirect('home.html')  # Redirect after successful form submission
-
+            try:
+                for child_form, application_form in zip(child_formset, application_formset):
+                    child = child_form.save(commit=False)
+                    child.parent = parent
+                    child.save()
+                    
+                    application = application_form.save(commit=False)
+                    application.child = child
+                    application.save()
+                
+                messages.success(request, "Children registered successfully!")
+                return redirect('home')  # Success page
+            except ValidationError as e:
+                messages.error(request, str(e))
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        # Initialize empty formsets on GET request
-        child_formset = ChildFormSet(prefix='child')
-        application_formset = PupilApplicationFormSet(prefix='application')
-
-    # Combine child formset and application formset into a single iterable
+        child_formset = ChildFormSet(form_kwargs={'parent': parent})
+        application_formset = PupilApplicationFormSet()
+    
     combined_forms = zip(child_formset, application_formset)
-
-    # Pass formsets to the template
+    
     context = {
         'parent': parent,
-        'combined_forms': combined_forms,  # This is the combined iterable of child and application forms
+        'combined_forms': combined_forms,
         'child_formset': child_formset,
         'application_formset': application_formset,
     }
-
+    
     return render(request, 'register_children.html', context)
 
 
@@ -156,7 +161,7 @@ def contact_view(request):
                 [settings.CONTACT_EMAIL],  # Replace with your contact email
                 fail_silently=False,
             )
-            return render(request, "home.html")  # Redirect to a success page
+            return render(request, "home")  # Redirect to a success page
     else:
         form = ContactForm()
 
@@ -170,7 +175,7 @@ def search_view(request):
         "children": [],
         "staff": [],
         "events": [],
-        "pages": [],  # For static pages like 'About', 'Admissions', etc.
+        "pages": [],  # For static pages like 'About', 'Admissions', 'Home' etc.
     }
 
     if query:
@@ -180,8 +185,13 @@ def search_view(request):
         results["events"] = Event.objects.filter(title__icontains=query)
 
         # Search in static content (e.g., pages)
-        results["pages"] = About.objects.filter(content__icontains=query)  # Adjust this for any other models or static content
-        results["pages"] = GalleryImage.objects.filter(cotent__icontains=query)
+        about_results = About.objects.filter(content__icontains=query)
+        gallery_results = GalleryImage.objects.filter(content__icontains=query)
+        results["pages"] = list(about_results) + list(gallery_results)  # Combine results
+
+    paginator = Paginator(results["children"], 10)
+    page_number = request.GET.get('page')
+    results["children"] = paginator.get_page(page_number)
 
     return render(request, "search.html", {"results": results, "query": query})
 

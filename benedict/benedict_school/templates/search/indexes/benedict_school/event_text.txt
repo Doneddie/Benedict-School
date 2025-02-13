@@ -1,2 +1,0 @@
-{{ object.title }}       # Index the event's title
-{{ object.description }} # Index the event's description

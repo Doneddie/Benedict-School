@@ -1,45 +1,67 @@
-{% load django_bootstrap5 %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Search Results</title>
-    </head>
-    <body>
-        <h1>Search Results</h1>
-        {% if query %}
-        <p>Results for: "{{ query }}"</p>
-        {% else %}
-        <p>Please enter a search term.</p>
-        {% endif %}
-        
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+{% if results.children or results.staff or results.events or results.pages %}
+    <!-- Display Children Results -->
+    {% if results.children %}
         <h2>Children</h2>
         <ul>
             {% for child in results.children %}
-            <li>{{ child.name }}</li>
-            {% empty %}
-            <li>No children found.</li>
+                <li>{{ child.name }}</li>
             {% endfor %}
         </ul>
-        
+    {% endif %}
+
+    <!-- Display Staff Results -->
+    {% if results.staff %}
         <h2>Staff</h2>
         <ul>
-            {% for staff_member in results.staff %}
-            <li>{{ staff_member.first_name }} {{ staff_member.last_name }}</li>
-            {% empty %}
-            <li>No staff found.</li>
+            {% for staff in results.staff %}
+                <li>{{ staff.first_name }} {{ staff.last_name }}</li>
             {% endfor %}
         </ul>
-        
+    {% endif %}
+
+    <!-- Display Event Results -->
+    {% if results.events %}
         <h2>Events</h2>
         <ul>
             {% for event in results.events %}
-            <li>{{ event.title }}</li>
-            {% empty %}
-            <li>No events found.</li>
+                <li>{{ event.title }}</li>
             {% endfor %}
         </ul>
-    </body>
-</html>
+    {% endif %}
+
+    <!-- Display Static Page Results -->
+    {% if results.pages %}
+        <h2>Pages</h2>
+        <ul>
+            {% for page in results.pages %}
+                <li>{{ page.title }}</li>  <!-- Adjust this based on your model fields -->
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if results.children.has_previous %}
+            <a href="?q={{ query }}&page=1">&laquo; first</a>
+            <a href="?q={{ query }}&page={{ results.children.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ results.children.number }} of {{ results.children.paginator.num_pages }}.
+        </span>
+
+        {% if results.children.has_next %}
+            <a href="?q={{ query }}&page={{ results.children.next_page_number }}">next</a>
+            <a href="?q={{ query }}&page={{ results.children.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

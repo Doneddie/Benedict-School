@@ -15,7 +15,7 @@
 {% block content %}
 <!-- About Us Section -->
 <section class="about-us container-fluid" >
-    <div class="about-header" style="background-image: url('/static/images/about_us.jpg');">
+    <div class="about-header" style="background-image: url('{% static 'images/about_us.jpg' %}');">
         <h1>About Us</h1>
     </div>
 
@@ -74,8 +74,11 @@
                     {% endif %}
                     <h3>{{ staff_member.name }}</h3>
                 </div>
+                {% else %}
+                    <p>No staff members available at the moment.</p>
                 {% endif %}
                 {% endfor %}
+                
             </div>
         </div>
     </div>

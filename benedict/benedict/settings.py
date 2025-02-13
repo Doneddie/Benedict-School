@@ -28,6 +28,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+# Add trusted origins for CSRF protection
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8000',  # Added localhost URL (use http://localhost if not using HTTPS)
+    'http://localhost:8000',   # Add for HTTP if not using HTTPS
+    'http://127.0.0.1:8000',   # Using the 127.0.0.1 IP address
+    'https://cautious-dollop-7jqjxgvr5rghwwwj-8000.app.github.dev',
+]
+
 
 # Application definition
 
@@ -70,6 +78,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'https://cautious-dollop-7jqjxgvr5rghwwwj-8000.app.github.dev',
 ]
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = "benedict.urls"
 
@@ -162,13 +172,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the email you send from as the defau
 
 
 CONTACT_EMAIL = "julia07n@yahoo.com"
-
-# Add trusted origins for CSRF protection
-CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:8000',  # Added localhost URL (use http://localhost if not using HTTPS)
-    'http://localhost:8000',   # Add for HTTP if not using HTTPS
-    'http://127.0.0.1:8000',   # Using the 127.0.0.1 IP address
-]
 
 LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
 LOGOUT_REDIRECT_URL = '/'     # Redirect to login page after logout

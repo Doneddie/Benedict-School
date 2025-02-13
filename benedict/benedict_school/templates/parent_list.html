@@ -69,6 +69,7 @@
                     <th>Email</th>
                     <th>Tel No</th>
                     <th>Address</th>
+                    <th>Status</th>
                     <th>Children Count</th>
                     <th>Actions</th>
                 </tr>
@@ -89,6 +90,17 @@
                     <td>{{ parent.email }}</td>
                     <td>{{ parent.tel_no}} </td>
                     <td>{{ parent.address }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if application.child.status == 'active' %}
+                                bg-success
+                            {% else %}
+                                bg-secondary
+                            {% endif %}
+                        ">
+                            {{ application.child.status|title }}
+                        </span>
+                    </td>
                     <td>{{ parent.children.count }}/{{ parent.num_children }}</td>
                     {{ previous_table_content|safe }}
                     <td class="no-print">

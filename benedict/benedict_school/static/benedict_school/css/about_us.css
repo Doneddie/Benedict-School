@@ -13,7 +13,6 @@ body {
 
 .about-header {
     padding: 100px;
-    background-image: url('{% static "images/about_us.jpg" %}');
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -28,12 +27,19 @@ h1 {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Shadow for readability */
 }
 
+/* Card Styling */
 .card {
     margin: 20px 0;
-    background-color: #f4f4f4;
+    background-color: white; /* Changed to white */
     border-radius: 8px;
     padding: 20px;
-    flex: 1 1 200px;  /* Allow cards to grow or shrink */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 .card-title {
@@ -62,6 +68,13 @@ h1 {
     width: 100%;
     height: auto;
     border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow to team photos */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.team-photo:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
 
 /* Dropdown for Anthem */
@@ -161,5 +174,3 @@ h1 {
         height: 300px;
     }
 }
-
-

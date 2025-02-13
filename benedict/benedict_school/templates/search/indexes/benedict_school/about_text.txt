@@ -1,2 +1,0 @@
-{{ object.title }}       # Index the title of the page
-{{ object.content }}     # Index the main content of the page
