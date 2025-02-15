@@ -18,6 +18,8 @@
     {% if combined_forms %}
     <form method="post" enctype="multipart/form-data" action="{% url 'register_children' parent.id %}">
         {% csrf_token %}
+        {{ child_formset.management_form }}
+        {{ application_formset.management_form }}
         <div class="accordion" id="childFormsAccordion">
             {% for form, application_form in combined_forms %}
                 <div class="accordion-item">

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,19 +23,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@dy&%7$qjzu+8nooddcv%b7d-4e0gz)swt*^5_%p&ah-3$618q"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-dev-key")
+
+SITE_ID = 1  # Required for allauth
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Add trusted origins for CSRF protection
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:8000',  # Added localhost URL (use http://localhost if not using HTTPS)
-    'http://localhost:8000',   # Add for HTTP if not using HTTPS
-    'http://127.0.0.1:8000',   # Using the 127.0.0.1 IP address
-    'https://cautious-dollop-7jqjxgvr5rghwwwj-8000.app.github.dev',
+    'https://*.github.dev',
+    'https://*.app.github.dev',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 
@@ -59,12 +64,13 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'crispy_bootstrap5',
     'formtools',
-    # "haystack",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -72,11 +78,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://cautious-dollop-7jqjxgvr5rghwwwj-8000.app.github.dev',
+    'https://*.github.dev',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -139,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 
@@ -161,27 +166,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'  # This is the public URL to access uploaded files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # This is the path where files will be stored
 
-# Email backend settings (for development, using the console backend)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # For example, using Gmail's SMTP server
+EMAIL_HOST = 'smtp.mail.yahoo.com'
 EMAIL_PORT = 587
+EMAIL_HOST_USER = 'julia07n@yahoo.co.uk'  # Your Yahoo email address
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "julia07n@yahoo.com"  # Your email address for sending emails
-EMAIL_HOST_PASSWORD = 'your_email_password'  # Your email password (or app-specific password)
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Use the email you send from as the default sender address
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
-CONTACT_EMAIL = "julia07n@yahoo.com"
+CONTACT_EMAIL = "julia07n@yahoo.co.uk"
 
 LOGIN_REDIRECT_URL = '/admin-dashboard/'  # Redirect admins after login
 LOGOUT_REDIRECT_URL = '/'     # Redirect to login page after logout
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
-    },
-}
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -201,4 +198,30 @@ LOGGING = {
             'level': 'DEBUG',
         },
     },
+}
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ]
 }

@@ -1,38 +1,38 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.views.decorators.http import require_http_methods
 from collections import OrderedDict
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import user_passes_test
-from django.views.decorators.csrf import csrf_protect
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
-from django.forms import formset_factory
-from django.urls import reverse_lazy
-from django import forms
-from django.contrib.auth.views import LoginView
-from .models import Parent, Child, PupilApplication, Exit, Event, About, Staff, GalleryImage
-from django.db.models import Q
-from .forms import ParentForm, ChildForm, PupilApplicationForm, ExitForm, EventForm, StaffForm, LoginForm, ContactForm, SearchForm, ChildFilterForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin  # To ensure users are logged in for sensitive views
-from django.utils import timezone
 from datetime import datetime
-from django.core.mail import send_mail
+
+# 2. Django imports (grouped by module, alphabetical order)
+from django import forms
 from django.conf import settings
-from django.urls import reverse
-from django.http import JsonResponse
-from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count, Q
+from django.forms import formset_factory
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_http_methods
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
+)
+
+# 3. Local application imports (alphabetical order)
+from .forms import (
+    ChildFilterForm, ChildForm, ContactForm, EventForm, ExitForm,
+    LoginForm, ParentForm, PupilApplicationForm, SearchForm, StaffForm
+)
+from .models import (
+    About, Child, Event, Exit, GalleryImage, Parent,
+    PupilApplication, Staff
+)
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -68,7 +68,7 @@ class ParentCreateView(CreateView):
         # Save the parent object and then pass it to the template
         self.object = form.save()
         # Redirect to the register_children page with the parent_pk
-        return redirect('register_children', parent_id=self.object.pk)
+        return redirect('register-children', parent_id=self.object.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +76,7 @@ class ParentCreateView(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('register_children', kwargs={'parent_pk': self.object.pk})
+        return reverse_lazy('register-children', kwargs={'parent_pk': self.object.pk})
 
 # Child and application create view
 def register_children(request, parent_id):
