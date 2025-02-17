@@ -29,7 +29,7 @@
 <body>
     <h2>Parent List</h2>
     <div>
-        <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
+        <button onclick="window.print()" class="btn btn-secondary me-2 no-print" title="Print List">
             <i class="bi bi-printer"></i> Print List
         </button>
     </div>
@@ -92,13 +92,13 @@
                     <td>{{ parent.address }}</td>
                     <td>
                         <span class="badge 
-                            {% if application.child.status == 'active' %}
+                            {% if parent.status == 'active' %}
                                 bg-success
                             {% else %}
                                 bg-secondary
                             {% endif %}
                         ">
-                            {{ application.child.status|title }}
+                            {{ parent.status|title }}
                         </span>
                     </td>
                     <td>{{ parent.children.count }}/{{ parent.num_children }}</td>
@@ -107,7 +107,7 @@
                         <a href="{% url 'parent-to-alumni' pk=parent.pk %}" class="btn btn-warning btn-sm">
                             Move to Alumni
                         </a>
-                        <a href="{% url 'delete-parent' parent.pk %}" 
+                        <a href="{% url 'parent-delete' parent.pk %}" 
                            class="btn btn-sm btn-danger">
                            <i class="bi bi-trash">Delete</i>
                         </a>
@@ -131,7 +131,7 @@
                 
                 {% for num in page_obj.paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">
                         {{ num }}
                     </a>
                 </li>

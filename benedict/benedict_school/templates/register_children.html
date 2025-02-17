@@ -16,7 +16,7 @@
     <h1>{% trans "Register Children for" %} {{ parent.first_name }} {{ parent.last_name }}</h1>
 
     {% if combined_forms %}
-    <form method="post" enctype="multipart/form-data" action="{% url 'register_children' parent.id %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'register-children' parent.id %}">
         {% csrf_token %}
         {{ child_formset.management_form }}
         {{ application_formset.management_form }}

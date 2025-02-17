@@ -1,19 +1,16 @@
-# Benedict-School
-
-Here’s an outline for a **child-friendly, engaging, and functional website structure**. The goal is to create a safe, warm, and inviting online presence for parents, kids, and teachers, ensuring easy navigation and visually appealing design elements.
-
----
-
-### **Website Structure for Kindergarten & Primary School**
+### **Website Structure for Benedict Kindergarten & Primary School**
 
 1. **Home Page**  
    _Bright, welcoming design with interactive visuals (cute animations, child-friendly icons)._  
    **Sections:**
-   - **Hero Section**: A warm welcome with the school’s name, tagline (e.g., "Building Bright Futures!"), and a big colorful image of children happily learning.
+   - **Hero Section**: A warm welcome with the school’s name, tagline (e.g., "Love learning!"), and a big colorful image of happy children.
    - **Call to Action**: Buttons like "Admissions", "Tour Our School", "Contact Us".
    - **Upcoming Events**: Showcase important dates (e.g., events, holidays).
+   - **Past Events**: Showcase past events
    - **Short Welcome Message**: Brief intro from the principal or school philosophy.
+   - **Gallery**: Gallery snapshot (e.g., "three images").
    - **Testimonials**: Quotes from parents and students.
+   - **School map**: Showing directions to the school.
 
 2. **About Us**  
    **Sections:**

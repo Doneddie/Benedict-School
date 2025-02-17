@@ -30,7 +30,7 @@
 <div class="container py-4">
     <h1 class="mb-4">Children List</h1>
     <div>
-        <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
+        <button onclick="window.print()" class="btn btn-secondary me-2 no-print" title="Print List">
             <i class="bi bi-printer"></i> Print List
         </button>
     </div>
@@ -39,6 +39,7 @@
     <div class="card mb-4 no-print">
         <div class="card-body">
             <form method="get" class="row g-3">
+                {% csrf_token %}
                 <div class="col-md-3">
                     {{ filter_form.search }}
                 </div>
@@ -84,8 +85,8 @@
                         <tr>
                             <td>
                                 {% if child.profile_image %}
-                                    <img src="{{ child.profile_image.url }}" 
-                                         alt="{{ child.name }}" 
+                                    <img src="{% if child.profile_image %}{{ child.profile_image.url }}{% else %}{% static 'path/to/default/image.png' %}{% endif %}"
+                                         alt="Profile image of {{ child.name }}" 
                                          class="rounded-circle"
                                          style="width: 40px; height: 40px; object-fit: cover;">
                                 {% else %}
@@ -106,13 +107,13 @@
                             <td>{{ child.parent.last_name }}</td>
                             <td>
                                 <span class="badge 
-                                    {% if application.child.status == 'active' %}
+                                    {% if child.status == 'active' %}
                                         bg-success
                                     {% else %}
                                         bg-secondary
                                     {% endif %}
                                 ">
-                                    {{ application.child.status|title }}
+                                    {{ child.status|title }}
                                 </span>
                             </td>
                             {{ previous_table_content|safe }}
@@ -121,9 +122,9 @@
                                     <a href="{% url 'child-to-alumni' pk=child.pk %}" class="btn btn-warning btn-sm">
                                         Move to Alumni
                                     </a>
-                                    <a href="{% url 'delete-child' child.pk %}" 
+                                    <a href="{% url 'child-delete' child.pk %}" 
                                        class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash">Delete</i>
+                                        <i class="bi bi-trash"></i>Delete
                                     </a>
                                 </div>
                                 {{ previous_action_button|safe }}
@@ -158,7 +159,7 @@
 
             {% for num in page_obj.paginator.page_range %}
             <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.urlencode %}&{{ request.GET.urlencode }}{% endif %}">
                     {{ num }}
                 </a>
             </li>

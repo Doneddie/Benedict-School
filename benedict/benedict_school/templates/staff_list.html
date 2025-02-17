@@ -34,7 +34,7 @@
         <button onclick="window.print()" class="btn btn-secondary me-2 no-print">
             <i class="bi bi-printer"></i> Print List
         </button>
-        <a href="{% url 'staff_create' %}" class="btn btn-primary no-print">
+        <a href="{% url 'staff-create' %}" class="btn btn-primary no-print">
             {% trans "Add New Staff Member" %}
         </a>
     </div>
@@ -107,11 +107,11 @@
                         {{ previous_table_content|safe }}
                         <td class="no-print">
                             <div class="btn-group" role="group">
-                                <a href="{% url 'staff_detail' pk=staff_member.pk %}"
+                                <a href="{% url 'staff-detail' pk=staff_member.pk %}"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye">Details</i>
                                 </a> |
-                                <a href="{% url 'staff_delete' pk=staff_member.pk %}"
+                                <a href="{% url 'staff-delete' pk=staff_member.pk %}"
                                    class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash">Delete</i>
                                 </a>
