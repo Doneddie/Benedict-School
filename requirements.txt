@@ -36,6 +36,7 @@ pycparser==2.22
 pyflakes==3.1.0
 PyJWT==2.9.0
 python-decouple==3.8
+python-dotenv==1.0.1
 requests==2.32.3
 soupsieve==2.6
 sqlparse==0.5.1
