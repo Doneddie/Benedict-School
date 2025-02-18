@@ -96,7 +96,7 @@
                                     </div>
                                 {% endif %}
                             </td>
-                            <td>{{ child.name }}</td>
+                            <td>{{ child.full_name }}</td>
                             <td>
                                 {% with age=child.date_of_birth|timesince %}
                                     {{ age|get_first_age }}

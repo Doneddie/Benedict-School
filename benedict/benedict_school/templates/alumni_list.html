@@ -60,7 +60,7 @@
                     <tbody>
                         {% for child in alumni_children %}
                         <tr>
-                            <td>{{ child.name }}</td>
+                            <td>{{ child.full_name }}</td>
                             <td>{{ child.alumni_date|date:"F j, Y" }}</td>
                             <td>{{ child.reason_for_leaving }}</td>
                             <td>{{ child.parent.first_name }} {{ child.parent.last_name }}</td>

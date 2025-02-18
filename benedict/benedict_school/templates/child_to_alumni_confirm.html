@@ -19,7 +19,7 @@
             </div>
 
             <h5>Child Information</h5>
-            <p><strong>Name:</strong> {{ child.name }}</p>
+            <p><strong>Name:</strong> {{ child.full_name }}</p>
             
             <h5>Parent Information</h5>
             <p><strong>Name:</strong> {{ parent.first_name }} {{ parent.last_name }}</p>
@@ -29,7 +29,7 @@
             <ul>
                 {% for sibling in siblings %}
                 {% if sibling.status == 'active' %}
-                <li>{{ sibling.name }}</li>
+                <li>{{ sibling.full_name }}</li>
                 {% endif %}
                 {% endfor %}
             </ul>

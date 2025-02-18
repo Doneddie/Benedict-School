@@ -31,7 +31,7 @@
                             <tbody>
                                 {% for application in applications %}
                                 <tr>
-                                    <td>{{ application.child.name }}</td>
+                                    <td>{{ application.child.full_name }}</td>
                                     <td>{{ application.application_date|date:"d M Y" }}</td>
                                     <td>{{ application.get_allergies_display }}</td>
                                     <td>

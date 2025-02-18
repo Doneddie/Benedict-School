@@ -10,4 +10,4 @@ def create_pupil_application(sender, instance, created, **kwargs):
     if created:
         # Check if the child is newly created
         PupilApplication.objects.create(child=instance)
-        print(f"PupilApplication created for child: {instance.name}")
+        print(f"PupilApplication created for child: {instance.full_name}")
