@@ -81,56 +81,79 @@ class ParentCreateView(CreateView):
 
 # Child and application create view
 def register_children(request, parent_id):
-    parent = Parent.objects.get(id=parent_id)
-    num_children = parent.num_children
-    
-    ChildFormSet = formset_factory(ChildForm, extra=num_children)
-    PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
-    
-    if request.method == 'POST':
-        print("POST received")
-        print("POST data:", request.POST)
-        print("FILES:", request.FILES)
-        child_formset = ChildFormSet(
-            request.POST, 
-            request.FILES,
-            form_kwargs={'parent': parent}
-        )
-        application_formset = PupilApplicationFormSet(request.POST, request.FILES)
-        print("Child Formset Errors:", child_formset.errors)
-        print("Application Formset Errors:", application_formset.errors)
+    try:
+        # Get the parent
+        parent = Parent.objects.get(id=parent_id)
+        num_children = parent.num_children
         
-        if child_formset.is_valid() and application_formset.is_valid():
-            try:
-                for child_form, application_form in zip(child_formset, application_formset):
-                    child = child_form.save(commit=False)
-                    child.parent = parent
-                    child.save()
+        # Create formsets for children and pupil applications
+        ChildFormSet = formset_factory(ChildForm, extra=num_children)
+        PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
+        
+        if request.method == 'POST':
+            print("POST received")
+            print("POST data:", request.POST)
+            print("FILES:", request.FILES)
+            
+            # Bind the formsets with data and files
+            child_formset = ChildFormSet(request.POST, request.FILES, form_kwargs={'parent': parent})
+            application_formset = PupilApplicationFormSet(request.POST, request.FILES)
+            
+            print("Child Formset Errors:", child_formset.errors)
+            print("Application Formset Errors:", application_formset.errors)
+            
+            # If the formsets are valid
+            if child_formset.is_valid() and application_formset.is_valid():
+                try:
+                    for child_form, application_form in zip(child_formset, application_formset):
+                        # Save child instance
+                        child = child_form.save(commit=False)
+                        child.parent = parent
+                        child.save()
+
+                        # Check if the child already has a PupilApplication
+                        if PupilApplication.objects.filter(child=child).exists():
+                            # If already exists, raise a validation error
+                            raise ValidationError(f"A PupilApplication already exists for child {child.full_name}.")
+
+                        # Save the application instance
+                        application = application_form.save(commit=False)
+                        application.child = child
+                        application.save()
                     
-                    application = application_form.save(commit=False)
-                    application.child = child
-                    application.save()
-                
-                messages.success(request, "Children registered successfully!")
-                return redirect('home')  # Success page
-            except ValidationError as e:
-                messages.error(request, str(e))
+                    messages.success(request, "Children registered successfully!")
+                    return redirect('home')  # Redirect to a success page
+
+                except ValidationError as e:
+                    # Handle validation errors
+                    messages.error(request, str(e))
+                except Exception as e:
+                    # Handle other errors
+                    messages.error(request, "An error occurred while registering the children.")
+                    print(f"Error: {str(e)}")
+            else:
+                # If formsets are not valid, show errors
+                messages.error(request, "Please correct the errors below.")
         else:
-            messages.error(request, "Please correct the errors below.")
-    else:
-        child_formset = ChildFormSet(form_kwargs={'parent': parent})
-        application_formset = PupilApplicationFormSet()
-    
-    combined_forms = zip(child_formset, application_formset)
-    
-    context = {
-        'parent': parent,
-        'combined_forms': combined_forms,
-        'child_formset': child_formset,
-        'application_formset': application_formset,
-    }
-    
-    return render(request, 'register_children.html', context)
+            # If the request is GET, initialize the formsets
+            child_formset = ChildFormSet(form_kwargs={'parent': parent})
+            application_formset = PupilApplicationFormSet()
+        
+        # Combine both formsets for rendering
+        combined_forms = zip(child_formset, application_formset)
+        
+        context = {
+            'parent': parent,
+            'combined_forms': combined_forms,
+            'child_formset': child_formset,
+            'application_formset': application_formset,
+        }
+        
+        return render(request, 'register_children.html', context)
+
+    except Parent.DoesNotExist:
+        messages.error(request, "Parent not found.")
+        return redirect('home')
 
 
 # Event views

@@ -1,198 +1,54 @@
 from formtools.wizard.views import SessionWizardView
 from django.forms import modelformset_factory
 
-{% block content %}
-    <h1>Register Children for {{ parent.first_name }} {{ parent.last_name }}</h1>
-
-    <!-- Display the child registration forms and application forms -->
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <!-- Render Child Forms -->
-        {{ child_formset.management_form }}
-        {% for form in child_formset %}
-            <fieldset>
-                <legend>Child {{ forloop.counter }}</legend>
-                {{ form.as_p }}
-            </fieldset>
-        {% endfor %}
-        
-        <!-- Render PupilApplication Forms -->
-        {{ application_formset.management_form }}
-        {% for form in application_formset %}
-            <fieldset>
-                <legend>Application for Child {{ forloop.counter }}</legend>
-                {{ form.as_p }}
-            </fieldset>
-        {% endfor %}
-        
-        <button type="submit">Submit</button>
-    </form>
-{% endblock %}
-
 def register_children(request, parent_id):
     parent = Parent.objects.get(id=parent_id)
-
-    # Get the number of children to register (from the parent object, not from a POST or GET request)
-    num_children = parent.num_children 
+    num_children = parent.num_children
     
-    # Create formsets based on the number of children
     ChildFormSet = formset_factory(ChildForm, extra=num_children)
     PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
-
-    if request.method == 'POST':
-        child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
-        application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
-
-        if child_formset.is_valid() and application_formset.is_valid():
-            for child_form, application_form in zip(child_formset, application_formset):
-                child = child_form.save(commit=False)
-                child.parent = parent
-                child.save()
-                application = application_form.save(commit=False)
-                application.child = child
-                application.save()
-
-            return redirect('success_page')  # Redirect to a success page or wherever you need
-
-    else:
-        child_formset = ChildFormSet(prefix='child')
-        application_formset = PupilApplicationFormSet(prefix='application')
-
-    context = {
-        'parent': parent,
-        'child_formset': child_formset,
-        'application_formset': application_formset,
-    }
-    return render(request, 'register_children.html', context)
-
-    def register_children(request, parent_id):
-    parent = Parent.objects.get(id=parent_id)  # Get the parent object
     
-    # Get the number of children to register from the parent object
-    num_children = parent.num_children 
-    
-    # Create formsets dynamically based on the number of children
-    ChildFormSet = formset_factory(ChildForm, extra=num_children)
-    PupilApplicationFormSet = formset_factory(PupilApplicationForm, extra=num_children)
-
     if request.method == 'POST':
-        # Process the formsets with POST data
-        child_formset = ChildFormSet(request.POST, request.FILES, prefix='child')
-        application_formset = PupilApplicationFormSet(request.POST, request.FILES, prefix='application')
-
+        print("POST received")
+        print("POST data:", request.POST)
+        print("FILES:", request.FILES)
+        child_formset = ChildFormSet(
+            request.POST, 
+            request.FILES,
+            form_kwargs={'parent': parent}
+        )
+        application_formset = PupilApplicationFormSet(request.POST, request.FILES)
+        print("Child Formset Errors:", child_formset.errors)
+        print("Application Formset Errors:", application_formset.errors)
+        
         if child_formset.is_valid() and application_formset.is_valid():
-            # Save the data for each child and their corresponding application form
-            for child_form, application_form in zip(child_formset, application_formset):
-                child = child_form.save(commit=False)
-                child.parent = parent
-                child.save()
-
-                # Save the associated application for the child
-                application = application_form.save(commit=False)
-                application.child = child
-                application.save()
-
-            return redirect('home')  # Redirect after successful form submission
-
+            try:
+                for child_form, application_form in zip(child_formset, application_formset):
+                    child = child_form.save(commit=False)
+                    child.parent = parent
+                    child.save()
+                    
+                    application = application_form.save(commit=False)
+                    application.child = child
+                    application.save()
+                
+                messages.success(request, "Children registered successfully!")
+                return redirect('home')  # Success page
+            except ValidationError as e:
+                messages.error(request, str(e))
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        # Initialize empty formsets on GET request
-        child_formset = ChildFormSet(prefix='child')
-        application_formset = PupilApplicationFormSet(prefix='application')
-
-    # Combine child formset and application formset into a single iterable
+        child_formset = ChildFormSet(form_kwargs={'parent': parent})
+        application_formset = PupilApplicationFormSet()
+    
     combined_forms = zip(child_formset, application_formset)
-
-    # Pass formsets to the template
+    
     context = {
         'parent': parent,
-        'combined_forms': combined_forms,  # This is the combined iterable of child and application forms
+        'combined_forms': combined_forms,
         'child_formset': child_formset,
         'application_formset': application_formset,
     }
-
+    
     return render(request, 'register_children.html', context)
-
-    body {
-        font-family: "Roboto", sans-serif;
-        background-color: #f9f9f9;
-    }
-    .hero-section {
-        background-color: #747988;
-        color: #110000;
-        text-align: center;
-        padding: 50px 20px;
-    }
-    .cta-btn {
-        background-color: #32cd32; /* Lemon green */
-        color: #fff;
-        border: none;
-    }
-    .cta-btn:hover {
-        background-color: #28a745; /* Darker lemon green */
-    }
-    .section-title {
-        color: #e6640e;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 30px;
-    }
-    .card {
-        background: #fff;
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-    }
-    .faq-item h4 {
-        color: #000;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .container {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-    
-        .hero-section {
-            padding: 20px 0;
-        }
-    
-        .cta-btn {
-            font-size: 1.2em;
-        }
-    }
-    
-    /* Centering unordered and ordered lists */
-    ul, ol {
-        list-style-position: inside;  /* Ensures the bullets/numbers are inside the content area */
-        text-align: center;           /* Centers the list items */
-        padding-left: 0;              /* Removes any default left padding */
-        margin-left: auto;
-        margin-right: auto;
-        display: table;               /* Makes the lists behave like table elements for centering */
-    }
-    
-    /* Styling list items */
-    ul li, ol li {
-        display: list-item;        /* Makes each list item in verticle alignment */
-        margin: 10px 0;            /* Adds space between list items */
-    }
-    
-    /* Optional: For ordered lists, add a little spacing between the number and the text */
-    ol {
-        counter-reset: list;         /* Resets the numbering */
-    }
-    
-    ol li::before {
-        content: counter(list) ". "; /* Adds number before the list item */
-        position: absolute;
-        left: -30px;                 /* Adjust this value for desired distance from the text */
-        font-weight: bold;
-        font-size: 16px;
-    }

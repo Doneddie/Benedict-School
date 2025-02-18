@@ -14,12 +14,24 @@
 {% block content %}
 <div class="registration-template">
     <h1>{% trans "Register Children for" %} {{ parent.first_name }} {{ parent.last_name }}</h1>
-
+    
+    <!-- Display messages (success/error) here -->
+    {% if messages %}
+    <div class="alert">
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
     {% if combined_forms %}
     <form method="post" enctype="multipart/form-data" action="{% url 'register-children' parent.id %}">
         {% csrf_token %}
         {{ child_formset.management_form }}
         {{ application_formset.management_form }}
+        
         <div class="accordion" id="childFormsAccordion">
             {% for form, application_form in combined_forms %}
                 <div class="accordion-item">
@@ -30,14 +42,23 @@
                     </h2>
                     <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.counter == 1 %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#childFormsAccordion">
                         <div class="accordion-body">
-                            <fieldset>
-                                <legend>{% trans "Child Registration" %}</legend>
-                                {% bootstrap_form form %}
-                            </fieldset>
-                            <fieldset class="application-fieldset">
-                                <legend>{% trans "Application for Child" %} {{ forloop.counter }}</legend>
-                                {% bootstrap_form application_form %}
-                            </fieldset>
+                            <div class="form-row">
+                                <!-- First Column -->
+                                <div class="form-column">
+                                    <fieldset>
+                                        <legend>{% trans "Child Registration" %}</legend>
+                                        {% bootstrap_form form %}
+                                    </fieldset>
+                                </div>
+
+                                <!-- Second Column -->
+                                <div class="form-column">
+                                    <fieldset class="application-fieldset">
+                                        <legend>{% trans "Application for Child" %} {{ forloop.counter }}</legend>
+                                        {% bootstrap_form application_form %}
+                                    </fieldset>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

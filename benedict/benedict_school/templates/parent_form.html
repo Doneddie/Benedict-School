@@ -25,6 +25,8 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% bootstrap_form_errors form %}
+                        
+                        <!-- Start of Two Columns for Form Fields -->
                         <div class="row g-3">
                             <div class="col-md-6">
                                 {% bootstrap_field form.first_name %}
@@ -55,6 +57,7 @@
                             </div>
                         </div>
 
+                        <!-- Single Column for Number of Children -->
                         <div class="row g-3">
                             <div class="col-md-6">
                                 {% bootstrap_field form.num_children %}
@@ -73,3 +76,4 @@
     </div>
 </div>
 {% endblock %}
+

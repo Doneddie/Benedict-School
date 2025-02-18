@@ -12,37 +12,12 @@ body {
     padding: 20px;
 }
 
-/* Main container styling */
-.container-fluid {
-    max-width: 100%;
-    padding: 0 20px;
-}
-
 /* Card Styling */
 .card {
     background-color: #fff;
     border: none;
     border-radius: 1rem; /* Matches rounded-4 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Matches shadow-lg */
-}
-
-/* Card Header Styling */
-.card-header {
-    background-color: #007bff;
-    color: white;
-    padding: 1.5rem; /* Matches py-3 */
-    border-radius: 1rem 1rem 0 0; /* Matches rounded-4 */
-}
-
-.card-header h2 {
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 0; /* Matches mb-0 */
-}
-
-/* Card Body Styling */
-.card-body {
-    padding: 1.5rem; /* Matches p-4 */
 }
 
 /* Form Group Styling */
@@ -70,13 +45,6 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Bootstrap's focus shadow */
 }
 
-/* Help text under fields */
-.form-text {
-    font-size: 0.875rem;
-    color: #666;
-    margin-top: 0.25rem;
-}
-
 /* Submit Button */
 .btn-primary {
     width: 100%;
@@ -100,12 +68,6 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Ensure each row contains one item and spans full width */
-.row .col-12, .row .col-md-6 {
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .card-header h2 {
@@ -126,3 +88,4 @@ body {
         font-size: 0.75rem;
     }
 }
+
