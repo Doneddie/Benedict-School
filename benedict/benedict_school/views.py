@@ -573,10 +573,10 @@ def child_list(request):
         return f"Child List - {timezone.now().strftime('%Y-%m-%d')}"
 
 @user_passes_test(is_admin, login_url='/admin-login/')
-def delete_child(request, child_id):
-    child = get_object_or_404(Child, id=child_id)
+def delete_child(request, pk):
+    child = get_object_or_404(Child, pk=pk)
     child.delete()
-    return redirect('child-list')
+    return redirect('child-list') 
 
 # Application view
 @user_passes_test(is_admin, login_url='/admin-login/')
